@@ -1,0 +1,52 @@
+ul.pagination {
+    justify-content: end;
+    display: flex;
+    margin-right: 20px;
+}
+
+.dropzone {
+    border: 2px dashed #007bff;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.dropzone .dz-message {
+    color: #6c757d;
+    font-weight: bold;
+}
+
+.dropzone .dz-preview .dz-progress .dz-upload {
+    background: #28a745;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+
+ .select2-container .select2-selection--single {
+    height: 100%;
+    padding: 0.625rem;
+    font-size: 14px;
+    border-width: 1px;
+    border-color: rgb(209 213 219);
+    background-color: rgb(249 250 251);
+    border-radius: 0.5rem;
+    width: 100%;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered{
+    color: rgba(17, 24, 39/ 1);
+    line-height: 20px;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered{
+    padding-left: 0;
+    padding-right: 0;
+}
