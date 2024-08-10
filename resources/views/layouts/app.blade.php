@@ -36,6 +36,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/customCss.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/nice-select.css') }}">
 
+    @stack('css')
+
 </head>
 
 <body class="font-sans antialiased">

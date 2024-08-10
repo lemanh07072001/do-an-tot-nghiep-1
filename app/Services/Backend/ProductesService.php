@@ -287,4 +287,5 @@ class ProductesService
     public function getAllLabelSelect(){
         return Label::select(['id', 'name'])->where('status',0)->get();
     }
+
 }

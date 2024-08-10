@@ -15,7 +15,7 @@
 
     </div>
     <x-card>
-        <form method="POST" action="{{ route('ecommerce_module.banner.store') }}">
+        <form method="POST" action="{{ route('ecommerce_module.banner.store') }}" class="repeater">
             @csrf
             <div class="grid grid-cols-6 gap-4 gap-y-4 ">
 
@@ -109,16 +109,40 @@
                 </div>
 
                 <div class="col-span-6 sm:col-span-2 ">
-                    <x-input-label required>Thương hiệu</x-input-label>
+                    <x-input-label required>Danh mục</x-input-label>
                     <x-select name="brand">
-                        @if (!empty($getAllBrandSelect))
-                            <option value="">--Chọn thương hiệu--</option>
-                            @foreach ($getAllBrandSelect as $brand)
-                                <option value="{{ $brand->id }}">
-                                    {{ $brand->name }}</option>
-                            @endforeach
-                        @endif
+                        <option value="">--Chọn danh mục--</option>
+                        {{ App\Helpers\GetData::showCategoriesSelect($getCategoriesSelect, old('categoories_id')) }}
                     </x-select>
+                </div>
+
+                <div class="col-span-6 sm:col-span-6 ">
+                    <div class="mb-2 text-sm font-semibold tracking-wide text-gray-900 uppercase lg:text-xs dark:text-white">Thuộc tính</div>
+                    <div data-repeater-list="group-a">
+                        <div data-repeater-item>
+                            <div class="grid grid-cols-8 gap-4 gap-y-4 ">
+                                <div class="col-span-2 sm:col-span-2 mb-2">
+                                    <select class="select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                                        @if (!empty($getAllLabelSelect))
+                                            <option value="">--Chọn nhãn--</option>
+                                            @foreach ($getAllLabelSelect as $label)
+                                                <option value="{{ $label->id }}">
+                                                    {{ $label->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                                <div class="col-span-1 sm:col-span-2 ">
+                                    <button type="button" data-repeater-delete
+                                        class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                      </div>
+                      <input data-repeater-create type="button" value="Add"/>
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
@@ -140,10 +164,67 @@
         </form>
     </x-card>
 
+    @push('css')
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.min.js"/>
+    @endpush
+
     @push('js')
-
-
         <script src="{{ asset('assets/apps/products/customPrduct.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $('.repeater').repeater({
+                    // (Optional)
+                    // start with an empty list of repeaters. Set your first (and only)
+                    // "data-repeater-item" with style="display:none;" and pass the
+                    // following configuration flag
+                    initEmpty: false,
+                    // (Optional)
+                    // "defaultValues" sets the values of added items.  The keys of
+                    // defaultValues refer to the value of the input's name attribute.
+                    // If a default value is not specified for an input, then it will
+                    // have its value cleared.
+                    defaultValues: {
+
+                    },
+                    // (Optional)
+                    // "show" is called just after an item is added.  The item is hidden
+                    // at this point.  If a show callback is not given the item will
+                    // have $(this).show() called on it.
+                    show: function () {
+                        console.log($(this).find('.select2'));
+                        $(this).slideDown();
+                        $(this).find('.select').select2();
+                    },
+                    // (Optional)
+                    // "hide" is called when a user clicks on a data-repeater-delete
+                    // element.  The item is still visible.  "hide" is passed a function
+                    // as its first argument which will properly remove the item.
+                    // "hide" allows for a confirmation step, to send a delete request
+                    // to the server, etc.  If a hide callback is not given the item
+                    // will be deleted.
+                    hide: function (deleteElement) {
+                        if(confirm('Are you sure you want to delete this element?')) {
+                            $(this).slideUp(deleteElement);
+                        }
+                    },
+                    // (Optional)
+                    // You can use this if you need to manually re-index the list
+                    // for example if you are using a drag and drop library to reorder
+                    // list items.
+                    ready: function (setIndexes) {
+                        console.log(setIndexes);
+                    },
+                    // (Optional)
+                    // Removes the delete button from the first list item,
+                    // defaults to false.
+                    isFirstItemUndeletable: true
+                })
+
+                $('.select').select2();
+            });
+        </script>
 
         <script>
             var uploadedDocumentMap = {}
@@ -242,9 +323,10 @@
                                 "{{ old('image') }}" + '">')
                         @endif
 
-                        this.on("addedfile",function(file){
-                            if(this.files.length > 1){
-                                $('form').find('input[name="image"][value="' + this.files[0].name + '"]').remove()
+                        this.on("addedfile", function(file) {
+                            if (this.files.length > 1) {
+                                $('form').find('input[name="image"][value="' + this.files[0].name +
+                                    '"]').remove()
                                 this.removeFile(this.files[0]);
 
                             }
