@@ -15,7 +15,7 @@
 
     </div>
     <x-card>
-        <form method="POST" action="{{ route('ecommerce_module.banner.store') }}" class="repeater">
+        <form method="POST" action="{{ route('ecommerce_module.products.store') }}" class="repeater">
             @csrf
             <div class="grid grid-cols-6 gap-4 gap-y-4 ">
 
@@ -117,22 +117,30 @@
                 </div>
 
                 <div class="col-span-6 sm:col-span-6 ">
-                    <div class="mb-2 text-sm font-semibold tracking-wide text-gray-900 uppercase lg:text-xs dark:text-white">Thuộc tính</div>
-                    <div data-repeater-list="group-a">
+                    <div
+                        class="mb-2 text-sm font-semibold tracking-wide text-gray-900 uppercase lg:text-xs dark:text-white">
+                        Thuộc tính</div>
+                    <div data-repeater-list="attribute[]">
                         <div data-repeater-item>
                             <div class="grid grid-cols-8 gap-4 gap-y-4 ">
-                                <div class="col-span-2 sm:col-span-2 mb-2">
-                                    <select class="select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                                        @if (!empty($getAllLabelSelect))
-                                            <option value="">--Chọn nhãn--</option>
-                                            @foreach ($getAllLabelSelect as $label)
-                                                <option value="{{ $label->id }}">
-                                                    {{ $label->name }}</option>
+                                <div class="col-span-2 sm:col-span-2 mb-2 ">
+                                    <select name="select_attribute"
+                                        class="select selectProperties  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
+                                        @if (!empty($getAllProperties))
+                                            <option value="">--Chọn thuộc tính--</option>
+                                            @foreach ($getAllProperties as $item)
+                                                <option value="{{ $item->id }}">
+                                                    {{ $item->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
                                 </div>
-                                <div class="col-span-1 sm:col-span-2 ">
+                                <div class="col-span-5 sm:col-span-5 mb-2">
+                                    <input type="text" name=""
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                        disabled></input>
+                                </div>
+                                <div class="col-span-1 sm:col-span-1">
                                     <button type="button" data-repeater-delete
                                         class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                                         Delete
@@ -141,22 +149,81 @@
                             </div>
                         </div>
                     </div>
-                      </div>
-                      <input data-repeater-create type="button" value="Add"/>
+
+                </div>
+                <div class="btn-foot">
+                    <button data-repeater-create type="button"
+                        class="add-row text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                        Thêm mới
+                    </button>
                 </div>
 
-                <div class="col-span-6 sm:col-span-3">
-                    <div class="flex justify-end mt-3">
-                        <button type="submit"
-                            class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                            Xác nhận
-                        </button>
-                        <a href="{{ route('ecommerce_module.banner.index') }}"
-                            class="text-white bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                            Quay lại
-                        </a>
+                <div class="col-span-6 sm:col-span-6 ">
+                    <div class="w-100">
+                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+                                <div
+                                    class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white ">
+                                    DANH SÁCH PHIÊN BẢN
+                                    <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Chọn danh sách
+                                        phiên bản phù hợp với sản phẩm</p>
+                                </div>
+                                <div>
+                                    <div id="renderTableAttribute"></div>
+                                </div>
+                            </table>
+                        </div>
+                        <tr>
+                            <td colspan="10">
+                                <div class="bg-white rounded-lg shadow p-4">
+                                    <div class="flex items-center justify-between ">
+                                        <span class="text-1xl font-bold text-gray-900">Cập nhật thông tin phiên bản</span>
+                                        <div>
+                                            <button type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Xác nhận</button>
+                                            <button type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Quay lại</button>
+                                        </div>
+
+                                    </div>
+
+                                    <div>
+                                        <div class="grid grid-cols-6 gap-4 gap-y-4 ">
+                                            <div class="col-span-6 sm:col-span-2">
+                                                <label for="quantity" class="inline-flex items-center cursor-pointer mb-2 text-sm font-medium text-gray-900 ">
+                                                    Số lượng
+                                                </label>
+                                                <input type="text" id="quantity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="Số lượng"  />
+                                            </div>
+                                            <div class="col-span-6 sm:col-span-2">
+                                                <label for="sku" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SKU</label>
+                                                <input type="text" id="sku" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="SKU"  />
+                                            </div>
+
+                                            <div class="col-span-6 sm:col-span-2">
+                                                <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giá bán</label>
+                                                <input type="text" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="Giá bán"  />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
                     </div>
                 </div>
+            </div>
+
+            <div class="col-span-6 sm:col-span-3">
+                <div class="flex justify-end mt-3">
+                    <button type="submit"
+                        class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                        Xác nhận
+                    </button>
+                    <a href="{{ route('ecommerce_module.banner.index') }}"
+                        class="text-white bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                        Quay lại
+                    </a>
+                </div>
+            </div>
 
             </div>
 
@@ -165,21 +232,24 @@
     </x-card>
 
     @push('css')
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.min.js"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.min.js" />
     @endpush
 
     @push('js')
-        <script src="{{ asset('assets/apps/products/customPrduct.js') }}"></script>
+        <script src="{{ asset('assets/apps/products/customProduct.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.js"></script>
 
         <script>
-            $(document).ready(function () {
+            var maxForms = {{ Js::from($getAllProperties) }};
+            var routeGetChildrenProperties = {{ Js::from(route('ecommerce_module.products.getChildrenProperties')) }};
+
+            $(document).ready(function() {
                 $('.repeater').repeater({
                     // (Optional)
                     // start with an empty list of repeaters. Set your first (and only)
                     // "data-repeater-item" with style="display:none;" and pass the
                     // following configuration flag
-                    initEmpty: false,
+                    initEmpty: true,
                     // (Optional)
                     // "defaultValues" sets the values of added items.  The keys of
                     // defaultValues refer to the value of the input's name attribute.
@@ -192,10 +262,18 @@
                     // "show" is called just after an item is added.  The item is hidden
                     // at this point.  If a show callback is not given the item will
                     // have $(this).show() called on it.
-                    show: function () {
-                        console.log($(this).find('.select2'));
+                    show: function() {
                         $(this).slideDown();
-                        $(this).find('.select').select2();
+
+
+                        $(this).find('.select').select2({
+                            width: '100%',
+                            minimumResultsForSearch: Infinity
+                        });
+
+                        updateSelectLabels();
+                        checkMaxAttributeGroup(maxForms);
+
                     },
                     // (Optional)
                     // "hide" is called when a user clicks on a data-repeater-delete
@@ -204,17 +282,19 @@
                     // "hide" allows for a confirmation step, to send a delete request
                     // to the server, etc.  If a hide callback is not given the item
                     // will be deleted.
-                    hide: function (deleteElement) {
-                        if(confirm('Are you sure you want to delete this element?')) {
+                    hide: function(deleteElement) {
+                        if (confirm('Are you sure you want to delete this element?')) {
+
                             $(this).slideUp(deleteElement);
+                            checkMaxAttributeGroup(maxForms);
                         }
                     },
                     // (Optional)
                     // You can use this if you need to manually re-index the list
                     // for example if you are using a drag and drop library to reorder
                     // list items.
-                    ready: function (setIndexes) {
-                        console.log(setIndexes);
+                    ready: function(setIndexes) {
+
                     },
                     // (Optional)
                     // Removes the delete button from the first list item,

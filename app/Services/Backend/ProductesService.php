@@ -26,7 +26,7 @@ class ProductesService
         $query =  Properties::query();
 
         $query = $query->withDepth()
-        ->defaultOrder();
+            ->defaultOrder();
 
         if ($request->has('searchInput') && isset($searchInput)) {
             $query->where(function ($query) use ($searchInput) {
@@ -89,6 +89,7 @@ class ProductesService
 
     public function store($request)
     {
+        dd($request->all());
         // Xử lý ngoại lệ
         try {
             //NOTE - Lưu thông tin người dùng vào cơ sở dữ liệu
@@ -236,22 +237,22 @@ class ProductesService
     {
         // Xử lý ngoại lệ
         try {
-              // Lấy id
-              $id = $request->id;
+            // Lấy id
+            $id = $request->id;
 
-              // Xóa tài khoản
+            // Xóa tài khoản
 
-              $properties = Properties::find($id);
+            $properties = Properties::find($id);
 
 
-              $childrenProperties = $properties->children;
+            $childrenProperties = $properties->children;
 
-              foreach ($childrenProperties as $children) {
-                  $children->delete();
-              }
+            foreach ($childrenProperties as $children) {
+                $children->delete();
+            }
 
-              // Xóa node cha
-              $dataDelete = $properties->delete();
+            // Xóa node cha
+            $dataDelete = $properties->delete();
             if ($dataDelete) {
                 // Thông báo thành công
                 return response()->json([
@@ -276,16 +277,50 @@ class ProductesService
         return Categories::withDepth()->get()->toFlatTree();
     }
 
-    public function getPropertiesSelectByParent(){
+    public function getPropertiesSelectByParent()
+    {
         return Properties::whereNull('parent_id')->get();
     }
 
-    public function getAllBrandSelect(){
-        return Brand::select(['id', 'name'])->where('status',0)->get();
+    public function getAllBrandSelect()
+    {
+        return Brand::select(['id', 'name'])->where('status', 0)->get();
     }
 
-    public function getAllLabelSelect(){
-        return Label::select(['id', 'name'])->where('status',0)->get();
+    public function getAllLabelSelect()
+    {
+        return Label::select(['id', 'name'])->where('status', 0)->get();
     }
 
+    public function getChildrenProperties( $request)
+    {
+        $id = $request->option['attributeId'];
+
+
+        $query = $request->input('search');
+
+        // Find the property by ID and get its descendants
+        $descendants = Properties::find($id)->descendants;
+
+        // Filter the descendants by the search query
+        if ($request->has('search') && isset($query)) {
+            $descendants->where(function ($querys) use ($query) {
+                $querys->where('name', 'like', '%' . $query . '%');
+            });
+        }
+
+        $descendants = $descendants->where('status',0);
+
+
+        $attrributeMapp = $descendants->map(function ($item){
+            return [
+                'id' => $item->id,
+                'text' => $item->name,
+
+            ];
+        })->all();
+
+        // Return the filtered results as JSON
+        return response()->json(array('items' => $attrributeMapp));
+    }
 }

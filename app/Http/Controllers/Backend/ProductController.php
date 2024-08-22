@@ -30,6 +30,19 @@ class ProductController extends Controller
         $getCategoriesSelect = $this->service->getCategoriesSelect();
         $getAllBrandSelect = $this->service->getAllBrandSelect();
         $getAllLabelSelect = $this->service->getAllLabelSelect();
-        return view('backend.products.create', compact(['getCategoriesSelect','getAllBrandSelect','getAllLabelSelect']));
+        $getAllProperties = $this->service->getPropertiesSelectByParent();
+        return view('backend.products.create', compact(['getCategoriesSelect', 'getAllBrandSelect', 'getAllLabelSelect', 'getAllProperties']));
+    }
+
+    public function store(Request $request){
+        return $this->service->store($request);
+    }
+
+
+
+
+    public function getChildrenProperties(Request $request)
+    {
+        return $this->service->getChildrenProperties($request);
     }
 }

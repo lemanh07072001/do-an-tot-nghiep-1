@@ -98,6 +98,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::post('/toggleStatus', [ProductController::class, 'toggleStatus'])->name('toggleStatus');
             Route::delete('/deleteAll', [ProductController::class, 'deleteAll'])->name('deleteAll');
             Route::delete('/deleteRow', [ProductController::class, 'deleteRow'])->name('deleteRow');
+
+            // Ajax routes
+            Route::post('/getChildrenProperties', [ProductController::class, 'getChildrenProperties'])->name('getChildrenProperties');
         });
 
         //LINK - Brand

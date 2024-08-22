@@ -76,12 +76,12 @@
 
     <!-- TinyMCE 5.0 -->
     <script src="{{asset('assets/js/keyTinyEMD.js')}}"></script>
-    <script>
+    {{-- <script>
         const key = keyTinyEMD().key; // Lấy khóa API từ hàm keyTinyEMD()
         const tinyMCEUrl = `https://cdn.tiny.cloud/1/${key}/tinymce/5/tinymce.min.js`;
-    </script>
+    </script> --}}
 
-    <script>
+    {{-- <script>
         document.addEventListener('DOMContentLoaded', function() {
             const tinyMCEUrl = document.querySelector('meta[name="tiny-mce-url"]').getAttribute('content');
             const scriptElement = document.createElement('script');
@@ -89,7 +89,7 @@
             scriptElement.referrerPolicy = "origin";
             document.head.appendChild(scriptElement);
         });
-    </script>
+    </script> --}}
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.4.1/dist/flowbite.min.js"></script>
 

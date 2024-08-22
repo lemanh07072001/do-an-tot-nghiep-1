@@ -21,6 +21,8 @@ return new class extends Migration
             $table->tinyInteger('status')->default(Status::Active);
             $table->string('image')->nullable();
             $table->timestamps();
+
+
         });
     }
 

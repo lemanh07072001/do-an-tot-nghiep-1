@@ -50,3 +50,16 @@ ul.pagination {
     padding-left: 0;
     padding-right: 0;
 }
+
+.select2-container--default .select2-selection--multiple{
+
+    margin: 0;
+    border-width: 1px !important;
+    border-radius: 0.5rem;
+}
+
+.select2-container .select2-search--inline .select2-search__field{
+    margin: 0;
+}
+
+
