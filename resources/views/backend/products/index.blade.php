@@ -1,3 +1,4 @@
+
 <x-app-layout>
     @section('title', config('apps.products.titleIndex'))
     <div class="p-4 max-h-full bg-white block sm:flex items-center justify-between   dark:bg-gray-800 ">
@@ -86,29 +87,29 @@
                                 </div>
                             </x-table-col>
 
-                            <x-table-col width="15%"
+                            <x-table-col width="10%"
+                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                SKU
+                            </x-table-col>
+
+                            <x-table-col
+                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                Ảnh đại diện
+                            </x-table-col>
+
+                            <x-table-col
                                 class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                                 Hình ảnh
                             </x-table-col>
 
-                            <x-table-col width="15%"
+                            <x-table-col width="10%"
                                 class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Tiêu đề
-                            </x-table-col>
-
-                            <x-table-col width="20%"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Link
-                            </x-table-col>
-
-                            <x-table-col scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Thời gian giảm giá
+                                Giá bán
                             </x-table-col>
 
                             <x-table-col width="10%"
                                 class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Người tạo
+                                Giá khuyến mãi
                             </x-table-col>
 
                             <x-table-col width="10%"
@@ -134,28 +135,28 @@
     </div>
 
     @push('js')
-        <script src="{{asset('assets/apps/banners/datatables.js')}}"></script>
+        <script src="{{asset('assets/apps/products/datatables.js')}}"></script>
 
         <script>
 
-            var url = '{!! route('ecommerce_module.banner.getData') !!}'
+            var url = '{!! route('ecommerce_module.products.getData') !!}'
             const columns = [{
                     data: 'id'
                 },
                 {
-                    data: 'image'
+                    data: 'sku'
                 },
                 {
-                    data: 'name'
+                    data: 'avatar'
                 },
                 {
-                    data: 'link'
+                    data: 'images'
                 },
                 {
-                    data: 'discount_period'
+                    data: 'price'
                 },
                 {
-                    data: 'user_id'
+                    data: 'price_sale'
                 },
                 {
                     data: 'status'
@@ -168,21 +169,21 @@
             const _CUSTOM_DATATABLES = {
                 CLASS_ROW: '',
                 PAGE: '8',
-                TARGETS: [0, 1, 2, 3, 4, 5, 6]
+                TARGETS: [0, 1, 2, 3,4,5,7,8]
 
             };
             var dataTableIndex = initializeDataTable(url, columns, _CUSTOM_DATATABLES);
 
             //NOTE - Toggle Status
-            var urlToggleStatus = '{!! route('ecommerce_module.banner.toggleStatus') !!}'
+            var urlToggleStatus = '{!! route('ecommerce_module.products.toggleStatus') !!}'
             toggleStatus(urlToggleStatus, dataTableIndex)
 
             //NOTE - Delete All
-            var urlToggleStatus = '{!! route('ecommerce_module.banner.deleteAll') !!}'
+            var urlToggleStatus = '{!! route('ecommerce_module.products.deleteAll') !!}'
             deleteAll(urlToggleStatus, dataTableIndex)
 
             //NOTE - Delete Row
-            var urlToggleStatus = '{!! route('ecommerce_module.banner.deleteRow') !!}'
+            var urlToggleStatus = '{!! route('ecommerce_module.products.deleteRow') !!}'
             deleteRow(urlToggleStatus, dataTableIndex)
         </script>
     @endpush

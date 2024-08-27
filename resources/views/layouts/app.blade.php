@@ -74,6 +74,8 @@
     <!-- Select2 -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+
+
     <!-- TinyMCE 5.0 -->
     <script src="{{asset('assets/js/keyTinyEMD.js')}}"></script>
     {{-- <script>
@@ -106,7 +108,11 @@
         }
     </script>
 
+    <script>
+        var hostUrl = "{{ env('APP_URL') }}";
 
+
+    </script>
 
 
 </body>

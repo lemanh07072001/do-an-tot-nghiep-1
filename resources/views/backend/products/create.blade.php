@@ -32,19 +32,19 @@
                 </div>
 
                 <div class="col-span-6 sm:col-span-6">
-                    <x-input-label for="short_description">Mô tả ngắn</x-input-label>
-                    <x-text-arena name="short_description" :value="old('short_description')" id="short_description" />
-                    <x-input-error error="short_description" class="mt-2" />
+                    <x-input-label for="sort_description">Mô tả ngắn</x-input-label>
+                    <x-text-arena name="sort_description" :value="old('sort_description')" id="sort_description" />
+                    <x-input-error error="sort_description" class="mt-2" />
                 </div>
 
                 <div class="col-span-6 sm:col-span-6 sm:row-span-6">
                     <x-input-label for="myDropzone_1" required>Hình ảnh</x-input-label>
-                    <input type="hidden" id="image_id" name="image" value="">
+                    <input type="hidden" id="image_id" name="images" value="">
                     <div id="myDropzone_1" style="max-width:100%"
                         class="dropzone border-4 border-dashed border-gray-300 rounded-lg p-4 flex-wrap text-center flex items-center justify-center">
 
                     </div>
-                    <x-input-error error="image" class="mt-2" />
+                    <x-input-error error="images" class="mt-2" />
                 </div>
 
 
@@ -56,30 +56,30 @@
 
                 <div class="col-span-6 sm:col-span-6 sm:row-span-6">
                     <x-input-label for="myDropzone_2" required>Ảnh đại diện</x-input-label>
-                    <input type="hidden" id="image_id" name="image" value="">
+                    <input type="hidden" id="image_id" name="avatar" value="">
                     <div id="myDropzone_2"
                         class="dropzone border-4 border-dashed border-gray-300 rounded-lg p-4 text-center flex flex-col items-center justify-center">
 
                     </div>
-                    <x-input-error error="image" class="mt-2" />
+                    <x-input-error error="avatar" class="mt-2" />
                 </div>
 
                 <div class="col-span-6 sm:col-span-2 ">
-                    <x-input-label for="suk" required>SUK</x-input-label>
-                    <x-text-input name="suk" :value="old('suk')" id="suk" placeholder="Mã sản phẩm" />
+                    <x-input-label for="sku" required>SKU</x-input-label>
+                    <x-text-input name="sku" :value="old('sku')" id="sku" placeholder="Mã sản phẩm" />
                     <x-input-error error="suk" class="mt-2" />
                 </div>
 
                 <div class="col-span-6 sm:col-span-2">
                     <x-input-label for="price" required>Giá</x-input-label>
-                    <x-text-input name="price" :value="old('price')" id="price" />
+                    <x-text-input class="int" name="price" :value="old('price')" id="price" />
                     <x-input-error error="price" class="mt-2" />
                 </div>
 
                 <div class="col-span-6 sm:col-span-2">
-                    <x-input-label for="discount" required>Giảm giá</x-input-label>
-                    <x-text-input name="discount" :value="old('discount')" id="discount" />
-                    <x-input-error error="discount" class="mt-2" />
+                    <x-input-label for="price_sale" required>Giảm giá</x-input-label>
+                    <x-text-input class="int" name="price_sale" :value="old('price_sale')" id="price_sale" />
+                    <x-input-error error="price_sale" class="mt-2" />
                 </div>
 
                 <div class="col-span-6 sm:col-span-2 ">
@@ -96,12 +96,12 @@
                 </div>
 
                 <div class="col-span-6 sm:col-span-2 ">
-                    <x-input-label required>Nhãn</x-input-label>
-                    <x-select name="label">
+                    <x-input-label>Nhãn</x-input-label>
+                    <x-select name="label_id">
                         @if (!empty($getAllLabelSelect))
                             <option value="">--Chọn nhãn--</option>
                             @foreach ($getAllLabelSelect as $label)
-                                <option value="{{ $label->id }}">
+                                <option value="{{ $label->id }}" @selected(old('status') == $status)>
                                     {{ $label->name }}</option>
                             @endforeach
                         @endif
@@ -110,106 +110,104 @@
 
                 <div class="col-span-6 sm:col-span-2 ">
                     <x-input-label required>Danh mục</x-input-label>
-                    <x-select name="brand">
+                    <x-select name="categories_id">
                         <option value="">--Chọn danh mục--</option>
-                        {{ App\Helpers\GetData::showCategoriesSelect($getCategoriesSelect, old('categoories_id')) }}
+                        {{ App\Helpers\GetData::showCategoriesSelect($getCategoriesSelect, old('categories_id')) }}
                     </x-select>
+                    <x-input-error error="categories_id" class="mt-2" />
                 </div>
 
-                <div class="col-span-6 sm:col-span-6 ">
+                <div class="col-span-6 sm:col-span-2 ">
+                    <h3 class="mb-3 text-xl font-medium text-gray-900 dark:text-white">Thêm mới thộc tính</h3>
+                    <label class="inline-flex items-center me-5 cursor-pointer mb-3">
+                        <input type="checkbox" name="turnOnVariant" class="sr-only peer turnOnVariant"
+                            @checked(old('turnOnVariant') == 'on')>
+                        <div
+                            class="relative w-11 h-6 bg-gray-200 rounded-full peer  peer-focus:ring-4 peer-focus:ring-orange-300  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500">
+                        </div>
+                        <span class="ms-3 text-sm font-medium text-gray-500 ">Bấm vào đây để thêm mới thuộc tính cho sản
+                            phẩm</span>
+                    </label>
+
+
+                    <div class="btn-foot block">
+                        <button data-create type="button" disabled
+                            class="add-row cursor-not-allowed text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                            Thêm mới
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-span-6 sm:col-span-6 attributeList {{ old('turnOnVariant') == 'on' ? '' : 'hidden' }}">
                     <div
                         class="mb-2 text-sm font-semibold tracking-wide text-gray-900 uppercase lg:text-xs dark:text-white">
                         Thuộc tính</div>
-                    <div data-repeater-list="attribute[]">
-                        <div data-repeater-item>
-                            <div class="grid grid-cols-8 gap-4 gap-y-4 ">
-                                <div class="col-span-2 sm:col-span-2 mb-2 ">
-                                    <select name="select_attribute"
-                                        class="select selectProperties  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ">
-                                        @if (!empty($getAllProperties))
-                                            <option value="">--Chọn thuộc tính--</option>
-                                            @foreach ($getAllProperties as $item)
-                                                <option value="{{ $item->id }}">
-                                                    {{ $item->name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </select>
+                    <div class="data-render">
+                        @if (old('attributeCatalogue'))
+                            @foreach (old('attributeCatalogue') as $key => $value)
+                                <div data-repeater-list="attribute">
+                                    <div data-repeater-item>
+                                        <div class="grid grid-cols-8 gap-4 gap-y-4">
+                                            <div class="col-span-2 sm:col-span-2 mb-2">
+                                                <select name="attributeCatalogue[]"
+                                                    class="select selectProperties bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                                    <option value="">--Chọn thuộc tính--</option>
+                                                    @foreach ($getAllProperties as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            @selected($value == $item->id)>{{ $item->name }}
+                                                        </option>
+                                                    @endforeach
+
+                                                </select>
+                                            </div>
+                                            <div class="col-span-5 sm:col-span-5 mb-2">
+                                                {{-- <input type="text" name="input_attribute"
+                                                    class="select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                                    disabled> --}}
+                                                <select name="attribute[{{ $value }}][]" multiple
+                                                    data-catID="{{ $value }}"
+                                                    class="selectMultiple variant-{{ $value }} bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                                                    id=""></select>
+                                            </div>
+                                            <div class="col-span-1 sm:col-span-1">
+                                                <button type="button" data-delete
+                                                    class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-span-5 sm:col-span-5 mb-2">
-                                    <input type="text" name=""
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                        disabled></input>
-                                </div>
-                                <div class="col-span-1 sm:col-span-1">
-                                    <button type="button" data-repeater-delete
-                                        class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                                        Delete
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                            @endforeach
+
+                        @endif
                     </div>
 
                 </div>
-                <div class="btn-foot">
-                    <button data-repeater-create type="button"
-                        class="add-row text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                        Thêm mới
-                    </button>
-                </div>
 
-                <div class="col-span-6 sm:col-span-6 ">
+
+                <div
+                    class="attributeList col-span-6 sm:col-span-6 {{ old('turnOnVariant') == 'on' ? '' : 'hidden' }}">
                     <div class="w-100">
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
+                            <table class="w-full text-sm text-left  text-gray-500 tableFull">
                                 <div
                                     class="p-5 text-lg font-semibold text-left rtl:text-right text-gray-900 bg-white ">
                                     DANH SÁCH PHIÊN BẢN
                                     <p class="mt-1 text-sm font-normal text-gray-500 dark:text-gray-400">Chọn danh sách
                                         phiên bản phù hợp với sản phẩm</p>
                                 </div>
-                                <div>
-                                    <div id="renderTableAttribute"></div>
+                                <div id="renderTableAttribute" class="w-100" style="width:100%">
+                                    <thead class="theadHeader text-xs text-white uppercase bg-gray-500"></thead>
+                                    <tbody class="bodyRow"></tbody>
                                 </div>
                             </table>
                         </div>
-                        <tr>
-                            <td colspan="10">
-                                <div class="bg-white rounded-lg shadow p-4">
-                                    <div class="flex items-center justify-between ">
-                                        <span class="text-1xl font-bold text-gray-900">Cập nhật thông tin phiên bản</span>
-                                        <div>
-                                            <button type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300  font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Xác nhận</button>
-                                            <button type="button" class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Quay lại</button>
-                                        </div>
 
-                                    </div>
-
-                                    <div>
-                                        <div class="grid grid-cols-6 gap-4 gap-y-4 ">
-                                            <div class="col-span-6 sm:col-span-2">
-                                                <label for="quantity" class="inline-flex items-center cursor-pointer mb-2 text-sm font-medium text-gray-900 ">
-                                                    Số lượng
-                                                </label>
-                                                <input type="text" id="quantity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="Số lượng"  />
-                                            </div>
-                                            <div class="col-span-6 sm:col-span-2">
-                                                <label for="sku" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SKU</label>
-                                                <input type="text" id="sku" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="SKU"  />
-                                            </div>
-
-                                            <div class="col-span-6 sm:col-span-2">
-                                                <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giá bán</label>
-                                                <input type="text" id="price" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " placeholder="Giá bán"  />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </td>
-                        </tr>
                     </div>
                 </div>
+
+
             </div>
 
             <div class="col-span-6 sm:col-span-3">
@@ -229,7 +227,10 @@
 
 
         </form>
+
+
     </x-card>
+
 
     @push('css')
         <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.min.js" />
@@ -240,71 +241,18 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.js"></script>
 
         <script>
-            var maxForms = {{ Js::from($getAllProperties) }};
-            var routeGetChildrenProperties = {{ Js::from(route('ecommerce_module.products.getChildrenProperties')) }};
+            var getAllProperties = {{ Js::from($getAllProperties) }};
 
-            $(document).ready(function() {
-                $('.repeater').repeater({
-                    // (Optional)
-                    // start with an empty list of repeaters. Set your first (and only)
-                    // "data-repeater-item" with style="display:none;" and pass the
-                    // following configuration flag
-                    initEmpty: true,
-                    // (Optional)
-                    // "defaultValues" sets the values of added items.  The keys of
-                    // defaultValues refer to the value of the input's name attribute.
-                    // If a default value is not specified for an input, then it will
-                    // have its value cleared.
-                    defaultValues: {
+            var old = {{ Js::from(old('attributeCatalogue')) }};
 
-                    },
-                    // (Optional)
-                    // "show" is called just after an item is added.  The item is hidden
-                    // at this point.  If a show callback is not given the item will
-                    // have $(this).show() called on it.
-                    show: function() {
-                        $(this).slideDown();
+            var routeGetChildrenProperties = {{ Js::from(route('ecommerce_module.ajax.getChildrenProperties')) }};
+            var getAttributeAjax = {{ Js::from(route('ecommerce_module.ajax.getAttributeAjax')) }};
 
-
-                        $(this).find('.select').select2({
-                            width: '100%',
-                            minimumResultsForSearch: Infinity
-                        });
-
-                        updateSelectLabels();
-                        checkMaxAttributeGroup(maxForms);
-
-                    },
-                    // (Optional)
-                    // "hide" is called when a user clicks on a data-repeater-delete
-                    // element.  The item is still visible.  "hide" is passed a function
-                    // as its first argument which will properly remove the item.
-                    // "hide" allows for a confirmation step, to send a delete request
-                    // to the server, etc.  If a hide callback is not given the item
-                    // will be deleted.
-                    hide: function(deleteElement) {
-                        if (confirm('Are you sure you want to delete this element?')) {
-
-                            $(this).slideUp(deleteElement);
-                            checkMaxAttributeGroup(maxForms);
-                        }
-                    },
-                    // (Optional)
-                    // You can use this if you need to manually re-index the list
-                    // for example if you are using a drag and drop library to reorder
-                    // list items.
-                    ready: function(setIndexes) {
-
-                    },
-                    // (Optional)
-                    // Removes the delete button from the first list item,
-                    // defaults to false.
-                    isFirstItemUndeletable: true
-                })
-
-                $('.select').select2();
-            });
+            var attributes = {{ Js::from(old('attribute')) }}
+            var variants = {{ Js::from(old('variant')) }}
         </script>
+
+
 
         <script>
             var uploadedDocumentMap = {}
@@ -318,13 +266,13 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
                             'content')
                     },
-                    uploadMultiple: true,
+                    // uploadMultiple: true,
                     maxFilesize: 2, // Dung lượng tối đa cho mỗi tệp tin (đơn vị MB)
                     acceptedFiles: ".png, .jpg", // Các loại tệp tin được chấp nhận
                     addRemoveLinks: true, // Cho phép xóa tệp tin sau khi đã tải lên
                     dictDefaultMessage: "Kéo và thả tệp tin vào đây hoặc nhấp để chọn tệp", // Tin nhắn mặc định
                     success: function(file, response) {
-                        console.log(file, response);
+                        console.log(response);
                         $('form').append('<input type="hidden" name="images[]" value="' + response +
                             '">')
                         uploadedDocumentMap[file.name] = response
@@ -376,7 +324,8 @@
                     addRemoveLinks: true, // Cho phép xóa tệp tin sau khi đã tải lên
                     dictDefaultMessage: "Kéo và thả tệp tin vào đây hoặc nhấp để chọn tệp", // Tin nhắn mặc định
                     success: function(file, response) {
-                        $('form').append('<input type="hidden" name="image" value="' + response +
+
+                        $('form').append('<input type="hidden" name="avatar" value="' + response +
                             '">')
                         uploadedDocumentMap[file.name] = response
                     },
@@ -388,24 +337,24 @@
                         } else {
                             name = uploadedDocumentMap[file.name]
                         }
-                        $('form').find('input[name="image"][value="' + name + '"]').remove()
+                        $('form').find('input[name="avatar"][value="' + name + '"]').remove()
                     },
                     init: function() {
-                        @if (old('image'))
+                        @if (old('avatar'))
                             let mockFile = {
-                                name: "{{ old('image') }}",
+                                name: "{{ old('avatar') }}",
                                 size: 12345 // Adjust size if needed
                             };
                             this.files.push(mockFile);
-                            this.displayExistingFile(mockFile, "{{ env('APP_URL') . old('image') }}");
+                            this.displayExistingFile(mockFile, "{{ env('APP_URL') . old('avatar') }}");
 
-                            $('form').append('<input type="hidden" name="image" value="' +
-                                "{{ old('image') }}" + '">')
+                            $('form').append('<input type="hidden" name="avatar" value="' +
+                                "{{ old('avatar') }}" + '">')
                         @endif
 
                         this.on("addedfile", function(file) {
                             if (this.files.length > 1) {
-                                $('form').find('input[name="image"][value="' + this.files[0].name +
+                                $('form').find('input[name="avatar"][value="' + this.files[0].name +
                                     '"]').remove()
                                 this.removeFile(this.files[0]);
 

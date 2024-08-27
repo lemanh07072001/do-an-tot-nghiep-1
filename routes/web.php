@@ -93,14 +93,12 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::get('/getData', [ProductController::class, 'getData'])->name('getData');
             Route::get('/create', [ProductController::class, 'create'])->name('create');
             Route::post('/store', [ProductController::class, 'store'])->name('store');
-            Route::get('/edit/{properties}', [ProductController::class, 'edit'])->name('edit');
-            Route::post('/update/{properties}', [ProductController::class, 'update'])->name('update');
+            Route::get('/edit/{products}', [ProductController::class, 'edit'])->name('edit');
+            Route::post('/update/{products}', [ProductController::class, 'update'])->name('update');
             Route::post('/toggleStatus', [ProductController::class, 'toggleStatus'])->name('toggleStatus');
             Route::delete('/deleteAll', [ProductController::class, 'deleteAll'])->name('deleteAll');
             Route::delete('/deleteRow', [ProductController::class, 'deleteRow'])->name('deleteRow');
 
-            // Ajax routes
-            Route::post('/getChildrenProperties', [ProductController::class, 'getChildrenProperties'])->name('getChildrenProperties');
         });
 
         //LINK - Brand
@@ -127,6 +125,13 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::post('/toggleStatus', [LabelController::class, 'toggleStatus'])->name('toggleStatus');
             Route::delete('/deleteAll', [LabelController::class, 'deleteAll'])->name('deleteAll');
             Route::delete('/deleteRow', [LabelController::class, 'deleteRow'])->name('deleteRow');
+        });
+
+
+         //LINK - Ajax
+         Route::prefix('ajax')->name('ajax.')->group(function () {
+              Route::post('/getChildrenProperties', [ProductController::class, 'getChildrenProperties'])->name('getChildrenProperties');
+              Route::get('/getAttributeAjax', [ProductController::class, 'getAttributeAjax'])->name('getAttributeAjax');
         });
     });
 

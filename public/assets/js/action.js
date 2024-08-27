@@ -2,6 +2,8 @@ $(document).ready(function() {
 
     handleCheckBox();
     select2();
+    formatInt();
+    loadFormatPrice();
 });
 
 let activeSelector = () => {
@@ -64,6 +66,7 @@ function checkAllFalse() {
 function updateToggleButtonDelete(_this) {
     var anyChecked = $(".childCheckbox:checked").length > 0;
     if (anyChecked) {
+
         $('#handleAdd').addClass('hidden');
         $('#handleDelete').removeClass('hidden');
     } else {
@@ -82,6 +85,59 @@ function select2(){
     })
 }
 
+function formatInt() {
+    $(document).on('change keyup blur', '.int', function() {
+        let _this = $(this);
+        let value = _this.val();
+
+        // If the value is empty, set it to '0'
+        if (value === '') {
+            _this.val('');
+            return;
+        }
+
+        // Remove existing commas or dots and format the number
+        value = value.replace(/[.,]/g, "");
+
+        // Check if the value is a valid number
+        if (isNaN(value)) {
+            _this.val('');
+            return;
+        }
+
+        // Add commas for thousands separators
+        _this.val(addCommas(value));
+    });
+}
+
+function addCommas(nStr) {
+    nStr = String(nStr);
+    return nStr.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+function loadFormatPrice(){
+    $('.int').each(function(index,item){
+        let value = $(item).val();
+
+        // If the value is empty, set it to '0'
+        if (value === '') {
+            $(item).val('');
+            return;
+        }
+
+        // Remove existing commas or dots and format the number
+        value = value.replace(/[.,]/g, "");
+
+        // Check if the value is a valid number
+        if (isNaN(value)) {
+            $(item).val('');
+            return;
+        }
+
+        // Add commas for thousands separators
+        $(item).val(addCommas(value));
+    })
+}
 
 // Button Import Excel
 $('#fileSelect').on('click', function() {

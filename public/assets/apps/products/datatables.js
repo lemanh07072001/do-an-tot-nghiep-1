@@ -134,7 +134,6 @@ let toggleStatus = (url, dataTableIndex, type = "toast ") => {
                     swalConfig1ButtonConfirm(response.message, 'success')
                 )
 
-                console.log('Toggle Status: ' + response.message);
                 dataTableIndex.draw();
             },
             //   Trả dữ liệu thất bại
@@ -149,7 +148,7 @@ let toggleStatus = (url, dataTableIndex, type = "toast ") => {
                     swalConfig1ButtonConfirm(response.message, 'success')
                 )
 
-                console.log('Toggle Status: ' + response.message);
+
                 dataTableIndex.draw();
             },
             complete: function() {

@@ -35,7 +35,6 @@ class CategoriesRequest extends FormRequest
                     'slug' => ['required', 'string', 'max:255'],
                     'description' => ['nullable', 'string'],
                     'order' => ['required', 'integer', 'max:20', 'min:0'],
-                    'image' => ['required',  'max:2048']
                 ];
         } else {
             $rule =
@@ -44,7 +43,6 @@ class CategoriesRequest extends FormRequest
                     'slug' => ['required', 'string', 'max:255'],
                     'description' => ['nullable', 'string'],
                     'order' => ['required', 'integer', 'max:20', 'min:0'],
-                    'image' => ['required',  'max:2048']
                 ];
         };
 
@@ -69,9 +67,6 @@ class CategoriesRequest extends FormRequest
             'order.max' => ':attribute không được quá :max ký tự',
             'order.min' => ':attribute không được nhỏ hơn :min ký tự',
             'order.integer' => ':attribute phải là số nguyên',
-
-            'image.required' => ':attribute không được để trống',
-            'image.max' => ':attribute không được quá :max kb',
         ];
     }
 

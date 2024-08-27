@@ -19,7 +19,9 @@ class UploadController extends Controller
                     foreach ($files as $file) {
                         $name = $file->getClientOriginalName();
                         $path = $file->storeAs($pathFull, $name);
-                        $storedFiles[] = 'storage/' . $pathFull . '/' . $name;
+
+                        array_push($storedFiles,'storage/' . $pathFull . '/' . $name);
+                        // $storedFiles[] = 'storage/' . $pathFull . '/' . $name;
                     }
                 } else {
                     // Nếu chỉ có một file
@@ -27,6 +29,7 @@ class UploadController extends Controller
                     $path = $files->storeAs($pathFull, $name);
                     $storedFiles[] = 'storage/' . $pathFull . '/' . $name;
                 }
+
 
                 return response()->json( $storedFiles);
             }

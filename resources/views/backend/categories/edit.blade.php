@@ -14,7 +14,7 @@
 
     </div>
 
-   
+
 
     <x-card>
         <form method="POST" action="{{ route('ecommerce_module.categories.update', $categories) }}">
@@ -69,7 +69,7 @@
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
-                    <x-input-label for="myDropzone" required>Hình ảnh</x-input-label>
+                    <x-input-label for="myDropzone" >Hình ảnh</x-input-label>
                     <input type="hidden" id="image_id" name="image" value="">
                     <div id="myDropzone"
                         class="dropzone border-4 border-dashed border-gray-300 rounded-lg p-4 text-center flex flex-col items-center justify-center">
@@ -117,7 +117,7 @@
 
         <script>
             var imageUrl = @json(env('APP_URL'). $categories->image);
-            
+
             var uploadedDocumentMap = {}
             // Khởi tạo Dropzone trên phần tử có ID là myDropzone
             Dropzone.autoDiscover = false; // Tắt chế độ tự động tìm kiếm các phần tử có class dropzone
@@ -142,18 +142,18 @@
                     removedfile: function(file) {
                         file.previewElement.remove()
                         var name = ''
-                        if (typeof file.file_name !== 'undefined') {
-                            name = file.file_name
+                        if (typeof file.name !== 'undefined') {
+                            name = file.name
                         } else {
                             name = uploadedDocumentMap[file.name]
                         }
                         $('form').find('input[name="image"][value="' + name + '"]').remove()
                     },
                     init: function() {
-                    
+
                         @if ( $categories->image)
                         // Tìm và xóa ảnh hiện tại khỏi Dropzone
-                        
+
                             let mockFile = {
                                 name: '{{$categories->image}}',
                                 size: 11213
@@ -161,20 +161,20 @@
 
                             this.files.push(mockFile);
                             this.displayExistingFile(mockFile, imageUrl);
-                        
+
                             $('form').append('<input type="hidden" name="image" value="' + @json($categories->image) + '">');
-                        
+
                         @endif
 
-                        this.on("addedfile",function(file){    
+                        this.on("addedfile",function(file){
                             if(this.files.length > 1){
                                 $('form').find('input[name="image"][value="' + this.files[0].name + '"]').remove()
                                 this.removeFile(this.files[0]);
-                            
+
                             }
                         })
                     },
-                
+
                 })
             });
         </script>

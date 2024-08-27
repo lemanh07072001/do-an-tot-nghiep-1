@@ -67,7 +67,7 @@
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
-                    <x-input-label for="myDropzone" required>Hình ảnh</x-input-label>
+                    <x-input-label for="myDropzone" >Hình ảnh</x-input-label>
 
                     <div id="myDropzone"
                         class="dropzone border-4 border-dashed border-gray-300 rounded-lg p-4 text-center flex flex-col items-center justify-center">
@@ -139,8 +139,8 @@
             removedfile: function(file) {
                 file.previewElement.remove()
                 var name = ''
-                if (typeof file.file_name !== 'undefined') {
-                    name = file.file_name
+                if (typeof file.name !== 'undefined') {
+                    name = file.name
                 } else {
                     name = uploadedDocumentMap[file.name]
                 }

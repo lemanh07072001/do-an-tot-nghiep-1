@@ -180,8 +180,8 @@
                     removedfile: function(file) {
                         file.previewElement.remove()
                         var name = ''
-                        if (typeof file.file_name !== 'undefined') {
-                            name = file.file_name
+                        if (typeof file.name !== 'undefined') {
+                            name = file.name
                         } else {
                             name = uploadedDocumentMap[file.name]
                         }

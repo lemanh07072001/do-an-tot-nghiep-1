@@ -15,7 +15,8 @@ class FormatFunction
         return Carbon::parse($date)->format('d-m-Y H:i:s');
     }
 
-    public static function getDatetime(){
+    public static function getDatetime()
+    {
         return Carbon::now()->toDateTimeString();
     }
 
@@ -127,5 +128,58 @@ class FormatFunction
                 <svg class="w-4 h-4 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
             </button>
         ';
+    }
+
+    public static function formatTitleProduct($data)
+    {
+        return '
+
+            <div class="flex items-center gap-4">
+                <img class="w-10 h-10 rounded-full" src="' . env('APP_URL') . $data->avatar . '" alt="">
+                <div class="font-medium text-sky-400">
+                    <div>' . $data->name . '</div>
+                    <div class="text-sm text-red-400  dark:text-gray-400">Danh mục: <span class="text-slate-400">' . $data->categories->name . '</span></div>
+                </div>
+            </div>
+        ';
+    }
+
+    public static function formatImagesProduct($data)
+    {
+        $imageArray = explode(", ", $data->images);
+        $html = "<div class='flex -space-x-4 rtl:space-x-reverse'>";
+
+        // Lấy tối đa 3 phần tử đầu tiên từ mảng
+        $firstThreeImages = array_slice($imageArray, 0, 3);
+
+        // Hiển thị 3 hình ảnh đầu tiên
+        foreach ($firstThreeImages as $image) {
+            $html .= "<img class='modelPreviewImages w-10 h-10 border-2 border-white rounded-full dark:border-gray-800' src='" . env('APP_URL').$image . "' alt='".$data->name."'>";
+        };
+
+        // Nếu mảng có nhiều hơn 3 phần tử, hiển thị số lượng hình ảnh còn lại
+        if (count($imageArray) > 3) {
+            $remainingCount = count($imageArray) - 3;
+            $html .= "<a class='modelPreviewImages flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 ' href='#'>".$remainingCount."</a>";
+        }
+
+        $html .= "</div>";
+
+        return $html;
+    }
+
+    public static function formatPriceProduct($data)
+    {
+        if($data != '0'){
+            return '<div class="font-semibold text-sm">'.number_format($data, 0, ',', '.') . ' đ'.'</div>';
+        }else{
+            return '<span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Không khuyến mãi</span>';
+        }
+
+    }
+
+    public static function formatPrice($data)
+    {
+        return str_replace('.', '', $data);
     }
 }

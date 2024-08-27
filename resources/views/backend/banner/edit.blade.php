@@ -157,7 +157,7 @@
 
         <script>
             var imageUrl = @json(env('APP_URL'). $banner->image);
-            
+
             var uploadedDocumentMap = {}
             // Khởi tạo Dropzone trên phần tử có ID là myDropzone
             Dropzone.autoDiscover = false; // Tắt chế độ tự động tìm kiếm các phần tử có class dropzone
@@ -182,18 +182,18 @@
                     removedfile: function(file) {
                         file.previewElement.remove()
                         var name = ''
-                        if (typeof file.file_name !== 'undefined') {
-                            name = file.file_name
+                        if (typeof file.name !== 'undefined') {
+                            name = file.name
                         } else {
                             name = uploadedDocumentMap[file.name]
                         }
                         $('form').find('input[name="image"][value="' + name + '"]').remove()
                     },
                     init: function() {
-                    
+
                         @if ( $banner->image)
                            // Tìm và xóa ảnh hiện tại khỏi Dropzone
-                         
+
                             let mockFile = {
                                 name: '{{$banner->image}}',
                                 size: 11213
@@ -201,20 +201,20 @@
 
                             this.files.push(mockFile);
                             this.displayExistingFile(mockFile, imageUrl);
-                          
+
                             $('form').append('<input type="hidden" name="image" value="' + @json($banner->image) + '">');
-                        
+
                         @endif
 
-                        this.on("addedfile",function(file){    
+                        this.on("addedfile",function(file){
                             if(this.files.length > 1){
                                 $('form').find('input[name="image"][value="' + this.files[0].name + '"]').remove()
                                 this.removeFile(this.files[0]);
-                               
+
                             }
                         })
                     },
-                   
+
                 })
             });
         </script>

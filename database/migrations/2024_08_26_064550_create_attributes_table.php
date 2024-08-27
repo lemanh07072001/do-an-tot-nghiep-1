@@ -1,7 +1,6 @@
 <?php
 
-use App\Enums\Status;
-use Kalnoy\Nestedset\NestedSet;
+use App\Models\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -13,12 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('properties', function (Blueprint $table) {
+        Schema::create('attributes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
-            $table->tinyInteger('status')->default(Status::Active);
-            NestedSet::columns($table);
+            $table->tinyInteger('publish')->default(0);
+            $table->tinyInteger('follow')->default(0);
+            $table->integer('order')->default(0);
+            $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('properties');
+        Schema::dropIfExists('attributes');
     }
 };
