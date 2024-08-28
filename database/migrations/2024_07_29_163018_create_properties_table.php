@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
+            $table->string('value')->nullable();
             $table->tinyInteger('status')->default(Status::Active);
             NestedSet::columns($table);
             $table->timestamps();

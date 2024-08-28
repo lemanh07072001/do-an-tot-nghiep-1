@@ -3,10 +3,11 @@
 
 namespace App\Helpers;
 
-use App\Models\Categories;
 use Carbon\Carbon;
-use App\Enums\Status;
 use App\Models\User;
+use App\Enums\Status;
+use App\Models\Categories;
+use App\Models\Properties;
 
 class FormatFunction
 {
@@ -182,4 +183,36 @@ class FormatFunction
     {
         return str_replace('.', '', $data);
     }
+
+    public static function formatTitleVariantProduct($data, $image = true)
+{
+    $name = $data->products->name;
+    $getCodeArray = explode(',', $data->code);
+
+    // Retrieve properties based on IDs
+    $properties = Properties::where('status', 0)->whereIn('id', $getCodeArray)->get();
+
+    // Concatenate property names
+    $getName = '';
+    foreach ($properties as $property) {
+        $getName .= ' - ' . $property->name;
+    }
+
+    // Start building the output HTML
+    $output = '<div class="flex items-center gap-4">';
+
+    // Conditionally add the image if required
+    if ($image) {
+        $output .= '<img class="w-10 h-10 rounded-full" src="' . env('APP_URL') . $data->products->avatar . '" alt="">';
+    }
+
+    // Continue building the output HTML
+    $output .= '
+        <div class="font-medium text-sky-400">
+            <div>' . htmlspecialchars($name . $getName) . '</div>
+        </div>
+    </div>';
+
+    return $output;
+}
 }

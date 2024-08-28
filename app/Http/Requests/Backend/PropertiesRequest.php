@@ -33,7 +33,11 @@ class PropertiesRequest extends FormRequest
                     'name' => ['required', 'string', 'max:255', 'unique:properties,name,' . $id],
                     'slug' => ['required', 'string', 'max:255'],
                     'parent_id' => ['nullable', 'string'],
-
+                    'value' => ['nullable', 'string',function ($attribute, $value, $fail) {
+                        if ($this->input('parent_id') === null && $value !== null) {
+                            $fail('Cột value không được nhập khi thuộc tính cha là --root--.');
+                        }
+                    }],
                     'status' => ['required', ]
                 ];
         } else {
@@ -42,7 +46,11 @@ class PropertiesRequest extends FormRequest
                     'name' => ['required', 'string', 'max:255', 'unique:properties,name'],
                     'slug' => ['required', 'string', 'max:255'],
                     'parent_id' => ['nullable', 'string'],
-
+                    'value' => ['nullable', 'string',function ($attribute, $value, $fail) {
+                        if ($this->input('parent_id') === null && $value !== null) {
+                            $fail('Cột value không được nhập khi thuộc tính cha là --root--.');
+                        }
+                    }],
                     'status' => ['required', ]
                 ];
         };

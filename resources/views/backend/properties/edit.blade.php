@@ -31,6 +31,12 @@
                     <x-input-error error="slug" class="mt-2" />
                 </div>
 
+                <div class="col-span-6 sm:col-span-6">
+                    <x-input-label for="value" >Thuộc tính</x-input-label>
+                    <x-text-input name="value" :value="old('value') ?? $properties->value" id="value" placeholder="Thuộc tính"  />
+                    <x-input-error error="value" class="mt-2" />
+                </div>
+
                 <div class="col-span-6 sm:col-span-3 ">
                     <x-input-label required>Thuộc tính cha</x-input-label>
                     <x-select data-search="search-status" name="parent_id">

@@ -133,3 +133,21 @@ Breadcrumbs::for('labelUpdate', function (BreadcrumbTrail $trail, $label) {
     $trail->parent('label');
     $trail->push(config('apps.label.titleUpdate') . ' [ ' . $label->name . ' ] ', route('ecommerce_module.label.edit', $label));
 });
+
+//NOTE - Transaction
+// Transaction
+Breadcrumbs::for('transaction', function (BreadcrumbTrail $trail) {
+    $trail->push('Trang chủ', route('ecommerce_module.transaction.index'));
+});
+
+// Transaction > Create
+Breadcrumbs::for('transactionCreate', function (BreadcrumbTrail $trail) {
+    $trail->parent('transaction');
+    $trail->push(config('apps.transaction.titleCreate'), route('ecommerce_module.transaction.create'));
+});
+
+// Transaction > Update[transaction]
+Breadcrumbs::for('transactionUpdate', function (BreadcrumbTrail $trail, $transaction) {
+    $trail->parent('transaction');
+    $trail->push(config('apps.transaction.titleUpdate') . ' [ ' . $transaction->name . ' ] ', route('ecommerce_module.transaction.edit', $transaction));
+});

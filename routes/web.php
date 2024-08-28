@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\LabelController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\PropertiesController;
+use App\Http\Controllers\Backend\TransactionController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UploadController;
@@ -125,6 +126,15 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::post('/toggleStatus', [LabelController::class, 'toggleStatus'])->name('toggleStatus');
             Route::delete('/deleteAll', [LabelController::class, 'deleteAll'])->name('deleteAll');
             Route::delete('/deleteRow', [LabelController::class, 'deleteRow'])->name('deleteRow');
+        });
+
+         //LINK - Transaction
+         Route::prefix('transaction')->name('transaction.')->group(function () {
+            Route::get('/', [TransactionController::class, 'index'])->name('index');
+            Route::get('/getData', [TransactionController::class, 'getData'])->name('getData');
+            Route::post('/getTransactionById', [TransactionController::class, 'getTransactionById'])->name('getTransactionById');
+            Route::post('/createTransaction', [TransactionController::class, 'createTransaction'])->name('createTransaction');
+            Route::get('/exportTransaction', [TransactionController::class, 'exportTransaction'])->name('exportTransaction');
         });
 
 

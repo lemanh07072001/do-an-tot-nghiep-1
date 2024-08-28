@@ -694,6 +694,8 @@ $(document).ready(function () {
     updateVariant();
     cancleVariantUpdate();
     saveVariantUpdate();
+    setupProductVariant();
+
 
 })
 

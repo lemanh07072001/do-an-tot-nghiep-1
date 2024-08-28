@@ -16,7 +16,7 @@
     <!-- Dropdown menu -->
 
     <div id="{{ $button->attributes->get('id') }}"
-        {{ $subDropdown->attributes->class(['z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-white-700 absolute p-4 ' . ($attributes['class'] ? $attributes['class'] : '')]) }}>
+        {{ $subDropdown->attributes->class(['z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow  dark:bg-white-700 absolute p-4 ' . ($attributes['class'] ? $attributes['class'] : '')]) }}>
         {{ $subDropdown }}
     </div>
 </div>
