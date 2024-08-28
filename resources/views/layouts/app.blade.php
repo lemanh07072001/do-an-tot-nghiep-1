@@ -44,9 +44,9 @@
 </head>
 
 <body class="font-sans antialiased">
-    <div class="absolute inset-x-0 inset-y-0 bg-gray-400 opacity-80">
+    <div class="absolute inset-x-0 inset-y-0 bg-gray-400 opacity-80 z-50" id="spingLoad">
         <div class="flex items-center justify-center w-full h-full ">
-            ds
+
             <div role="status">
                 <svg aria-hidden="true" class="w-10 h-10 text-gray-200 animate-spin fill-blue-600"
                     viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

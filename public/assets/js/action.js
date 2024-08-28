@@ -4,7 +4,20 @@ $(document).ready(function() {
     select2();
     formatInt();
     loadFormatPrice();
+    spingLoad();
 });
+
+let spingLoad = () => {
+    $('#spingLoad').show();
+
+    $(window).on('load', function() {
+        $('#spingLoad').hide();
+    });
+
+    $('a').on('click', function(e) {
+        $('#spingLoad').show(); // Hiển thị spinner
+    });
+}
 
 let activeSelector = () => {
     $('.select').each(function(index, value) {
