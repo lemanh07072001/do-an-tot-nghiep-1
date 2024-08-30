@@ -151,3 +151,39 @@ Breadcrumbs::for('transactionUpdate', function (BreadcrumbTrail $trail, $transac
     $trail->parent('transaction');
     $trail->push(config('apps.transaction.titleUpdate') . ' [ ' . $transaction->name . ' ] ', route('ecommerce_module.transaction.edit', $transaction));
 });
+
+//NOTE - Voucher
+// Voucher
+Breadcrumbs::for('voucher', function (BreadcrumbTrail $trail) {
+    $trail->push('Trang chủ', route('ecommerce_module.voucher.index'));
+});
+
+// Voucher > Create
+Breadcrumbs::for('voucherCreate', function (BreadcrumbTrail $trail) {
+    $trail->parent('voucher');
+    $trail->push(config('apps.voucher.titleCreate'), route('ecommerce_module.voucher.create'));
+});
+
+// Voucher > Update[voucher]
+Breadcrumbs::for('voucherUpdate', function (BreadcrumbTrail $trail, $voucher) {
+    $trail->parent('voucher');
+    $trail->push(config('apps.voucher.titleUpdate') . ' [ ' . $voucher->name . ' ] ', route('ecommerce_module.voucher.edit', $voucher));
+});
+
+//NOTE - Client
+// Client
+Breadcrumbs::for('client', function (BreadcrumbTrail $trail) {
+    $trail->push('Trang chủ', route('account_module.client.index'));
+});
+
+// Client > Create
+Breadcrumbs::for('clientCreate', function (BreadcrumbTrail $trail) {
+    $trail->parent('client');
+    $trail->push(config('apps.client.titleCreate'), route('account_module.client.create'));
+});
+
+// Client > Update[client]
+Breadcrumbs::for('clientUpdate', function (BreadcrumbTrail $trail, $client) {
+    $trail->parent('client');
+    $trail->push(config('apps.client.titleUpdate') . ' [ ' . $client->name . ' ] ', route('account_module.client.edit', $client));
+});

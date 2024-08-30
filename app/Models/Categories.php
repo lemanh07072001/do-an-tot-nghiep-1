@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Products;
 use Spatie\Image\Enums\Fit;
 use Kalnoy\Nestedset\NodeTrait;
 use Spatie\MediaLibrary\HasMedia;
@@ -35,5 +36,10 @@ class Categories extends Model implements HasMedia
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Products::class, 'categories_id');
     }
 }

@@ -3,12 +3,15 @@
 use App\Http\Controllers\Backend\BannerController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoriesController;
+use App\Http\Controllers\BackEnd\ChatGpt\ChatGptController;
+use App\Http\Controllers\Backend\ClientController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\LabelController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\PropertiesController;
 use App\Http\Controllers\Backend\TransactionController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Backend\VoucherController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +47,20 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::get('/export', [UserController::class, 'export'])->name('export');
             Route::post('/import', [UserController::class, 'import'])->name('import');
         });
+
+         //LINK - Client
+         Route::prefix('client')->name('client.')->group(function () {
+            Route::get('/', [ClientController::class, 'index'])->name('index');
+            Route::get('/getData', [ClientController::class, 'getData'])->name('getData');
+            Route::get('/create', [ClientController::class, 'create'])->name('create');
+            Route::post('/store', [ClientController::class, 'store'])->name('store');
+            Route::get('/edit/{client}', [ClientController::class, 'edit'])->name('edit');
+            Route::post('/update/{client}', [ClientController::class, 'update'])->name('update');
+            Route::post('/toggleStatus', [ClientController::class, 'toggleStatus'])->name('toggleStatus');
+            Route::delete('/deleteAll', [ClientController::class, 'deleteAll'])->name('deleteAll');
+            Route::delete('/deleteRow', [ClientController::class, 'deleteRow'])->name('deleteRow');
+
+        });
     });
 
     //ANCHOR - [Ecommecre Modules]
@@ -53,6 +70,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         Route::prefix('categories')->name('categories.')->group(function () {
             Route::get('/', [CategoriesController::class, 'index'])->name('index');
             Route::get('/getData', [CategoriesController::class, 'getData'])->name('getData');
+            Route::get('/detaiProductCategories', [CategoriesController::class, 'detaiProductCategories'])->name('detaiProductCategories');
             Route::get('/create', [CategoriesController::class, 'create'])->name('create');
             Route::post('/store', [CategoriesController::class, 'store'])->name('store');
             Route::get('/edit/{categories}', [CategoriesController::class, 'edit'])->name('edit');
@@ -99,7 +117,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::post('/toggleStatus', [ProductController::class, 'toggleStatus'])->name('toggleStatus');
             Route::delete('/deleteAll', [ProductController::class, 'deleteAll'])->name('deleteAll');
             Route::delete('/deleteRow', [ProductController::class, 'deleteRow'])->name('deleteRow');
-
         });
 
         //LINK - Brand
@@ -128,8 +145,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::delete('/deleteRow', [LabelController::class, 'deleteRow'])->name('deleteRow');
         });
 
-         //LINK - Transaction
-         Route::prefix('transaction')->name('transaction.')->group(function () {
+        //LINK - Transaction
+        Route::prefix('transaction')->name('transaction.')->group(function () {
             Route::get('/', [TransactionController::class, 'index'])->name('index');
             Route::get('/getData', [TransactionController::class, 'getData'])->name('getData');
             Route::post('/getTransactionById', [TransactionController::class, 'getTransactionById'])->name('getTransactionById');
@@ -137,13 +154,27 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::get('/exportTransaction', [TransactionController::class, 'exportTransaction'])->name('exportTransaction');
         });
 
+        //LINK - Voucher
+        Route::prefix('voucher')->name('voucher.')->group(function () {
+            Route::get('/', [VoucherController::class, 'index'])->name('index');
+            Route::get('/getData', [VoucherController::class, 'getData'])->name('getData');
+            Route::get('/create', [VoucherController::class, 'create'])->name('create');
+            Route::post('/store', [VoucherController::class, 'store'])->name('store');
+            Route::get('/edit/{voucher}', [VoucherController::class, 'edit'])->name('edit');
+            Route::post('/update/{voucher}', [VoucherController::class, 'update'])->name('update');
+            Route::post('/toggleStatus', [VoucherController::class, 'toggleStatus'])->name('toggleStatus');
+            Route::delete('/deleteAll', [VoucherController::class, 'deleteAll'])->name('deleteAll');
+            Route::delete('/deleteRow', [VoucherController::class, 'deleteRow'])->name('deleteRow');
+        });
 
-         //LINK - Ajax
-         Route::prefix('ajax')->name('ajax.')->group(function () {
-              Route::post('/getChildrenProperties', [ProductController::class, 'getChildrenProperties'])->name('getChildrenProperties');
-              Route::get('/getAttributeAjax', [ProductController::class, 'getAttributeAjax'])->name('getAttributeAjax');
+        //LINK - Ajax
+        Route::prefix('ajax')->name('ajax.')->group(function () {
+            Route::post('/getChildrenProperties', [ProductController::class, 'getChildrenProperties'])->name('getChildrenProperties');
+            Route::get('/getAttributeAjax', [ProductController::class, 'getAttributeAjax'])->name('getAttributeAjax');
         });
     });
+
+
 
 
     //LINK - UploadController

@@ -150,4 +150,8 @@ class CategoriesController extends Controller
     {
         return $this->service->deleteRow($request);
     }
+
+    public function detaiProductCategories(Request $request){
+        return $this->service->detaiProductCategories($request);
+    }
 }

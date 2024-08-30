@@ -9,14 +9,33 @@ $(document).ready(function() {
 
 let spingLoad = () => {
     $('#spingLoad').show();
+    $('body').addClass('overflow-hidden');
 
     $(window).on('load', function() {
-        $('#spingLoad').hide();
+        hidenLoading();
     });
 
-    $('a').on('click', function(e) {
-        $('#spingLoad').show(); // Hiển thị spinner
+    $(document).on('click','a', function(e) {
+        showLoading();
     });
+
+    $(document).on('click','button[type="submit"]', function(e) {
+        $('.saveBtn').hide();
+        $('.loadingBtn').show();
+        $('.loadingBtn').attr('disabled', true);
+        $('.loadingBtn').addClass('cursor-not-allowed');
+        showLoading();
+    });
+}
+
+let showLoading = () => {
+    $('#spingLoad').show(); // Hiển thị spinner
+    $('body').addClass('overflow-hidden');
+}
+
+let hidenLoading = () => {
+    $('#spingLoad').hide();
+    $('body').removeClass('overflow-hidden');
 }
 
 let activeSelector = () => {

@@ -173,7 +173,7 @@ let deleteAll = function(url, dataTableIndex, ) {
         var getIDs = getCheckedIds();
 
         // Tắt màn hình loading
-        dataTableIndex.processing(true);
+        hidenLoading();
         Swal.fire(
             swalConfig2ButtonConfirm("Bạn có chắc chắn muốn xóa tài khoản này?")
         ).then(function(result) {
@@ -189,7 +189,7 @@ let deleteAll = function(url, dataTableIndex, ) {
                     success: function(response) {
 
                         // Tắt màn hình loading
-                        dataTableIndex.processing(false);
+                        hidenLoading();
                         Swal.fire(
                             swalConfig1ButtonConfirm(response.message, 'success')
                         )
@@ -201,8 +201,8 @@ let deleteAll = function(url, dataTableIndex, ) {
                     error: function(error) {
 
                         // Tắt màn hình loading
-                        dataTableIndex.processing(false);
-                        console.log(error.responseJSON.message);
+                        hidenLoading();
+
                         Swal.fire(
                             swalConfig1ButtonConfirm(error.responseJSON.message, 'error')
                         )
@@ -214,6 +214,7 @@ let deleteAll = function(url, dataTableIndex, ) {
 
 
             } else if (result.dismiss === 'cancel') {
+                hidenLoading();
                 Swal.fire(
                     swalConfig1ButtonConfirm("Tài khoản chưa bị xóa!.", 'error')
                 );
@@ -265,6 +266,8 @@ let deleteRow = function(url, dataTableIndex, ) {
                 })
 
 
+            }else{
+                hidenLoading();
             }
         });
     })

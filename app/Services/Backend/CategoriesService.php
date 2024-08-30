@@ -3,9 +3,11 @@
 
 namespace App\Services\Backend;
 
-use App\Models\Categories;
-use App\Helpers\FormatFunction;
 use App\Models\User;
+use App\Models\Products;
+use App\Models\Categories;
+use App\Models\Properties;
+use App\Helpers\FormatFunction;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -21,7 +23,7 @@ class CategoriesService
 
         $query =  Categories::query();
 
-        $query = $query->with(['user'])
+        $query = $query->with(['user', 'products'])
             ->withDepth()
             ->defaultOrder();
 
@@ -53,11 +55,11 @@ class CategoriesService
             ->addColumn('name', function ($categories) {
                 return FormatFunction::formatTitleCategories($categories);
             })
-            ->addColumn('parent_categories', function ($categories) {
-                return '5';
+            ->addColumn('detaiProductCategories', function ($categories) {
+                return '<button data-id="' . $categories->id . '" type="button" class="detaiProductCategories px-3 py-2 rounded-lg text-xs font-medium text-center text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 ">Chi tiết</button>';
             })
             ->addColumn('count_product', function ($categories) {
-                return '5';
+                return FormatFunction::formatCountProductCategories($categories);
             })
             ->addColumn('categories_id', function ($categories) {
                 return $categories->user->name;
@@ -80,7 +82,7 @@ class CategoriesService
                     ';
             })
 
-            ->rawColumns(['name', 'categories_id', 'count_product', 'status', 'parent_categories', 'datetime', 'action'])
+            ->rawColumns(['name', 'categories_id', 'count_product', 'status', 'detaiProductCategories', 'datetime', 'action'])
             ->make(true);
     }
 
@@ -107,7 +109,7 @@ class CategoriesService
             //NOTE - Thông báo
             if ($dataInsert) {
 
-            
+
                 // Chuyển hướng trang
                 return redirect()->route('ecommerce_module.categories.index');
             } else {
@@ -194,7 +196,7 @@ class CategoriesService
     {
         // Xử lý ngoại lệ
         try {
-            // Lấy id 
+            // Lấy id
             $ids = $request->id;
 
             foreach ($ids as $id) {
@@ -213,7 +215,7 @@ class CategoriesService
             };
 
             if ($dataDelete) {
-                // Thông báo thành công 
+                // Thông báo thành công
                 return response()->json([
                     'message' => 'Xóa tài khoản thành công!'
                 ], 200);
@@ -224,7 +226,7 @@ class CategoriesService
                 ], 500);
             }
         } catch (\Exception $e) {
-            // Thông báo lỗi xử lý 
+            // Thông báo lỗi xử lý
             return response()->json([
                 'message' => 'Lỗi hệ thống vui lòng thử lại sau!'
             ], 500);
@@ -281,4 +283,17 @@ class CategoriesService
     {
         return User::select(['id', 'name'])->get();
     }
+
+    public function detaiProductCategories($request)
+{
+    $id = $request->get('id');
+
+    // Lấy danh mục với sản phẩm và biến thể của sản phẩm
+    $categoriId = Categories::find($id);
+
+    $categories = $categoriId->products->select(['id','name','avatar']);
+
+    // Trả về dữ liệu dưới dạng JSON
+    return response()->json($categories);
+}
 }

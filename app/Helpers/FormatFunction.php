@@ -6,6 +6,7 @@ namespace App\Helpers;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Enums\Status;
+use App\Models\Products;
 use App\Models\Categories;
 use App\Models\Properties;
 
@@ -155,13 +156,13 @@ class FormatFunction
 
         // Hiển thị 3 hình ảnh đầu tiên
         foreach ($firstThreeImages as $image) {
-            $html .= "<img class='modelPreviewImages w-10 h-10 border-2 border-white rounded-full dark:border-gray-800' src='" . env('APP_URL').$image . "' alt='".$data->name."'>";
+            $html .= "<img class='modelPreviewImages w-10 h-10 border-2 border-white rounded-full dark:border-gray-800' src='" . env('APP_URL') . $image . "' alt='" . $data->name . "'>";
         };
 
         // Nếu mảng có nhiều hơn 3 phần tử, hiển thị số lượng hình ảnh còn lại
         if (count($imageArray) > 3) {
             $remainingCount = count($imageArray) - 3;
-            $html .= "<a class='modelPreviewImages flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 ' href='#'>".$remainingCount."</a>";
+            $html .= "<a class='modelPreviewImages flex items-center justify-center w-10 h-10 text-xs font-medium text-white bg-gray-700 border-2 border-white rounded-full hover:bg-gray-600 ' href='#'>" . $remainingCount . "</a>";
         }
 
         $html .= "</div>";
@@ -171,12 +172,11 @@ class FormatFunction
 
     public static function formatPriceProduct($data)
     {
-        if($data != '0'){
-            return '<div class="font-semibold text-sm">'.number_format($data, 0, ',', '.') . ' đ'.'</div>';
-        }else{
+        if ($data != '0') {
+            return '<div class="font-semibold text-sm">' . number_format($data, 0, ',', '.') . ' đ' . '</div>';
+        } else {
             return '<span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Không khuyến mãi</span>';
         }
-
     }
 
     public static function formatPrice($data)
@@ -185,34 +185,62 @@ class FormatFunction
     }
 
     public static function formatTitleVariantProduct($data, $image = true)
-{
-    $name = $data->products->name;
-    $getCodeArray = explode(',', $data->code);
+    {
+        $name = $data->products->name;
+        $getCodeArray = explode(',', $data->code);
 
-    // Retrieve properties based on IDs
-    $properties = Properties::where('status', 0)->whereIn('id', $getCodeArray)->get();
+        // Retrieve properties based on IDs
+        $properties = Properties::where('status', 0)->whereIn('id', $getCodeArray)->get();
 
-    // Concatenate property names
-    $getName = '';
-    foreach ($properties as $property) {
-        $getName .= ' - ' . $property->name;
-    }
+        // Concatenate property names
+        $getName = '';
+        foreach ($properties as $property) {
+            $getName .= ' - ' . $property->name;
+        }
 
-    // Start building the output HTML
-    $output = '<div class="flex items-center gap-4">';
+        // Start building the output HTML
+        $output = '<div class="flex items-center gap-4">';
 
-    // Conditionally add the image if required
-    if ($image) {
-        $output .= '<img class="w-10 h-10 rounded-full" src="' . env('APP_URL') . $data->products->avatar . '" alt="">';
-    }
+        // Conditionally add the image if required
+        if ($image) {
+            $output .= '<img class="w-10 h-10 rounded-full" src="' . env('APP_URL') . $data->products->avatar . '" alt="">';
+        }
 
-    // Continue building the output HTML
-    $output .= '
+        // Continue building the output HTML
+        $output .= '
         <div class="font-medium text-sky-400">
             <div>' . htmlspecialchars($name . $getName) . '</div>
         </div>
     </div>';
 
-    return $output;
-}
+        return $output;
+    }
+
+    public static function formatCountProductCategories($data)
+    {
+        $totalProductsByCategory = count($data->products);
+        if ($totalProductsByCategory) {
+            return '<span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">' . $totalProductsByCategory . ' sản phẩm</span>';
+        }
+    }
+
+
+    public static function formatSaleVoucher($data)
+    {
+        if ($data->discount_type == '%') {
+            return '<span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">' . $data->value_reduction . ' %</span>';
+        } else {
+            return '<span class="bg-pink-100 text-pink-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-pink-400 border border-pink-400">' . number_format($data->value_reduction, 0, ',', '.') . ' đ' . '</span>';
+        }
+    }
+
+    public static function formatQuantityVoucher($data)
+    {
+        if ($data->limit != null) {
+            return '<span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">'.$data->unlimited.' / ' . $data->limit . ' voucher</span>';
+        } else {
+            return '<span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">'.$data->unlimited.' / Không giới hạn</span>';
+        }
+       
+    }
 }

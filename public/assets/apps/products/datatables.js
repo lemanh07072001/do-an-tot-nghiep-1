@@ -118,7 +118,7 @@ let toggleStatus = (url, dataTableIndex, type = "toast ") => {
         //   Gọi ajax
 
         // Hiển thị màn hình loading
-        dataTableIndex.processing(true);
+        showLoading();
 
         $.ajax({
             url: url,
@@ -127,7 +127,7 @@ let toggleStatus = (url, dataTableIndex, type = "toast ") => {
             //   Trả dữ liệu thành công
             success: function(response) {
                 // Tắt màn hình loading
-                dataTableIndex.processing(false);
+                hidenLoading();
 
                 //   Hiện thông báo thành công
                 Swal.fire(
@@ -140,7 +140,7 @@ let toggleStatus = (url, dataTableIndex, type = "toast ") => {
             error: function(error) {
 
                 // Tắt màn hình loading
-                dataTableIndex.processing(false);
+                hidenLoading();
 
 
                 //   Hiện thông báo thất bại
@@ -152,7 +152,7 @@ let toggleStatus = (url, dataTableIndex, type = "toast ") => {
                 dataTableIndex.draw();
             },
             complete: function() {
-
+                hidenLoading();
             }
         })
     });
@@ -173,7 +173,7 @@ let deleteAll = function(url, dataTableIndex, ) {
         var getIDs = getCheckedIds();
 
         // Tắt màn hình loading
-        dataTableIndex.processing(true);
+        showLoading();
         Swal.fire(
             swalConfig2ButtonConfirm("Bạn có chắc chắn muốn xóa tài khoản này?")
         ).then(function(result) {
@@ -189,7 +189,7 @@ let deleteAll = function(url, dataTableIndex, ) {
                     success: function(response) {
 
                         // Tắt màn hình loading
-                        dataTableIndex.processing(false);
+                        hidenLoading();
                         Swal.fire(
                             swalConfig1ButtonConfirm(response.message, 'success')
                         )
@@ -201,7 +201,7 @@ let deleteAll = function(url, dataTableIndex, ) {
                     error: function(error) {
 
                         // Tắt màn hình loading
-                        dataTableIndex.processing(false);
+                        hidenLoading();
                         console.log(error.responseJSON.message);
                         Swal.fire(
                             swalConfig1ButtonConfirm(error.responseJSON.message, 'error')
@@ -228,7 +228,7 @@ let deleteRow = function(url, dataTableIndex, ) {
         let ID = $(this).closest("tr").attr("id");
 
         // Tắt màn hình loading
-        dataTableIndex.processing(true);
+        showLoading();
         Swal.fire(
             swalConfig2ButtonConfirm("Bạn có chắc chắn muốn xóa tài khoản này?")
         ).then(function(result) {
@@ -245,7 +245,7 @@ let deleteRow = function(url, dataTableIndex, ) {
                     success: function(response) {
 
                         // Tắt màn hình loading
-                        dataTableIndex.processing(false);
+                        hidenLoading();
                         Swal.fire(
                             swalConfig1ButtonConfirm(response.message, 'success')
                         )
@@ -256,11 +256,14 @@ let deleteRow = function(url, dataTableIndex, ) {
                     error: function(error) {
 
                         // Tắt màn hình loading
-                        dataTableIndex.processing(false);
+                        hidenLoading();
                         console.log(error.responseJSON.message);
                         Swal.fire(
                             swalConfig1ButtonConfirm(error.responseJSON.message, 'error')
                         )
+                    },
+                    complete: function() {
+                        hidenLoading();
                     }
                 })
 
@@ -278,7 +281,7 @@ let exportData = function(url, dataTableIndex) {
         var getIDs = getCheckedIds();
 
         // Tắt màn hình loading
-        dataTableIndex.processing(true);
+        showLoading();
         $.ajax({
             url: url,
             data: { id: getIDs },
@@ -286,7 +289,7 @@ let exportData = function(url, dataTableIndex) {
             //   Trả dữ liệu thành công
             success: function(response) {
                 // Tắt màn hình loading
-                dataTableIndex.processing(false);
+                hidenLoading();
                 // Bắt đầu tải về
 
                 window.location.href = response.file;
@@ -304,7 +307,7 @@ let importData = function(url, dataTableIndex) {
         var formData = new FormData();
         formData.append('file', file);
         // Tắt màn hình loading
-        dataTableIndex.processing(true);
+        showLoading();
         $.ajax({
             url: url,
             type: 'POST',
@@ -319,12 +322,12 @@ let importData = function(url, dataTableIndex) {
                 Swal.fire(
                     swalConfig1ButtonConfirm(response.message, 'success')
                 )
-                dataTableIndex.processing(false);
+                hidenLoading();
                 dataTableIndex.ajax.reload(function() {}, false);
             },
             error: function(xhr) {
                 // Tắt màn hình loading
-                dataTableIndex.processing(false);
+                hidenLoading();
                 dataTableIndex.ajax.reload(function() {}, false);
                 console.log(xhr.responseJSON.message);
 

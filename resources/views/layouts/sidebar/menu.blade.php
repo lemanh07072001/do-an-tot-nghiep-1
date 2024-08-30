@@ -65,6 +65,13 @@
                 </a>
             </li>
 
+            <li>
+                <a href="{{ route('account_module.client.index') }}"
+                    class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700 {{ request()->routeIs('account_module.client*') ? 'bg-gray-100 dark:bg-gray-700' : '' }}">
+                    Người dùng
+                </a>
+            </li>
+
         </ul>
     </li>
     {{--  End User  --}}
@@ -146,7 +153,15 @@
             <li>
                 <a href="{{ route('ecommerce_module.transaction.index') }}"
                     class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700 {{ request()->routeIs('ecommerce_module.transaction*') ? 'bg-gray-100 dark:bg-gray-700' : '' }}">
-                    Số lượng sản phẩm
+                    Quản lý kho
+                </a>
+            </li>
+
+            {{--  Voucher  --}}
+            <li>
+                <a href="{{ route('ecommerce_module.voucher.index') }}"
+                    class="flex items-center p-2 text-base text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700 {{ request()->routeIs('ecommerce_module.voucher*') ? 'bg-gray-100 dark:bg-gray-700' : '' }}">
+                    Mã khuyến mãi
                 </a>
             </li>
         </ul>
