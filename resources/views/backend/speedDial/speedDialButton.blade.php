@@ -2,12 +2,12 @@
     <div id="speed-dial-menu-click" class="flex flex-col items-center hidden mb-4 space-y-2">
         <button type="button" data-tooltip-target="tooltip-chatgpt" data-tooltip-placement="left"
             class="flex justify-center items-center w-[52px] h-[52px] text-gray-500 hover:text-gray-900 bg-white rounded-full border border-gray-200 dark:border-gray-600 shadow-sm dark:hover:text-white dark:text-gray-400 hover:bg-gray-50 dark:bg-gray-700 dark:hover:bg-gray-600 focus:ring-4 focus:ring-gray-300 focus:outline-none dark:focus:ring-gray-400">
-            <img class="w-5 h-5" src="{{ asset('images/chatGpt.png') }}" />
-            <span class="sr-only">ChatGPT</span>
+            <img class="w-5 h-5" src="{{ asset('images/logogemini.png') }}" />
+            <span class="sr-only">AI</span>
         </button>
         <div id="tooltip-chatgpt" role="tooltip"
             class="absolute z-10 invisible inline-block w-auto px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-            ChatGPT
+            AI
             <div class="tooltip-arrow" data-popper-arrow></div>
         </div>
     </div>
@@ -22,11 +22,11 @@
         <span class="sr-only">Open actions menu</span>
     </button>
 
-    <div id="box-chatGpt" class="hidden ">
+    <div id="box-chatGpt" class="hidden w-[32rem]">
         <div
-            class="max-w-lg h-96 p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative">
+            class="w-[32rem] p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative">
             <div class="flex justify-between mb-4">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Hỗ trợ AI Chat GPT</h5>
+                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">AI hỗ trợ</h5>
                 <button type="button" id="cloneBoxChatGpt" data-drawer-hide="drawer-navigation"
                     aria-controls="drawer-navigation"
                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8  inline-flex items-center justify-center ">
@@ -38,54 +38,29 @@
                     <span class="sr-only">Close menu</span>
                 </button>
             </div>
-            <div class="">
-                <div class="flex items-start gap-2.5">
-                    <img class="w-8 h-8 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="Jese image">
-                    <div
-                        class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700">
-                        <div class="flex items-center space-x-2 rtl:space-x-reverse">
-                            <span class="text-sm font-semibold text-gray-900 dark:text-white">Bonnie Green</span>
-                            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">11:46</span>
+            <div id="chat-container" class="overflow-x-auto h-96 pb-20 ">
+
+
+                <div class="client-chat relative">
+
+                </div>
+
+                <div class="absolute bottom-20 hidden" id="loadingAi">
+                    <div class="flex items-center justify-items-start">
+                        <div role="status">
+                            <svg aria-hidden="true"
+                                class="w-4 h-4 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                                viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                    fill="currentColor" />
+                                <path
+                                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                    fill="currentFill" />
+                            </svg>
+                            <span class="sr-only">Loading...</span>
                         </div>
-                        <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">That's awesome. I think our
-                            users will really appreciate the improvements.</p>
-                        <span class="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
-                    </div>
-                    <button id="dropdownMenuIconButton" data-dropdown-toggle="dropdownDots"
-                        data-dropdown-placement="bottom-start"
-                        class="inline-flex self-center items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800 dark:focus:ring-gray-600"
-                        type="button">
-                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
-                            <path
-                                d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
-                        </svg>
-                    </button>
-                    <div id="dropdownDots"
-                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-40 dark:bg-gray-700 dark:divide-gray-600">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
-                            aria-labelledby="dropdownMenuIconButton">
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Reply</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Forward</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Copy</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
-                            </li>
-                            <li>
-                                <a href="#"
-                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Delete</a>
-                            </li>
-                        </ul>
+                        <span class="ml-2 text-xs">Đang trả lời...</span>
                     </div>
                 </div>
             </div>
@@ -98,7 +73,21 @@
                         class="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Search" required />
                     <button type="button" id="searchBtn"
-                        class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+                        class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        <div id="btnLoadingSearch" class="hidden">
+                            <svg aria-hidden="true" role="status" class="inline w-4 h-4 me-3 text-white animate-spin"
+                                viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                    fill="#E5E7EB" />
+                                <path
+                                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                    fill="currentColor" />
+                            </svg>
+                            Loading...
+                        </div>
+                        <span id="textSearch">Search</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -107,33 +96,10 @@
 </div>
 
 @push('js')
-    <script src="{{ asset('assets/apps/speedDial/speedDialMain.js') }}"></script>
-
     <script>
-
-
-        $('#searchBtn').on('click', function(e) {
-            e.preventDefault();
-            let searchInput = $('#search').val();
-
-            $.ajax({
-                url: '{{ route("chatGpt.ask") }}',
-                data: {
-                    valueData: searchInput,
-                },
-                type: "POST",
-                dataType: "json",
-
-                success: function(response) {
-                    console.log(response);
-
-                },
-                error: function(xhr, status, error) {
-                console.error("Error:", error);
-            }
-
-            })
-
-        })
+        var sendMessage = {{ Js::from(route('ai.chat')) }};
+        var linkLogoGemini = {{ Js::from(asset('images/logogemini.png')) }};
     </script>
+
+    <script src="{{ asset('assets/apps/speedDial/speedDialMain.js') }}"></script>
 @endpush

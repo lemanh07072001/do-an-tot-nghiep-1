@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\AI\AIController;
 use App\Http\Controllers\Backend\BannerController;
 use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoriesController;
@@ -174,7 +175,11 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         });
     });
 
+     //LINK - Voucher
+     Route::prefix('ai')->name('ai.')->group(function () {
+        Route::post('chat', [AIController::class, 'chat'])->name('chat');
 
+    });
 
 
     //LINK - UploadController
