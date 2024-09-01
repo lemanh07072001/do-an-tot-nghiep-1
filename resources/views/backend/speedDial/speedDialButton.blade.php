@@ -27,8 +27,8 @@
             class="w-[32rem] p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 relative">
             <div class="flex justify-between mb-4">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">AI hỗ trợ</h5>
-                <button type="button" id="cloneBoxChatGpt" data-drawer-hide="drawer-navigation"
-                    aria-controls="drawer-navigation"
+                <button type="button" id="cloneBoxChatGpt"
+
                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8  inline-flex items-center justify-center ">
                     <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 14 14">

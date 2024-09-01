@@ -187,3 +187,21 @@ Breadcrumbs::for('clientUpdate', function (BreadcrumbTrail $trail, $client) {
     $trail->parent('client');
     $trail->push(config('apps.client.titleUpdate') . ' [ ' . $client->name . ' ] ', route('account_module.client.edit', $client));
 });
+
+//NOTE - GroupProduct
+// GroupProduct
+Breadcrumbs::for('groupProduct', function (BreadcrumbTrail $trail) {
+    $trail->push('Trang chủ', route('ecommerce_module.groupProduct.index'));
+});
+
+// GroupProduct > Create
+Breadcrumbs::for('groupProductCreate', function (BreadcrumbTrail $trail) {
+    $trail->parent('groupProduct');
+    $trail->push(config('apps.groupProduct.titleCreate'), route('ecommerce_module.groupProduct.create'));
+});
+
+// GroupProduct > Update[client]
+Breadcrumbs::for('groupProductUpdate', function (BreadcrumbTrail $trail, $groupProduct) {
+    $trail->parent('groupProduct');
+    $trail->push(config('apps.groupProduct.titleUpdate') . ' [ ' . $groupProduct->name . ' ] ', route('ecommerce_module.groupProduct.edit', $groupProduct));
+});

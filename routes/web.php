@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\CategoriesController;
 use App\Http\Controllers\BackEnd\ChatGpt\ChatGptController;
 use App\Http\Controllers\Backend\ClientController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\GroupProductController;
 use App\Http\Controllers\Backend\LabelController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\PropertiesController;
@@ -166,6 +167,20 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::post('/toggleStatus', [VoucherController::class, 'toggleStatus'])->name('toggleStatus');
             Route::delete('/deleteAll', [VoucherController::class, 'deleteAll'])->name('deleteAll');
             Route::delete('/deleteRow', [VoucherController::class, 'deleteRow'])->name('deleteRow');
+        });
+
+        //LINK - GroupProduct
+        Route::prefix('groupProduct')->name('groupProduct.')->group(function () {
+            Route::get('/', [GroupProductController::class, 'index'])->name('index');
+            Route::get('/getData', [GroupProductController::class, 'getData'])->name('getData');
+            Route::get('/create', [GroupProductController::class, 'create'])->name('create');
+            Route::post('/store', [GroupProductController::class, 'store'])->name('store');
+            Route::get('/edit/{groupProduct}', [GroupProductController::class, 'edit'])->name('edit');
+            Route::post('/update/{groupProduct}', [GroupProductController::class, 'update'])->name('update');
+            Route::post('/toggleStatus', [GroupProductController::class, 'toggleStatus'])->name('toggleStatus');
+            Route::delete('/deleteAll', [GroupProductController::class, 'deleteAll'])->name('deleteAll');
+            Route::delete('/deleteRow', [GroupProductController::class, 'deleteRow'])->name('deleteRow');
+            Route::post('/getAllProducts', [GroupProductController::class, 'getAllProducts'])->name('getAllProducts');
         });
 
         //LINK - Ajax
