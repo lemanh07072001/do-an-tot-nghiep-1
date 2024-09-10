@@ -24,7 +24,8 @@ class User extends Authenticatable implements HasMedia
         'email',
         'password',
         'avatar',
-        'status'
+        'status',
+        'is_admin'
     ];
 
     public function registerMediaConversions(?Media $media = null): void

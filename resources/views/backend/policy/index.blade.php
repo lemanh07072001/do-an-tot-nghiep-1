@@ -1,10 +1,10 @@
 <x-app-layout>
-    @section('title', config('apps.client.titleIndex'))
+    @section('title', config('apps.policy.titleIndex'))
     <div class="p-4 max-h-full bg-white block sm:flex items-center justify-between   dark:bg-gray-800 ">
 
         <div class="w-full mb-1">
             <div class="mb-4">
-                {{ Breadcrumbs::render('client') }}
+                {{ Breadcrumbs::render('policy') }}
                 <div class="flex items-center content-center">
                     <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mr-2 ">@yield('title')
                     </h1>
@@ -26,42 +26,9 @@
 
                 <div class="flex items-center" id="handleAdd">
 
-                    <div class="flex pl-2 space-x-1 mr-2">
-                        <x-dropdown-form>
-                            <x-slot:button id="dropdownFind" icon="iconoir-filter-solid">
-                                Tìm kiếm
-                            </x-slot:button>
 
-                            <x-slot:subDropdown class="w-60">
-                                <div class="p-1">
-                                    <x-input-label required>Trạng thái</x-input-label>
-                                    <x-select data-search="search-status">
-                                        @if (\App\Enums\Status::getValues())
-                                            <option value="">--Chọn trạng thái--</option>
-                                            @foreach (\App\Enums\Status::getValues() as $status)
-                                                <option value="{{ $status }}">
-                                                    {{ \App\Enums\Status::getKey($status) }}</option>
-                                            @endforeach
-                                        @endif
-                                    </x-select>
-                                </div>
-
-                                <div class="p-1 mt-2">
-                                    <x-input-label required>Người tạo</x-input-label>
-                                    <x-select data-search="search-user">
-                                        @if (\App\Enums\Status::getValues())
-                                            <option value="">--Chọn người tạo--</option>
-                                            @foreach ($getAllUsersSelect as $user)
-                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </x-select>
-                                </div>
-                            </x-slot:subDropdown>
-                        </x-dropdown-form>
-                    </div>
                     <div>
-                        <a href={{ route('account_module.client.create') }}
+                        <a href={{ route('setting_module.policy.create') }}
                             class="text-white bg-gradient-to-r focus:ring-blue-300 dark:focus:ring-blue-800 from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br  focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
                             @svg('heroicon-o-plus', 'w-4 h-4 me-2')
                             Thêm mới dữ liệu
@@ -96,25 +63,12 @@
                                 </div>
                             </x-table-col>
 
-                            <x-table-col width="10%"
+                            <x-table-col
                                 class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Avatar
+                                Tên tiêu đề
                             </x-table-col>
 
-                            <x-table-col width="10%"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Name
-                            </x-table-col>
 
-                            <x-table-col scope="col"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Email
-                            </x-table-col>
-
-                            <x-table-col width="10%"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Trạng thái
-                            </x-table-col>
 
                             <x-table-col width="10%"
                                 class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
@@ -134,25 +88,16 @@
     </div>
 
     @push('js')
-        <script src="{{asset('assets/apps/client/datatables.js')}}"></script>
+        <script src="{{asset('assets/apps/policy/datatables.js')}}"></script>
 
         <script>
 
-            var url = '{!! route('account_module.client.getData') !!}'
+            var url = '{!! route('setting_module.policy.getData') !!}'
             const columns = [{
                     data: 'id'
                 },
                 {
-                    data: 'avatar'
-                },
-                {
                     data: 'name'
-                },
-                {
-                    data: 'email'
-                },
-                {
-                    data: 'status'
                 },
                 {
                     data: 'action'
@@ -162,21 +107,18 @@
             const _CUSTOM_DATATABLES = {
                 CLASS_ROW: '',
                 PAGE: '8',
-                TARGETS: [0, 1, 2, 3, 4, 5]
+                TARGETS: [0, 1, 2]
 
             };
             var dataTableIndex = initializeDataTable(url, columns, _CUSTOM_DATATABLES);
 
-            //NOTE - Toggle Status
-            var urlToggleStatus = '{!! route('account_module.client.toggleStatus') !!}'
-            toggleStatus(urlToggleStatus, dataTableIndex)
 
             //NOTE - Delete All
-            var urlToggleStatus = '{!! route('account_module.client.deleteAll') !!}'
+            var urlToggleStatus = '{!! route('setting_module.policy.deleteAll') !!}'
             deleteAll(urlToggleStatus, dataTableIndex)
 
             //NOTE - Delete Row
-            var urlToggleStatus = '{!! route('account_module.client.deleteRow') !!}'
+            var urlToggleStatus = '{!! route('setting_module.policy.deleteRow') !!}'
             deleteRow(urlToggleStatus, dataTableIndex)
         </script>
     @endpush

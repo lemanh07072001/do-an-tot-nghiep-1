@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Backend\GroupProductRequest;
+use App\Models\GroupProduct;
 use App\Services\Backend\GroupProductService;
 use Illuminate\Http\Request;
 
@@ -31,21 +33,22 @@ class GroupProductController extends Controller
         return view('backend.groupProduct.create');
     }
 
-    public function store(BrandRequest $request)
+    public function store(GroupProductRequest $request)
     {
         return $this->service->store($request);
     }
 
-    public function edit(Brand $brand)
+    public function edit(GroupProduct $groupProduct)
     {
+        $getGroupProduct = $this->service->getGroupProduct($groupProduct);
 
-        return view('backend.brand.edit', compact('brand'));
+        return view('backend.groupProduct.edit', compact(['groupProduct','getGroupProduct']));
     }
 
 
-    public function update(BrandRequest $request, Brand $brand)
+    public function update(GroupProductRequest $request, GroupProduct $groupProduct)
     {
-        return $this->service->update($request, $brand);
+        return $this->service->update($request, $groupProduct);
     }
 
 
@@ -67,5 +70,9 @@ class GroupProductController extends Controller
 
     public function getAllProducts(){
         return $this->service->getAllProducts();
+    }
+
+    public function searchProduct(Request $request){
+        return $this->service->searchProduct($request);
     }
 }

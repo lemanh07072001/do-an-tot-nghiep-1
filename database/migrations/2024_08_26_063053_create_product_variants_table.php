@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('product_variants', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable();
-            $table->integer('quantity')->default(0);
-            $table->string('sku')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->string('sku');
             $table->decimal('price', 10, 2)->default(0);
 
             $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();

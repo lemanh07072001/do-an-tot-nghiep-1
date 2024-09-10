@@ -6,11 +6,15 @@ use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CategoriesController;
 use App\Http\Controllers\BackEnd\ChatGpt\ChatGptController;
 use App\Http\Controllers\Backend\ClientController;
+use App\Http\Controllers\Backend\CommentController;
+use App\Http\Controllers\Backend\ContactController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\GroupProductController;
 use App\Http\Controllers\Backend\LabelController;
+use App\Http\Controllers\Backend\PolicyController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\PropertiesController;
+use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\TransactionController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\VoucherController;
@@ -22,7 +26,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix('admin')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
     //ANCHOR - [Ecommerce Modules]
     Route::name('dashboard_module.')->group(function () {
 
@@ -50,19 +54,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::post('/import', [UserController::class, 'import'])->name('import');
         });
 
-         //LINK - Client
-         Route::prefix('client')->name('client.')->group(function () {
-            Route::get('/', [ClientController::class, 'index'])->name('index');
-            Route::get('/getData', [ClientController::class, 'getData'])->name('getData');
-            Route::get('/create', [ClientController::class, 'create'])->name('create');
-            Route::post('/store', [ClientController::class, 'store'])->name('store');
-            Route::get('/edit/{client}', [ClientController::class, 'edit'])->name('edit');
-            Route::post('/update/{client}', [ClientController::class, 'update'])->name('update');
-            Route::post('/toggleStatus', [ClientController::class, 'toggleStatus'])->name('toggleStatus');
-            Route::delete('/deleteAll', [ClientController::class, 'deleteAll'])->name('deleteAll');
-            Route::delete('/deleteRow', [ClientController::class, 'deleteRow'])->name('deleteRow');
-
-        });
     });
 
     //ANCHOR - [Ecommecre Modules]
@@ -181,12 +172,62 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::delete('/deleteAll', [GroupProductController::class, 'deleteAll'])->name('deleteAll');
             Route::delete('/deleteRow', [GroupProductController::class, 'deleteRow'])->name('deleteRow');
             Route::post('/getAllProducts', [GroupProductController::class, 'getAllProducts'])->name('getAllProducts');
+            Route::get('/searchProduct', [GroupProductController::class, 'searchProduct'])->name('searchProduct');
+        });
+
+        //LINK - Comment
+        Route::prefix('comment')->name('comment.')->group(function () {
+            Route::get('/', [CommentController::class, 'index'])->name('index');
+            Route::get('/getData', [CommentController::class, 'getData'])->name('getData');
+            Route::get('/create', [CommentController::class, 'create'])->name('create');
+            Route::post('/store', [CommentController::class, 'store'])->name('store');
+            Route::get('/edit/{comment}', [CommentController::class, 'edit'])->name('edit');
+            Route::post('/update/{comment}', [CommentController::class, 'update'])->name('update');
+            Route::post('/toggleStatus', [CommentController::class, 'toggleStatus'])->name('toggleStatus');
+            Route::delete('/deleteAll', [CommentController::class, 'deleteAll'])->name('deleteAll');
+            Route::delete('/deleteRow', [CommentController::class, 'deleteRow'])->name('deleteRow');
         });
 
         //LINK - Ajax
         Route::prefix('ajax')->name('ajax.')->group(function () {
             Route::post('/getChildrenProperties', [ProductController::class, 'getChildrenProperties'])->name('getChildrenProperties');
             Route::get('/getAttributeAjax', [ProductController::class, 'getAttributeAjax'])->name('getAttributeAjax');
+        });
+    });
+
+    //ANCHOR - [Settings Modules]
+    Route::name('setting_module.')->group(function () {
+
+        //LINK - Settings
+        Route::prefix('setting')->name('setting.')->group(function () {
+            Route::get('/', [SettingController::class, 'index'])->name('index');
+            Route::post('/updateOrCreate', [SettingController::class, 'updateOrCreate'])->name('updateOrCreate');
+        });
+
+        //LINK - Policy
+        Route::prefix('policy')->name('policy.')->group(function () {
+            Route::get('/', [PolicyController::class, 'index'])->name('index');
+            Route::get('/getData', [PolicyController::class, 'getData'])->name('getData');
+            Route::get('/create', [PolicyController::class, 'create'])->name('create');
+            Route::post('/store', [PolicyController::class, 'store'])->name('store');
+            Route::get('/edit/{policy}', [PolicyController::class, 'edit'])->name('edit');
+            Route::post('/update/{policy}', [PolicyController::class, 'update'])->name('update');
+            Route::post('/toggleStatus', [PolicyController::class, 'toggleStatus'])->name('toggleStatus');
+            Route::delete('/deleteAll', [PolicyController::class, 'deleteAll'])->name('deleteAll');
+            Route::delete('/deleteRow', [PolicyController::class, 'deleteRow'])->name('deleteRow');
+            Route::post('/upload-image', [PolicyController::class, 'uploadImage'])->name('uploadImage');
+            Route::post('/ai-assistant', [PolicyController::class, 'processContent'])->name('processContent');
+        });
+
+         //LINK - Contact
+         Route::prefix('contact')->name('contact.')->group(function () {
+            Route::get('/', [ContactController::class, 'index'])->name('index');
+            Route::get('/getData', [ContactController::class, 'getData'])->name('getData');
+            Route::get('/getMessage', [ContactController::class, 'getMessage'])->name('getMessage');
+            Route::post('/sendMessage', [ContactController::class, 'sendMessage'])->name('sendMessage');
+            Route::post('/toggleStatus', [ContactController::class, 'toggleStatus'])->name('toggleStatus');
+            Route::delete('/deleteAll', [ContactController::class, 'deleteAll'])->name('deleteAll');
+            Route::delete('/deleteRow', [ContactController::class, 'deleteRow'])->name('deleteRow');
         });
     });
 
@@ -197,7 +238,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     });
 
 
+});
+
+
     //LINK - UploadController
     Route::post('/upload', [UploadController::class, 'upload'])->name('upload');
-});
 require __DIR__ . '/auth.php';

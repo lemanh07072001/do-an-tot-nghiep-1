@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Banner;
 use App\Models\Products;
 use App\Helpers\FormatFunction;
+use App\Models\GroupProduct;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -17,13 +18,12 @@ class GroupProductService
     {
         $searchInput = $request->searchInput;
         $searchStatus = $request->searchStatus;
-        $searchUser = $request->searchUser;
 
         $filer = [];
 
-        $query =  Banner::query();
+        $query =  GroupProduct::query();
 
-        $query = $query->with(['user']);
+
 
         if ($request->has('searchInput') && isset($searchInput)) {
             $query->where(function ($query) use ($searchInput) {
@@ -36,39 +36,21 @@ class GroupProductService
             $filer[] = ['status', '=', $searchStatus];
         }
 
-        if ($request->has('searchUser') && isset($searchUser)) {
-
-            $filer[] = ['user_id', '=', $searchUser];
-        }
-
-
         if (!empty($filer)) {
             $query = $query->where($filer);
         }
 
 
         return DataTables::of($query)
-            ->addColumn('name', function ($banner) {
-                return $banner->name;
+            ->addColumn('name', function ($groupProduct) {
+                return $groupProduct->name;
             })
-            ->addColumn('image', function ($banner) {
-                return '<img src="' . (!empty($banner->image) ? env('APP_URL').$banner->image:'') . '" width="80%"/>';
+            ->addColumn('status', function ($groupProduct) {
+                return FormatFunction::formatBadge($groupProduct->status);
             })
-            ->addColumn('link', function ($banner) {
-                return '<span class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Link</span>';
-            })
-            ->addColumn('user_id', function ($banner) {
-                return $banner->user->name;
-            })
-            ->addColumn('discount_period', function ($banner) {
-                return FormatFunction::formatDateSafe($banner);
-            })
-            ->addColumn('status', function ($banner) {
-                return FormatFunction::formatBadge($banner->status);
-            })
-            ->addColumn('action', function ($banner) {
+            ->addColumn('action', function ($groupProduct) {
                 return '
-                        <a href="' . route('ecommerce_module.banner.edit', ['banner' => $banner]) . '" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-400 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
+                        <a href="' . route('ecommerce_module.groupProduct.edit', ['groupProduct' => $groupProduct]) . '" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-400 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
                             <svg class="w-4 h-4 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
                         </a>
 
@@ -78,94 +60,80 @@ class GroupProductService
                     ';
             })
 
-            ->rawColumns(['name', 'image', 'discount_period', 'status', 'link', 'action'])
+            ->rawColumns(['name', 'status', 'link', 'action'])
             ->make(true);
     }
 
 
     public function store($request)
     {
-        $dateStart = null;
-        $dateEnd = null;
+        try {
+            $productIds = $request->idArray;
 
-        if(!empty($request->date_start) && !empty($request->date_end)){
-            $dateStart = Carbon::createFromFormat('d/m/Y', $request->date_start)->format('Y-m-d');
-
-            $dateEnd = Carbon::createFromFormat('d/m/Y', $request->date_end)->format('Y-m-d');
-        }
-
-
-        //NOTE - Lưu thông tin người dùng vào cơ sở dữ liệu
-        $data = [
-            'name' => $request->name,
-            'slug' => $request->slug,
-            'link' => $request->link,
-            'status' => $request->status,
-            'date_start' => $dateStart,
-            'date_end' => $dateEnd,
-            'image' => $request->image,
-            'user_id' => Auth::id(),
-        ];
+            $data = [
+                'name' => $request->name,
+                'slug' => $request->slug,
+                'status' => $request->status,
+                'created_at' => FormatFunction::getDatetime(),
+            ];
 
 
-        //NOTE - Lưu vào cơ sở dữ liệu
-        $dataInsert = Banner::create($data);
-        //NOTE - Thông báo
-        if ($dataInsert) {
-            // Chuyển hướng trang
-            return redirect()->route('ecommerce_module.banner.index');
-        } else {
-            // Thông báo thất bại
-            flash()->error('Tạo tài khoản thất bại! Vui lòng đợi trong ít phút');
-            // Chuyển hướng trang
-            return redirect()->back();
+            $dataInsert = GroupProduct::create($data);
+            //NOTE - Thông báo
+            if ($dataInsert) {
+                $dataInsert->products()->sync($productIds);
+                // Thông báo thành công
+                flash()->success('Thêm nhóm sản phẩm thành công!');
+
+                // Chuyển hướng trang
+                return redirect()->route('ecommerce_module.groupProduct.index');
+            } else {
+                // Thông báo thất bại
+                flash()->error('Tạo tài khoản thất bại! Vui lòng đợi trong ít phút');
+                // Chuyển hướng trang
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            // Thông báo lỗi xử lý
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
-    public function update($request, $banner)
+    public function update($request, $groupProduct)
     {
-        $dateStart = null;
-        $dateEnd = null;
+        try {
+            $productIds = $request->idArray;
 
-        if(!empty($request->date_start) && !empty($request->date_end)){
-            $dateStart = Carbon::createFromFormat('d/m/Y', $request->date_start)->format('Y-m-d');
-
-            $dateEnd = Carbon::createFromFormat('d/m/Y', $request->date_end)->format('Y-m-d');
-        }
-        //NOTE - Lưu thông tin người dùng vào cơ sở dữ liệu
-        $data = [
-            'name' => $request->name,
-            'slug' => $request->slug,
-            'link' => $request->link,
-            'status' => $request->status,
-            'date_start' => $dateStart,
-            'date_end' => $dateEnd,
-            'image' => $request->image,
-            'user_id' => Auth::id(),
-        ];
+            $data = [
+                'name' => $request->name,
+                'slug' => $request->slug,
+                'status' => $request->status,
+                'updated_at' => FormatFunction::getDatetime(),
+            ];
 
 
+            $dataUpdate = $groupProduct->update($data);
+            //NOTE - Thông báo
+            if ($dataUpdate) {
+                $groupProduct->products()->sync($productIds);
+                // Thông báo thành công
+                flash()->success('Cập nhật nhóm sản phẩm thành công!');
 
-
-
-        //NOTE - Lưu vào cơ sở dữ liệu
-        $dataUpdate = $banner->update($data);
-        //NOTE - Thông báo
-        if ($dataUpdate) {
-
-
-
-            // Thông báo thành công
-            flash()->success('Cập nhật banner thành công!');
-
-
-            // Chuyển hướng trang
-            return redirect()->route('ecommerce_module.banner.index');
-        } else {
-            // Thông báo thất bại
-            flash()->error('Cập nhật thất bại! Vui lòng đợi trong ít phút');
-            // Chuyển hướng trang
-            return redirect()->back();
+                // Chuyển hướng trang
+                return redirect()->route('ecommerce_module.groupProduct.index');
+            } else {
+                // Thông báo thất bại
+                flash()->error('Cập nhật nhóm sản phẩm thất bại! Vui lòng đợi trong ít phút');
+                // Chuyển hướng trang
+                return redirect()->back();
+            }
+        } catch (\Exception $e) {
+            // Thông báo lỗi xử lý
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -179,7 +147,7 @@ class GroupProductService
             $id = $request->id;
 
             // Xử lý cập nhật status
-            $changeStatus = Banner::find($id)->update(['status' => !$request->value]);
+            $changeStatus = GroupProduct::find($id)->update(['status' => !$request->value]);
 
             // Thông báo
             if ($changeStatus) {
@@ -210,7 +178,7 @@ class GroupProductService
             $ids = $request->id;
 
             // Xóa tài khoản
-            $dataDelete = Banner::destroy($ids);
+            $dataDelete = GroupProduct::destroy($ids);
             if ($dataDelete) {
                 // Thông báo thành công
                 return response()->json([
@@ -225,7 +193,7 @@ class GroupProductService
         } catch (\Exception $e) {
             // Thông báo lỗi xử lý
             return response()->json([
-                'message' => 'Lỗi hệ thống vui lòng thử lại sau!'
+                'message' => $e->getMessage()
             ], 500);
         }
     }
@@ -238,7 +206,7 @@ class GroupProductService
             // Lấy id
             $id = $request->id;
             // Xóa tài khoản
-            $dataDelete = Banner::find($id)->delete();
+            $dataDelete = GroupProduct::find($id)->delete();
             if ($dataDelete) {
                 // Thông báo thành công
                 return response()->json([
@@ -253,7 +221,7 @@ class GroupProductService
         } catch (\Exception $e) {
             // Thông báo lỗi xử lý
             return response()->json([
-                'message' => 'Lỗi hệ thống vui lòng thử lại sau!'
+                'message' => $e->getMessage()
             ], 500);
         }
     }
@@ -263,7 +231,20 @@ class GroupProductService
         return User::select(['id', 'name'])->get();
     }
 
-    public function getAllProducts(){
-        return Products::select(['id', 'name','avatar'])->get();
+    public function getAllProducts()
+    {
+        return Products::select(['id', 'name', 'avatar'])->get();
+    }
+
+    public function searchProduct($request)
+    {
+        $search = $request->get('search');
+
+        return Products::select(['id', 'name', 'avatar'])->where('name', 'like', '%' . $search . '%')->get();
+    }
+
+    public function getGroupProduct($groupProduct)
+    {
+        return $groupProduct->products->select('id', 'name', 'avatar')->toArray();
     }
 }

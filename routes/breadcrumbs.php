@@ -170,23 +170,7 @@ Breadcrumbs::for('voucherUpdate', function (BreadcrumbTrail $trail, $voucher) {
     $trail->push(config('apps.voucher.titleUpdate') . ' [ ' . $voucher->name . ' ] ', route('ecommerce_module.voucher.edit', $voucher));
 });
 
-//NOTE - Client
-// Client
-Breadcrumbs::for('client', function (BreadcrumbTrail $trail) {
-    $trail->push('Trang chủ', route('account_module.client.index'));
-});
 
-// Client > Create
-Breadcrumbs::for('clientCreate', function (BreadcrumbTrail $trail) {
-    $trail->parent('client');
-    $trail->push(config('apps.client.titleCreate'), route('account_module.client.create'));
-});
-
-// Client > Update[client]
-Breadcrumbs::for('clientUpdate', function (BreadcrumbTrail $trail, $client) {
-    $trail->parent('client');
-    $trail->push(config('apps.client.titleUpdate') . ' [ ' . $client->name . ' ] ', route('account_module.client.edit', $client));
-});
 
 //NOTE - GroupProduct
 // GroupProduct
@@ -204,4 +188,69 @@ Breadcrumbs::for('groupProductCreate', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('groupProductUpdate', function (BreadcrumbTrail $trail, $groupProduct) {
     $trail->parent('groupProduct');
     $trail->push(config('apps.groupProduct.titleUpdate') . ' [ ' . $groupProduct->name . ' ] ', route('ecommerce_module.groupProduct.edit', $groupProduct));
+});
+
+//NOTE - GroupProduct
+// GroupProduct
+Breadcrumbs::for('comment', function (BreadcrumbTrail $trail) {
+    $trail->push('Trang chủ', route('ecommerce_module.comment.index'));
+});
+
+// GroupProduct > Create
+Breadcrumbs::for('commentCreate', function (BreadcrumbTrail $trail) {
+    $trail->parent('comment');
+    $trail->push(config('apps.comment.titleCreate'), route('ecommerce_module.comment.create'));
+});
+
+// GroupProduct > Update[client]
+Breadcrumbs::for('commentUpdate', function (BreadcrumbTrail $trail, $comment) {
+    $trail->parent('comment');
+    $trail->push(config('apps.comment.titleUpdate') . ' [ ' . $comment->name . ' ] ', route('ecommerce_module.comment.edit', $comment));
+});
+
+
+// <=============== SETTING MODULES ===============>
+//NOTE - Setting
+// Setting
+Breadcrumbs::for('setting', function (BreadcrumbTrail $trail) {
+
+    $trail->push('Cài đặt thông tin cấu hình hệ thống', route('setting_module.setting.index'));
+});
+
+
+//NOTE - Policy
+// GroupProduct
+Breadcrumbs::for('policy', function (BreadcrumbTrail $trail) {
+    $trail->push('Trang chủ', route('setting_module.policy.index'));
+});
+
+// Policy > Create
+Breadcrumbs::for('policyCreate', function (BreadcrumbTrail $trail) {
+    $trail->parent('policy');
+    $trail->push(config('apps.policy.titleCreate'), route('setting_module.policy.create'));
+});
+
+// Policy > Update[policy]
+Breadcrumbs::for('policyUpdate', function (BreadcrumbTrail $trail, $policy) {
+    $trail->parent('policy');
+    $trail->push(config('apps.policy.titleUpdate') . ' [ ' . $policy->name . ' ] ', route('setting_module.policy.edit', $policy));
+});
+
+//NOTE - Contact
+// GroupProduct
+Breadcrumbs::for('contact', function (BreadcrumbTrail $trail) {
+    $trail->push('Trang chủ', route('setting_module.contact.index'));
+});
+
+// Contact > Create
+Breadcrumbs::for('contactCreate', function (BreadcrumbTrail $trail) {
+    $trail->parent('policy');
+    $trail->push(config('apps.contact.titleCreate'), route('setting_module.contact.create'));
+
+});
+
+// Contact > Update[contact]
+Breadcrumbs::for('contactUpdate', function (BreadcrumbTrail $trail, $contact) {
+    $trail->parent('contact');
+    $trail->push(config('apps.contact.titleUpdate') . ' [ ' . $contact->name . ' ] ', route('setting_module.contact.edit', $contact));
 });

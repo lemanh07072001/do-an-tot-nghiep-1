@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class GroupProduct extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'slug',
+        'status'
+    ];
+
+    public function products()
+    {
+        return $this->belongsToMany(Products::class);
+    }
 }

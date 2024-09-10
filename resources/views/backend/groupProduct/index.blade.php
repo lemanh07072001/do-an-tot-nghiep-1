@@ -46,17 +46,7 @@
                                     </x-select>
                                 </div>
 
-                                <div class="p-1 mt-2">
-                                    <x-input-label required>Người tạo</x-input-label>
-                                    <x-select data-search="search-user">
-                                        @if (\App\Enums\Status::getValues())
-                                            <option value="">--Chọn người tạo--</option>
-                                            @foreach ($getAllUsersSelect as $user)
-                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </x-select>
-                                </div>
+
                             </x-slot:subDropdown>
                         </x-dropdown-form>
                     </div>
@@ -96,20 +86,9 @@
                                 </div>
                             </x-table-col>
 
-                            <x-table-col width="15%"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Hình ảnh
-                            </x-table-col>
-
                             <x-table-col
                                 class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Thương hiệu
-                            </x-table-col>
-
-
-                            <x-table-col width="10%"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Người tạo
+                                Nhóm sản phẩm
                             </x-table-col>
 
                             <x-table-col width="10%"
@@ -135,22 +114,16 @@
     </div>
 
     @push('js')
-        <script src="{{asset('assets/apps/brand/datatables.js')}}"></script>
+        <script src="{{asset('assets/apps/groupProduct/datatables.js')}}"></script>
 
         <script>
 
-            var url = '{!! route('ecommerce_module.brand.getData') !!}'
+            var url = '{!! route('ecommerce_module.groupProduct.getData') !!}'
             const columns = [{
                     data: 'id'
                 },
                 {
-                    data: 'image'
-                },
-                {
                     data: 'name'
-                },
-                {
-                    data: 'user_id'
                 },
                 {
                     data: 'status'
@@ -163,21 +136,21 @@
             const _CUSTOM_DATATABLES = {
                 CLASS_ROW: '',
                 PAGE: '8',
-                TARGETS: [0, 1, 2, 3, 4, 5, 6]
+                TARGETS: [0, 1, 2, 3]
 
             };
             var dataTableIndex = initializeDataTable(url, columns, _CUSTOM_DATATABLES);
 
             //NOTE - Toggle Status
-            var urlToggleStatus = '{!! route('ecommerce_module.brand.toggleStatus') !!}'
+            var urlToggleStatus = '{!! route('ecommerce_module.groupProduct.toggleStatus') !!}'
             toggleStatus(urlToggleStatus, dataTableIndex)
 
             //NOTE - Delete All
-            var urlToggleStatus = '{!! route('ecommerce_module.brand.deleteAll') !!}'
+            var urlToggleStatus = '{!! route('ecommerce_module.groupProduct.deleteAll') !!}'
             deleteAll(urlToggleStatus, dataTableIndex)
 
             //NOTE - Delete Row
-            var urlToggleStatus = '{!! route('ecommerce_module.brand.deleteRow') !!}'
+            var urlToggleStatus = '{!! route('ecommerce_module.groupProduct.deleteRow') !!}'
             deleteRow(urlToggleStatus, dataTableIndex)
         </script>
     @endpush

@@ -86,21 +86,30 @@ function initializeDataTable(
     /* Search Input */
     if (searchInput !== undefined) {
         searchInput.on("keyup", function() {
-            datatables.ajax.reload();
+           showLoading();
+            datatables.ajax.reload(function(){
+                hidenLoading();
+            });
         });
     }
 
     /* Search status */
     if (searchStatus !== undefined) {
         searchStatus.on("change", function() {
-            datatables.ajax.reload();
+           showLoading();
+            datatables.ajax.reload(function(){
+                hidenLoading();
+            });
         });
     }
 
     /* Search parent */
     if (searchParent !== undefined) {
         searchParent.on("change", function() {
-            datatables.ajax.reload();
+           showLoading();
+            datatables.ajax.reload(function(){
+                hidenLoading();
+            });
         });
     }
 

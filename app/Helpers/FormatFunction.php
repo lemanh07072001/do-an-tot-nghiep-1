@@ -237,10 +237,66 @@ class FormatFunction
     public static function formatQuantityVoucher($data)
     {
         if ($data->limit != null) {
-            return '<span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">'.$data->unlimited.' / ' . $data->limit . ' voucher</span>';
+            return '<span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-green-400 border border-green-400">' . $data->unlimited . ' / ' . $data->limit . ' voucher</span>';
         } else {
-            return '<span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">'.$data->unlimited.' / Không giới hạn</span>';
+            return '<span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-red-400 border border-red-400">' . $data->unlimited . ' / Không giới hạn</span>';
         }
-       
+    }
+
+    public static function formatTitleComment($data)
+    {
+        $html = '';
+        $isAdmin = '';
+
+        if ($data->user->is_admin == 1) {
+            $isAdmin .= '<span class="bg-purple-100 text-purple-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-purple-900 dark:text-purple-300">Admin</span>';
+        }
+
+        // Xác định padding dựa trên depth
+        $paddingClass = 'pl-' . ($data->depth * 3); // Mỗi độ sâu thêm 4 đơn vị padding
+
+        $html .= '<div class="overflow-hidden text-base font-normal truncate ' . $paddingClass . '"><span class="font-semibold text-black">Họ tên</span>: ' . $data->user->name . ' ' . $isAdmin . '</div>';
+        $html .= '<div class="overflow-hidden text-base font-normal truncate ' . $paddingClass . '"><span class="font-semibold text-black">Email</span>: ' . $data->user->email . '</div>';
+
+        return $html;
+    }
+
+    public static function formatStatusComment($data)
+    {
+        if ($data->status == '0') {
+            return '<span class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Đã duyệt</span>';
+        } else {
+            return '<span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Chưa duyệt</span>';
+        }
+    }
+
+    public static function formatTitleMessage($data)
+    {
+        $buttonHtml = '<button type="button" class="openModalMessage text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Chi tiết</button>';
+        return $buttonHtml;
+    }
+
+
+    public static function formatTitleContact($data)
+    {
+        $html = '';
+
+
+        $html .= '<div class="overflow-hidden text-base font-normal truncate "><span class="font-semibold text-black">Họ tên</span>: ' . $data->name . ' </div>';
+        $html .= '<div class="overflow-hidden text-base font-normal truncate"><span class="font-semibold text-black">Email</span>: ' . $data->email . '</div>';
+        $html .= '<div class="overflow-hidden text-base font-normal truncate"><span class="font-semibold text-black">Phone</span>: ' . $data->phone . '</div>';
+
+        return $html;
+    }
+
+    public static function formatStatusCContent($data)
+    {
+        if ($data->status === 0) {
+            return '<span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Chưa trả lời</span>';
+        } else if ($data->status === 1) {
+            return '<span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Đã trả lời</span>';
+        }else{
+            return '<span class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Đã xem</span>';
+        }
     }
 }

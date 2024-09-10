@@ -171,7 +171,7 @@
 
             $(document).ready(function() {
                 $("#myDropzone").dropzone({
-                    url: "/admin/upload", // Đường dẫn xử lý tệp tin sau khi tải lên
+                    url: "/upload", // Đường dẫn xử lý tệp tin sau khi tải lên
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
                             'content')

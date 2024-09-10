@@ -278,7 +278,7 @@
 
             $(document).ready(function() {
                 $("#myDropzone_1").dropzone({
-                    url: "/admin/upload", // Đường dẫn xử lý tệp tin sau khi tải lên
+                    url: "/upload", // Đường dẫn xử lý tệp tin sau khi tải lên
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
                             'content')
@@ -336,7 +336,7 @@
 
             $(document).ready(function() {
                 $("#myDropzone_2").dropzone({
-                    url: "/admin/upload", // Đường dẫn xử lý tệp tin sau khi tải lên
+                    url: "/upload", // Đường dẫn xử lý tệp tin sau khi tải lên
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
                             'content')

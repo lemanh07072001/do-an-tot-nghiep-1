@@ -8,7 +8,9 @@ class UploadController extends Controller
 {
     public function upload(Request $request)
     {
+
         try {
+
             if ($request->hasFile('file')) {
                 $files = $request->file('file');
                 $pathFull = 'upload';

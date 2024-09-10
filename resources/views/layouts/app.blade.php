@@ -8,6 +8,12 @@
 
     <title>@yield('title')</title>
 
+    @php
+        $logo = asset(App\Models\Setting::where('setting_key', 'setting_logo')->value('setting_value')) ?? '/images/logo.png';
+
+    @endphp
+
+    <link rel="icon" type="image/x-icon" href="{{asset($logo)}}">
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -45,12 +51,20 @@
 {{-- id="spingLoad" --}}
 <body class="font-sans antialiased ">
     <div class="absolute inset-x-0 inset-y-0 bg-gray-400 opacity-80 z-50 overflow-hidden  " id="spingLoad">
-        <div class="flex items-center justify-center w-full max-h-max h-full overflow-hidden">
-
-            <div role="status">
-                <img src="{{asset('/images/logo.svg')}}" class="h-12 mr-3" alt="FlowBite Logo" />
+        <div class="fixed top-0 left-0 z-50 w-screen h-screen flex items-center justify-center" style="background: rgba(0, 0, 0, 0.3);">
+            <div class="bg-white border py-2 px-5 rounded-lg flex items-center flex-col">
+              <div class="loader-dots block relative w-20 h-5 mt-2">
+                <div class="absolute top-0 mt-1 w-3 h-3 rounded-full bg-green-500"></div>
+                <div class="absolute top-0 mt-1 w-3 h-3 rounded-full bg-green-500"></div>
+                <div class="absolute top-0 mt-1 w-3 h-3 rounded-full bg-green-500"></div>
+                <div class="absolute top-0 mt-1 w-3 h-3 rounded-full bg-green-500"></div>
+              </div>
+              <div class="text-gray-500 text-xs font-medium mt-2 text-center">
+                Loading...
+              </div>
             </div>
-        </div>
+            </div>
+          </div>
     </div>
     @include('layouts.header.header')
     <div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">

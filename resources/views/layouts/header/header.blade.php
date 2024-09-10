@@ -1,3 +1,10 @@
+@php
+    $logo = asset(App\Models\Setting::where('setting_key', 'setting_logo')->value('setting_value')) ?? '/images/logo.png';
+
+    $title = App\Models\Setting::where('setting_key', 'setting_name')->value('setting_value') ?? 'Laravel';
+@endphp
+
+
 <nav class="fixed z-30 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
         <div class="flex items-center justify-between">
@@ -18,9 +25,9 @@
                     </svg>
                 </button>
                 <a href="" class="flex ml-2 md:mr-24">
-                    <img src="/images/logo.svg" class="h-8 mr-3" alt="FlowBite Logo" />
+                    <img src="{{$logo}}" class="h-8 mr-3" alt="{{$title}}" />
                     <span
-                        class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Flowbite</span>
+                        class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">{{$title}}</span>
                 </a>
                 <!-- Search  -->
                 @include('layouts.header.search')

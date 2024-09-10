@@ -1,9 +1,9 @@
 <x-app-layout>
-    @section('title', config('apps.brand.titleCreate'))
+    @section('title', config('apps.groupProduct.titleCreate'))
     <div class="p-4 max-h-full block sm:flex items-center justify-between   dark:bg-gray-800 ">
         <div class="w-full mb-1">
             <div class="mb-4">
-                {{ Breadcrumbs::render('brandCreate') }}
+                {{ Breadcrumbs::render('groupProductCreate') }}
                 <div class="flex items-center content-center">
                     <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mr-2 ">@yield('title')
                     </h1>
@@ -15,7 +15,7 @@
 
     </div>
     <div>
-        <form method="POST" action="{{ route('ecommerce_module.voucher.store') }}">
+        <form method="POST" action="{{ route('ecommerce_module.groupProduct.store') }}">
             @csrf
             <div class="grid grid-cols-12 ">
                 <div class="col-span-4 ">
@@ -44,7 +44,18 @@
                             <x-input-error error="slug" class="mt-2" />
                         </div>
 
-
+                        <div class="col-span-6 sm:col-span-3 ">
+                            <x-input-label required>Trạng thái</x-input-label>
+                            <x-select data-search="search-status" name="status">
+                                @if (\App\Enums\Status::getValues())
+                                    <option disabled>--Chọn trạng thái--</option>
+                                    @foreach (\App\Enums\Status::getValues() as $status)
+                                    <option value="{{ $status }}" @selected(old('status') == $status)>
+                                            {{ \App\Enums\Status::getKey($status) }}</option>
+                                    @endforeach
+                                @endif
+                            </x-select>
+                        </div>
                     </x-card>
                 </div>
             </div>
@@ -75,32 +86,13 @@
                             </div>
                             <input type="text" id="simple-search"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full ps-10 p-2.5  "
-                                placeholder="Tìm kiếm theo tên, mã SKU,.." required />
+                                placeholder="Tìm kiếm theo tên, mã SKU,.."  />
                         </div>
 
                         <div id="main">
                             <div class="flow-root">
-                                <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
-                                    <li class="py-3 sm:py-4">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0">
-                                                <img class="w-8 h-8 rounded-full"
-                                                    src="/docs/images/people/profile-picture-1.jpg" alt="Neil image">
-                                            </div>
-                                            <div class="flex-1 min-w-0 ms-4">
-                                                <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-                                                    Neil Sims
-                                                </p>
-                                                <p class="text-sm text-gray-500 truncate dark:text-gray-400">
-                                                    email@windster.com
-                                                </p>
-                                            </div>
-                                            <div
-                                                class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-                                                $320
-                                            </div>
-                                        </div>
-                                    </li>
+                                <ul role="list" id="listTable" class="divide-y divide-gray-200 dark:divide-gray-700">
+
 
                                 </ul>
                             </div>
@@ -144,15 +136,7 @@
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white ">
                             Chọn sản phẩm
                         </h3>
-                        <button type="button"
-                            class="ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white">
-                            <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
+
                     </div>
                     <!-- Modal body -->
                     <div class="space-y-6 p-6">
@@ -165,9 +149,9 @@
                                         d="M3 5v10M3 5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm0 10a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm12 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm0 0V6a3 3 0 0 0-3-3H9m1.5-2-2 2 2 2" />
                                 </svg>
                             </div>
-                            <input type="text" id="simple-search"
+                            <input type="text" id="search-modal"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full ps-10 p-2.5  "
-                                placeholder="Tìm kiếm theo tên, mã SKU,.." required />
+                                placeholder="Tìm kiếm theo tên, mã SKU,.."  />
                         </div>
 
                         <div class="flow-root h-96">
@@ -184,10 +168,24 @@
                             class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             Áp dụng
                         </button>
-                        <button type="button"
-                            class="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
-                            Huỷ
-                        </button>
+
+                    </div>
+
+                    <div class="absolute inset-x-0 inset-y-0 bg-gray-400 opacity-80" id="loadingIndicator">
+                        <div class="fixed top-0 left-0 z-50 w-screen h-screen flex items-center justify-center" style="background: rgba(0, 0, 0, 0.3);">
+                            <div class="bg-white border py-2 px-5 rounded-lg flex items-center flex-col">
+                              <div class="loader-dots block relative w-20 h-5 mt-2">
+                                <div class="absolute top-0 mt-1 w-3 h-3 rounded-full bg-green-500"></div>
+                                <div class="absolute top-0 mt-1 w-3 h-3 rounded-full bg-green-500"></div>
+                                <div class="absolute top-0 mt-1 w-3 h-3 rounded-full bg-green-500"></div>
+                                <div class="absolute top-0 mt-1 w-3 h-3 rounded-full bg-green-500"></div>
+                              </div>
+                              <div class="text-gray-500 text-xs font-medium mt-2 text-center">
+                                Loading...
+                              </div>
+                            </div>
+                            </div>
+                          </div>
                     </div>
                 </div>
             </div>
@@ -196,6 +194,8 @@
     @push('js')
     <script>
           var routeGetAllProduct = {{ Js::from(route('ecommerce_module.groupProduct.getAllProducts')) }};
+          var routeSearchProduct = {{ Js::from(route('ecommerce_module.groupProduct.searchProduct')) }};
+          var hostUrl = "{{ env('APP_URL') }}";
     </script>
     <script src="{{ asset('assets/apps/groupProduct/customGroupProduct.js') }}"></script>
         <script>
