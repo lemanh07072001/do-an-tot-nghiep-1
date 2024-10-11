@@ -5,7 +5,7 @@ namespace App\Services\Backend;
 
 use Carbon\Carbon;
 use App\Models\Brand;
-use App\Models\Label;
+
 use App\Models\Products;
 use App\Models\Categories;
 use App\Models\Properties;
@@ -116,7 +116,7 @@ class ProductesService
             'attributeCatalogue' => $this->formatJson($request, 'attributeCatalogue'),
             'attributes' => $this->formatJson($request, 'attribute'),
             'variants' => $this->formatJson($request, 'variant'),
-            'label_id' => $request->label_id,
+            'label' => $request->label,
             'categories_id' => $request->categories_id,
             'created_at' => FormatFunction::getDatetime(),
         ];
@@ -238,7 +238,7 @@ class ProductesService
             'attributeCatalogue' => $this->formatJson($request, 'attributeCatalogue'),
             'attributes' => $this->formatJson($request, 'attribute'),
             'variants' => $this->formatJson($request, 'variant'),
-            'label_id' => $request->label_id,
+            'label' => $request->label,
             'categories_id' => $request->categories_id,
             'created_at' => FormatFunction::getDatetime(),
         ];

@@ -6,7 +6,7 @@ namespace App\Services\Backend;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Brand;
-use App\Models\Label;
+
 use App\Models\Banner;
 use App\Models\Voucher;
 use App\Models\Properties;

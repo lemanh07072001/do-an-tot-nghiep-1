@@ -91,6 +91,11 @@ class CategoriesService
         // Xử lý ngoại lệ
         try {
 
+            if ($request->hot == 'on') {
+                $hot = 0;
+            } else {
+                $hot = 1;
+            }
 
             //NOTE - Lưu thông tin người dùng vào cơ sở dữ liệu
             $data = [
@@ -99,7 +104,7 @@ class CategoriesService
                 'parent_id' => $request->parent_id,
                 'status' => $request->status,
                 'description' => $request->description,
-                'order' => $request->order,
+                'hot' => $hot,
                 'image' => $request->image,
                 'user_id' => Auth::id(),
             ];
@@ -128,7 +133,11 @@ class CategoriesService
 
     public function update($request, $categories)
     {
-
+        if ($request->hot == 'on') {
+            $hot = 0;
+        } else {
+            $hot = 1;
+        }
 
         //NOTE - Lưu thông tin người dùng vào cơ sở dữ liệu
         $data = [
@@ -137,7 +146,7 @@ class CategoriesService
             'parent_id' => $request->parent_id,
             'status' => $request->status,
             'description' => $request->description,
-            'order' => $request->order,
+            'hot' => $hot,
             'image' => $request->image,
             'user_id' => Auth::id(),
         ];
@@ -285,15 +294,15 @@ class CategoriesService
     }
 
     public function detaiProductCategories($request)
-{
-    $id = $request->get('id');
+    {
+        $id = $request->get('id');
 
-    // Lấy danh mục với sản phẩm và biến thể của sản phẩm
-    $categoriId = Categories::find($id);
+        // Lấy danh mục với sản phẩm và biến thể của sản phẩm
+        $categoriId = Categories::find($id);
 
-    $categories = $categoriId->products->select(['id','name','avatar']);
+        $categories = $categoriId->products->select(['id', 'name', 'avatar']);
 
-    // Trả về dữ liệu dưới dạng JSON
-    return response()->json($categories);
-}
+        // Trả về dữ liệu dưới dạng JSON
+        return response()->json($categories);
+    }
 }

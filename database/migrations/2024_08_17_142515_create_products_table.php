@@ -29,7 +29,7 @@ return new class extends Migration
             $table->decimal('price_sale', 10, 2)->default(0);
             $table->tinyInteger('status')->default(Status::Active);
             $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();
-            $table->foreignIdFor(Label::class)->nullable()->constrained()->nullOnDelete();
+            $table->tinyInteger('label')->nullable();
             $table->foreignIdFor(Categories::class)->nullable()->constrained()->nullOnDelete();
             $table->timestamps();
         });

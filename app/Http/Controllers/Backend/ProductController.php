@@ -31,9 +31,8 @@ class ProductController extends Controller
     public function create()
     {
         $getCategoriesSelect = $this->service->getCategoriesSelect();
-        $getAllLabelSelect = $this->service->getAllLabelSelect();
         $getAllProperties = $this->service->getPropertiesSelectByParent();
-        return view('backend.products.create', compact(['getCategoriesSelect', 'getAllLabelSelect', 'getAllProperties']));
+        return view('backend.products.create', compact(['getCategoriesSelect', 'getAllProperties']));
     }
 
     public function store(ProductRequest $request){
@@ -42,9 +41,8 @@ class ProductController extends Controller
 
     public function edit(Products $products){
         $getCategoriesSelect = $this->service->getCategoriesSelect();
-        $getAllLabelSelect = $this->service->getAllLabelSelect();
         $getAllProperties = $this->service->getPropertiesSelectByParent();
-        return view('backend.products.edit', compact(['getCategoriesSelect', 'getAllLabelSelect', 'getAllProperties','products']));
+        return view('backend.products.edit', compact(['getCategoriesSelect','getAllProperties','products']));
     }
 
     public function update(ProductRequest $request,Products $products){

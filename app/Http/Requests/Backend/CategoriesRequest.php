@@ -34,7 +34,6 @@ class CategoriesRequest extends FormRequest
                     'name' => ['required', 'string', 'max:255', 'unique:categories,name,' . $id],
                     'slug' => ['required', 'string', 'max:255'],
                     'description' => ['nullable', 'string'],
-                    'order' => ['required', 'integer', 'max:20', 'min:0'],
                 ];
         } else {
             $rule =
@@ -42,7 +41,6 @@ class CategoriesRequest extends FormRequest
                     'name' => ['required', 'string', 'max:255', 'unique:categories,name'],
                     'slug' => ['required', 'string', 'max:255'],
                     'description' => ['nullable', 'string'],
-                    'order' => ['required', 'integer', 'max:20', 'min:0'],
                 ];
         };
 

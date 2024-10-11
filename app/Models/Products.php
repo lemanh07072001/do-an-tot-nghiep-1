@@ -27,7 +27,7 @@ class Products extends Model
         'price_sale',
         'status',
         'user_id',
-        'label_id',
+        'label',
         'categories_id',
         'attributeCatalogue',
         'attributes',
@@ -58,8 +58,5 @@ class Products extends Model
         return $this->belongsToMany(GroupProduct::class);
     }
 
-    public function comments()
-    {
-        return $this->hasMany(Comment::class);
-    }
+
 }

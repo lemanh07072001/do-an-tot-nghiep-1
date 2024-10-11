@@ -22,9 +22,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+use App\Http\Controllers\Client\HomeController;
+
 
 Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
     //ANCHOR - [Ecommerce Modules]
@@ -125,18 +125,7 @@ Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
             Route::delete('/deleteRow', [BrandController::class, 'deleteRow'])->name('deleteRow');
         });
 
-        //LINK - Label
-        Route::prefix('label')->name('label.')->group(function () {
-            Route::get('/', [LabelController::class, 'index'])->name('index');
-            Route::get('/getData', [LabelController::class, 'getData'])->name('getData');
-            Route::get('/create', [LabelController::class, 'create'])->name('create');
-            Route::post('/store', [LabelController::class, 'store'])->name('store');
-            Route::get('/edit/{label}', [LabelController::class, 'edit'])->name('edit');
-            Route::post('/update/{label}', [LabelController::class, 'update'])->name('update');
-            Route::post('/toggleStatus', [LabelController::class, 'toggleStatus'])->name('toggleStatus');
-            Route::delete('/deleteAll', [LabelController::class, 'deleteAll'])->name('deleteAll');
-            Route::delete('/deleteRow', [LabelController::class, 'deleteRow'])->name('deleteRow');
-        });
+
 
         //LINK - Transaction
         Route::prefix('transaction')->name('transaction.')->group(function () {
@@ -175,18 +164,7 @@ Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
             Route::get('/searchProduct', [GroupProductController::class, 'searchProduct'])->name('searchProduct');
         });
 
-        //LINK - Comment
-        Route::prefix('comment')->name('comment.')->group(function () {
-            Route::get('/', [CommentController::class, 'index'])->name('index');
-            Route::get('/getData', [CommentController::class, 'getData'])->name('getData');
-            Route::get('/create', [CommentController::class, 'create'])->name('create');
-            Route::post('/store', [CommentController::class, 'store'])->name('store');
-            Route::get('/edit/{comment}', [CommentController::class, 'edit'])->name('edit');
-            Route::post('/update/{comment}', [CommentController::class, 'update'])->name('update');
-            Route::post('/toggleStatus', [CommentController::class, 'toggleStatus'])->name('toggleStatus');
-            Route::delete('/deleteAll', [CommentController::class, 'deleteAll'])->name('deleteAll');
-            Route::delete('/deleteRow', [CommentController::class, 'deleteRow'])->name('deleteRow');
-        });
+
 
         //LINK - Ajax
         Route::prefix('ajax')->name('ajax.')->group(function () {
@@ -240,6 +218,9 @@ Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
 
 });
 
+
+Route::get('/', [HomeController::class,'index'])->name('index');
+Route::post('/hotline-ajax', [HomeController::class,'hotlineAjax'])->name('hotlineAjax');
 
     //LINK - UploadController
     Route::post('/upload', [UploadController::class, 'upload'])->name('upload');

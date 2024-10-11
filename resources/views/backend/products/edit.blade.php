@@ -11,8 +11,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
     <x-card>
         <form method="POST" action="{{ route('ecommerce_module.products.update', $products) }}" class="repeater">
@@ -97,16 +95,12 @@
                     </x-select>
                 </div>
 
-                <div class="col-span-6 sm:col-span-2 ">
-                    <x-input-label >Nhãn</x-input-label>
-                    <x-select name="label_id">
-                        @if (!empty($getAllLabelSelect))
-                            <option value="">--Chọn nhãn--</option>
-                            @foreach ($getAllLabelSelect as $label)
-                                <option value="{{ $label->id }}" @selected(old('label_id', $products->label_id) == $label->id)>
-                                    {{ $label->name }}</option>
-                            @endforeach
-                        @endif
+                 <div class="col-span-6 sm:col-span-2 ">
+                    <x-input-label>Nhãn</x-input-label>
+                    <x-select name="label">
+                        <option value="1" @selected(old('label')??$products->label=='1')>Sản phẩm hot</option>
+                        <option value="2" @selected(old('label')??$products->label=='2')>Sản phẩm mới</option>
+                        <option value="3" @selected(old('label')??$products->label=='3')>Sản phẩm khuyến mãi</option>
                     </x-select>
                 </div>
 

@@ -116,23 +116,7 @@ Breadcrumbs::for('brandUpdate', function (BreadcrumbTrail $trail, $brand) {
     $trail->push(config('apps.brand.titleUpdate') . ' [ ' . $brand->name . ' ] ', route('ecommerce_module.brand.edit', $brand));
 });
 
-//NOTE - Label
-// Label
-Breadcrumbs::for('label', function (BreadcrumbTrail $trail) {
-    $trail->push('Trang chủ', route('ecommerce_module.label.index'));
-});
 
-// Label > Create
-Breadcrumbs::for('labelCreate', function (BreadcrumbTrail $trail) {
-    $trail->parent('label');
-    $trail->push(config('apps.label.titleCreate'), route('ecommerce_module.label.create'));
-});
-
-// Label > Update[label]
-Breadcrumbs::for('labelUpdate', function (BreadcrumbTrail $trail, $label) {
-    $trail->parent('label');
-    $trail->push(config('apps.label.titleUpdate') . ' [ ' . $label->name . ' ] ', route('ecommerce_module.label.edit', $label));
-});
 
 //NOTE - Transaction
 // Transaction
@@ -188,24 +172,6 @@ Breadcrumbs::for('groupProductCreate', function (BreadcrumbTrail $trail) {
 Breadcrumbs::for('groupProductUpdate', function (BreadcrumbTrail $trail, $groupProduct) {
     $trail->parent('groupProduct');
     $trail->push(config('apps.groupProduct.titleUpdate') . ' [ ' . $groupProduct->name . ' ] ', route('ecommerce_module.groupProduct.edit', $groupProduct));
-});
-
-//NOTE - GroupProduct
-// GroupProduct
-Breadcrumbs::for('comment', function (BreadcrumbTrail $trail) {
-    $trail->push('Trang chủ', route('ecommerce_module.comment.index'));
-});
-
-// GroupProduct > Create
-Breadcrumbs::for('commentCreate', function (BreadcrumbTrail $trail) {
-    $trail->parent('comment');
-    $trail->push(config('apps.comment.titleCreate'), route('ecommerce_module.comment.create'));
-});
-
-// GroupProduct > Update[client]
-Breadcrumbs::for('commentUpdate', function (BreadcrumbTrail $trail, $comment) {
-    $trail->parent('comment');
-    $trail->push(config('apps.comment.titleUpdate') . ' [ ' . $comment->name . ' ] ', route('ecommerce_module.comment.edit', $comment));
 });
 
 

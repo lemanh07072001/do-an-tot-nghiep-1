@@ -202,12 +202,7 @@
                             <x-input-error error="setting_passEmail" class="mt-2" />
                         </div>
 
-                        <div class="col-span-6 sm:col-span-3 ">
-                            <x-input-label for="setting_email_hotline">Email liên hệ</x-input-label>
-                            <x-text-input name="setting_email_hotline" :value="old('setting_email_hotline') ?? $settings['setting_email_hotline']" id="setting_email_hotline"
-                                placeholder="Nhập email liên hệ" />
-                            <x-input-error error="setting_email_hotline" class="mt-2" />
-                        </div>
+
 
 
 

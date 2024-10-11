@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('description')->nullable();
-            $table->string('order')->default(0);
+            $table->string('hot')->default(0);
             $table->string('slug');
             $table->nestedSet();
             $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();

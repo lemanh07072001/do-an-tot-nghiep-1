@@ -62,10 +62,14 @@
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
-                    <x-input-label for="order" required>Thứ tự</x-input-label>
-                    <x-text-input min="0" max="20" type="number" name="order" id="order"
-                        :value="old('order', $categories->order ?? 0)" />
-                    <x-input-error for="order" class="mt-2" />
+                    <div class="flex items-center mb-4">
+                        <input id="default-checkbox" type="checkbox" name="hot"
+                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                            @checked(old('hot')||$categories->hot == '0')
+                            >
+                        <label for="default-checkbox"
+                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Danh mục hot</label>
+                    </div>
                 </div>
 
                 <div class="col-span-6 sm:col-span-3">
