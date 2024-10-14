@@ -17,6 +17,8 @@
         $categoriesArray[] = $parentArray;
     }
 
+
+
 @endphp
 
 <header id="header" class="header">
@@ -60,7 +62,7 @@
                                         thiệu</a>
                                 </li>
                                 <li class="border-solid lg:px-2.5 lg:mx-[7px] menu-list lg:relative group">
-                                    <a href="#"
+                                    <a href="{{ route('allProductCategories') }}"
                                         class="leading-4 px-5 py-[15px] inline-flex w-full justify-between text-[#666666] text-[.8em] font-bold tracking-wider uppercase lg:group-hover:text-[#ff5b26] lg:hover:text-[#ff5b26] lg:text-[.9em] lg:hover:ease-in lg:p-0 lg:py-2.5">
                                         Sản phẩm
                                         <ion-icon name="chevron-down-outline" class="text-sm"
@@ -81,8 +83,10 @@
                                                         <ul class="">
                                                             @if (count($itemParent['children']) > 0)
                                                                 @foreach ($itemParent['children'] as $item)
+
+
                                                                     <li class="pl-[.5em]">
-                                                                        <a href="#"
+                                                                        <a href="{{ route('detail',['slug' => $item['slug'],'id'=>$item['id']]) }}"
                                                                             class="pl-5 py-2 text-[.9em] text-[rgba(102,102,102,0.85)] block lg:hover:bg-[#ff5b26] lg:rounded-lg lg:py-2 lg:px-5 lg:pr-1 lg:pl-2 lg:mx-2 lg:hover:text-[#fff]">
                                                                             {{ $item['name'] }}
                                                                         </a>
@@ -120,32 +124,12 @@
                     <div class="flex flex-1 justify-end order-3 lg:order-none lg:flex-initial">
                         <!-- Search Bar -->
                         <div class="search-header pr-2 lg:mx-[7px] border-solid relative first:ml-0 lg:py-3 group">
-                            <ion-icon class=" cursor-pointer text-[#666666] text-[20px] lg:text-[20px]"
+                            <a href="{{ route('search') }}">
+                                <ion-icon class=" cursor-pointer text-[#666666] text-[20px] lg:text-[20px]"
                                 name="search-outline"></ion-icon>
+                            </a>
 
-                            <div class="absolute w-[300px] lg:w-[400px] right-0 top-[-100px] z-40 group-hover:top-12">
-                                <form class="max-w-md mx-auto">
-                                    <label for="default-search"
-                                        class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-                                    <div class="relative">
-                                        <div
-                                            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                                <path stroke="currentColor" stroke-linecap="round"
-                                                    stroke-linejoin="round" stroke-width="2"
-                                                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                                            </svg>
-                                        </div>
-                                        <input type="search" id="default-search"
-                                            class="block w-full pr-28 p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-[#ff5b26] focus:border-[#ff5b26] "
-                                            placeholder="Search Mockups, Logos..." />
-                                        <button type="submit"
-                                            class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2">Tìm
-                                            kiếm</button>
-                                    </div>
-                                </form>
-                            </div>
+
                         </div>
                         <!-- End Search Bar -->
 
@@ -177,3 +161,10 @@
         </div>
     </div>
 </header>
+
+
+@push('js')
+    <script>
+
+    </script>
+@endpush

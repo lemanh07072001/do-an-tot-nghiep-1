@@ -18,6 +18,7 @@ use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\TransactionController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\VoucherController;
+use App\Http\Controllers\Client\DetailController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UploadController;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\HomeController;
 
 
-Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     //ANCHOR - [Ecommerce Modules]
     Route::name('dashboard_module.')->group(function () {
 
@@ -53,7 +54,6 @@ Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
             Route::get('/export', [UserController::class, 'export'])->name('export');
             Route::post('/import', [UserController::class, 'import'])->name('import');
         });
-
     });
 
     //ANCHOR - [Ecommecre Modules]
@@ -197,8 +197,8 @@ Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
             Route::post('/ai-assistant', [PolicyController::class, 'processContent'])->name('processContent');
         });
 
-         //LINK - Contact
-         Route::prefix('contact')->name('contact.')->group(function () {
+        //LINK - Contact
+        Route::prefix('contact')->name('contact.')->group(function () {
             Route::get('/', [ContactController::class, 'index'])->name('index');
             Route::get('/getData', [ContactController::class, 'getData'])->name('getData');
             Route::get('/getMessage', [ContactController::class, 'getMessage'])->name('getMessage');
@@ -209,19 +209,32 @@ Route::prefix('admin')->middleware(['auth','isAdmin'])->group(function () {
         });
     });
 
-     //LINK - Voucher
-     Route::prefix('ai')->name('ai.')->group(function () {
+    //LINK - Voucher
+    Route::prefix('ai')->name('ai.')->group(function () {
         Route::post('chat', [AIController::class, 'chat'])->name('chat');
-
     });
-
-
 });
 
 
-Route::get('/', [HomeController::class,'index'])->name('index');
-Route::post('/hotline-ajax', [HomeController::class,'hotlineAjax'])->name('hotlineAjax');
+Route::get('/', [HomeController::class, 'index'])->name('index');
+Route::post('/hotline-ajax', [HomeController::class, 'hotlineAjax'])->name('hotlineAjax');
 
-    //LINK - UploadController
-    Route::post('/upload', [UploadController::class, 'upload'])->name('upload');
+Route::get('/danh-muc/{slug}/{id}', [DetailController::class, 'detail'])->name('detail');
+Route::get('/get-products-ajax', [DetailController::class, 'getProducts'])->name('getProducts');
+Route::get('/search', [HomeController::class, 'search'])->name('search');
+Route::get('/search-product-ajax', [HomeController::class, 'searchAjax'])->name('searchAjax');
+
+Route::get('/all-product-categories', [DetailController::class, 'allProductCategories'])->name('allProductCategories');
+Route::get('/all-product-categories-ajax', [DetailController::class, 'allProductCategoriesAjax'])->name('allProductCategoriesAjax');
+
+Route::get('/nhom-san-pham/{slug}', [DetailController::class, 'allGroupProduct'])->name('allGroupProduct');
+Route::get('/get-group-product-ajax', [DetailController::class, 'getGroupProductAjax'])->name('getGroupProductAjax');
+
+Route::get('/danh-muc-san-pham/{slug}', [DetailController::class, 'getFirstCategories'])->name('getFirstCategories');
+Route::get('/danh-muc-san-pham-ajax', [DetailController::class, 'getFirstCategoriesAjax'])->name('getFirstCategoriesAjax');
+
+
+Route::get('/san-pham/{slug}', [DetailController::class, 'firstProduct'])->name('firstProduct');
+//LINK - UploadController
+Route::post('/upload', [UploadController::class, 'upload'])->name('upload');
 require __DIR__ . '/auth.php';

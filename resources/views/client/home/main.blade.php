@@ -17,7 +17,8 @@
                           </div>
 
                           <div class="flex justify-center lg:inline">
-                              <a href="" class="w-[12rem] flex  items-center relative">
+                              <a href="{{ route('allGroupProduct', ['slug' => $group->slug]) }}"
+                                  class="w-[12rem] flex  items-center relative">
                                   <span
                                       class="w-[3rem] h-[3rem] bg-[#ff5b26] flex justify-center items-center rounded-full ">
                                       <ion-icon name="chevron-forward-outline" class="text-lg text-white"></ion-icon>
@@ -54,7 +55,7 @@
                                           <div class="px-2 pb-3 group ">
                                               <div
                                                   class="border-[#e0e0e0]  border-[1px] relative pt-1 rounded-[20px] overflow-hidden shadow-[0_1px_3px_-2px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] group-hover:shadow-[0_3px_6px_-4px_rgba(0,0,0,0.16),0_3px_6px_rgba(0,0,0,0.23)] duration-300">
-                                                  <a href="">
+                                                  <a href="{{ route('firstProduct', ['slug' => $product->slug]) }}">
                                                       @switch($product->label)
                                                           @case(1)
                                                               <div
@@ -91,7 +92,7 @@
                                                       </div>
 
                                                       <div class="px-4 pb-5 pt-2 text-[.9em]">
-                                                          <p>{{ $product->name }}</p>
+                                                          <p class="truncate">{{ $product->name }}</p>
                                                           <p class="my-[6px]">
                                                           <div class="flex font-bold text-[#111]">
                                                               <span>{{ $formattedMinPrice }}</span>

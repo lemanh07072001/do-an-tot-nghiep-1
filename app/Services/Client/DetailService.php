@@ -1,0 +1,221 @@
+<?php
+
+namespace App\Services\Client;
+
+use App\Models\Categories;
+use App\Models\GroupProduct;
+use App\Models\Products;
+use App\Models\Setting;
+
+class DetailService
+{
+    public function getFirstCategories($slug)
+    {
+        $categories = Categories::where("slug", $slug)->where('status', 0)->first();
+        return $categories;
+    }
+
+    public function getProducts($request)
+    {
+        //Lấy số lượng sản phẩm trên 1 trang
+        $paginateDefault = '1';
+        $paginate = Setting::where('setting_key', 'setting_paginate')->value('setting_value') ?? $paginateDefault;
+
+        // Kiểm tra xem giá trị phân trang có phải là số không, nếu không thì sử dụng giá trị mặc định
+        $paginate = is_numeric($paginate) ? intval($paginate) : $paginateDefault;
+
+
+        // Lấy dữ liệu từ database, có thể thêm sắp xếp hoặc phân trang nếu cần
+        $sort = $request->get('sort');
+        $id = $request->get('id');
+
+        // Kiểm tra hợp lệ của $id
+        if (!$id || !is_numeric($id)) {
+            return response()->json(['error' => 'ID không hợp lệ'], 400);
+        }
+
+
+        $query = Products::query();
+        $query = $query->where('status', 0)->where('categories_id', '=', $id);
+
+
+
+        switch ($sort) {
+            case '0':
+                $query->orderBy('created_at', 'desc'); // Mới nhất
+                break;
+            case '1':
+                $query->orderBy('price', 'asc'); // Giá từ thấp đến cao
+                break;
+            case '2':
+                $query->orderBy('price', 'desc'); // Giá từ cao đến thấp
+                break;
+            default:
+                $query->orderBy('name', 'asc'); // Thứ tự mặc định
+                break;
+        }
+
+        // Phân trang nếu cần
+        $products = $query->paginate($paginate);
+
+        if ($products->isEmpty()) {
+            return response()->json(['message' => 'Không tìm thấy sản phẩm'], 404);
+        }
+
+        // Trả về JSON
+        return response()->json($products);
+    }
+
+    public function getAllProduct($request)
+    {
+        //Lấy số lượng sản phẩm trên 1 trang
+        $paginateDefault = '1';
+        $paginate = Setting::where('setting_key', 'setting_paginate')->value('setting_value') ?? $paginateDefault;
+
+        // Lấy dữ liệu từ database, có thể thêm sắp xếp hoặc phân trang nếu cần
+        $sort = $request->get('sort');
+
+        $query = Products::query();
+        $query = $query->where('status', 0);
+
+
+
+        switch ($sort) {
+            case '0':
+                $query->orderBy('created_at', 'desc'); // Mới nhất
+                break;
+            case '1':
+                $query->orderBy('price', 'asc'); // Giá từ thấp đến cao
+                break;
+            case '2':
+                $query->orderBy('price', 'desc'); // Giá từ cao đến thấp
+                break;
+            default:
+                $query->orderBy('name', 'asc'); // Thứ tự mặc định
+                break;
+        }
+
+        // Phân trang nếu cần
+        $products = $query->paginate($paginate);
+
+        if ($products->isEmpty()) {
+            return response()->json(['message' => 'Không tìm thấy sản phẩm'], 404);
+        }
+
+        // Trả về JSON
+        return response()->json($products);
+    }
+
+    public function getNameGroupProduct($slug)
+    {
+        return GroupProduct::where('slug', $slug)->where('status', 0)->first();
+    }
+
+    public function getGroupProductAjax( $request)
+    {
+        // Lấy số lượng sản phẩm trên mỗi trang, mặc định là 1 nếu không có cài đặt
+        $paginateDefault = 1;
+        $paginate = Setting::where('setting_key', 'setting_paginate')->value('setting_value') ?? $paginateDefault;
+
+        // Lấy dữ liệu từ request
+        $sort = $request->get('sort');
+        $slug = $request->get('slug');
+
+        // Tìm group product theo slug
+        $groupProduct = GroupProduct::where('slug', $slug)->where('status', 0)->firstOrFail();
+
+        // Kiểm tra nếu không tìm thấy group product
+        if (!$groupProduct) {
+            abort(404, 'Không tìm thấy nhóm sản phẩm');
+        }
+
+        // Lấy sản phẩm thuộc nhóm dựa trên mối quan hệ nhiều-nhiều
+        $query = $groupProduct->products()->where('status', 0);
+
+        // Xử lý sắp xếp theo yêu cầu
+        switch ($sort) {
+            case '0':
+                $query->orderBy('created_at', 'desc'); // Mới nhất
+                break;
+            case '1':
+                $query->orderBy('price', 'asc'); // Giá từ thấp đến cao
+                break;
+            case '2':
+                $query->orderBy('price', 'desc'); // Giá từ cao đến thấp
+                break;
+            default:
+                $query->orderBy('name', 'asc'); // Thứ tự mặc định
+                break;
+        }
+
+        // Phân trang các sản phẩm
+        $products = $query->paginate($paginate);
+
+        // Kiểm tra nếu không có sản phẩm nào
+        if ($products->isEmpty()) {
+            abort(404, 'Không tìm thấy sản phẩm');
+        }
+
+        // Trả về dữ liệu JSON của sản phẩm
+        return response()->json($products);
+    }
+
+    public function getFirstCategorie($slug)
+    {
+        return Categories::where('slug', $slug)->where('status', 0)->first();
+    }
+
+    public function getFirstCategoriesAjax( $request)
+    {
+        // Lấy số lượng sản phẩm trên mỗi trang, mặc định là 1 nếu không có cài đặt
+        $paginateDefault = 1;
+        $paginate = Setting::where('setting_key', 'setting_paginate')->value('setting_value') ?? $paginateDefault;
+
+        // Lấy dữ liệu từ request
+        $sort = $request->get('sort');
+        $slug = $request->get('slug');
+
+        try {
+            // Tìm danh mục theo slug
+            $categories = Categories::where('slug', $slug)->where('status', 0)->firstOrFail();
+
+            // Lấy sản phẩm thuộc danh mục dựa trên mối quan hệ nhiều-nhiều
+            $query = $categories->products()->where('status', 0);
+
+            // Xử lý sắp xếp theo yêu cầu
+            switch ($sort) {
+                case '0':
+                    $query->orderBy('created_at', 'desc'); // Mới nhất
+                    break;
+                case '1':
+                    $query->orderBy('price', 'asc'); // Giá từ thấp đến cao
+                    break;
+                case '2':
+                    $query->orderBy('price', 'desc'); // Giá từ cao đến thấp
+                    break;
+                default:
+                    $query->orderBy('name', 'asc'); // Thứ tự mặc định
+                    break;
+            }
+
+            // Phân trang các sản phẩm
+            $products = $query->paginate($paginate);
+
+            // Kiểm tra nếu không có sản phẩm nào
+            if ($products->isEmpty()) {
+                return response()->json(['message' => 'Không tìm thấy sản phẩm'], 404);
+            }
+
+            // Trả về dữ liệu JSON của sản phẩm
+            return response()->json($products);
+        } catch (\Exception $e) {
+            // Xử lý ngoại lệ và trả về trang lỗi 404
+            abort(404, 'Không tìm thấy danh mục hoặc sản phẩm');
+        }
+    }
+
+    public function getFirstProduct($slug)
+    {
+        // dd($slug);
+    }
+}

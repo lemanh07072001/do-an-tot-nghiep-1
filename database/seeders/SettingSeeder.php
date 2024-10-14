@@ -69,6 +69,11 @@ class SettingSeeder extends Seeder
                 'setting_key' => 'setting_passEmail',
                 'setting_value' => 'xnmprgtkilckxnmj',
             ],
+            [
+                'setting_key' => 'setting_paginate',
+                'setting_value' => '1',
+            ],
+
 
         ];
 

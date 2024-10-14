@@ -1,6 +1,4 @@
 
-
-
 function openMenuMobile() {
     $('#buttonOpenMenuMobile').on('click', function () {
         let _menu = $('#menu');
@@ -56,12 +54,12 @@ function timeDown(){
             seconds = "0" + seconds;
         }
 
-      
+
         // Hiển thị thời gian trong phần tử HTML
         $('#hours').text(hours)
         $('#minutes').text(minutes)
         $('#seconds').text(seconds)
-      
+
 
         // Giảm thời gian đi 1 giây
         countdownTime--;
@@ -74,7 +72,7 @@ function timeDown(){
     }
 
     // Cập nhật đồng hồ mỗi giây
-    var countdownInterval = setInterval(updateCountdown, 1000); 
+    var countdownInterval = setInterval(updateCountdown, 1000);
 }
 
 
@@ -96,3 +94,12 @@ $(document).ready(function () {
     //     console.log('da');
     // })
 })
+
+
+function showLoading(){
+    $("#loading").show();
+}
+
+function hidenLoading(){
+    $("#loading").fadeOut();
+}

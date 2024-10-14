@@ -21,7 +21,7 @@
                  <div class="px-2 pb-2 ">
                      <div
                          class="border-[1px] group-hover:border-[#ff5b26] duration-300 group-hover:shadow-[1px_5px_5px_1px_#ccc] border-solid border-gray-500 rounded-[100px] group-hover:bg-[#ff5b26]">
-                         <a href="#" class="block">
+                         <a href="{{ route('getFirstCategories',['slug'=>$item->slug]) }}" class="block">
                              <div class="flex items-center p-2 h-full lg:p-1">
                                  <div class="relative hidden overflow-hidden  lg:rounded-full lg:block">
                                      <div class="h-[70px] w-[70px]">

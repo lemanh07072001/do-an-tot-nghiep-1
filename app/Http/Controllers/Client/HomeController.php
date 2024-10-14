@@ -42,4 +42,12 @@ class HomeController extends Controller
         }
         return $this->service->hotlineAjax($request);
     }
+
+    public function search(){
+        return view('client.uitil.search');
+    }
+
+    public function searchAjax(Request $request){
+        return $this->service->searchAjax($request);
+    }
 }

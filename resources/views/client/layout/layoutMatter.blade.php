@@ -84,12 +84,12 @@
 </head>
 
 <body>
-    <div  id="loading">
-       <div class="rl-loading-container">
-         <div class="rl-loading-thumb rl-loading-thumb-1"></div>
-        <div class="rl-loading-thumb rl-loading-thumb-2"></div>
-        <div class="rl-loading-thumb rl-loading-thumb-3"></div>
-       </div>
+    <div id="loading">
+        <div class="rl-loading-container">
+            <div class="rl-loading-thumb rl-loading-thumb-1"></div>
+            <div class="rl-loading-thumb rl-loading-thumb-2"></div>
+            <div class="rl-loading-thumb rl-loading-thumb-3"></div>
+        </div>
     </div>
 
     <div id="wrapper">
@@ -99,6 +99,108 @@
 
         @yield('content')
 
+        <!-- Banner Footer -->
+        <section
+            class="relative overflow-hidden w-full z-20
+            before:content-[''] before:absolute before:h-[200px] before:w-[200px] before:bg-[#ff5b26] before:bottom-[60px] before:left-[-50px] before:rounded-full lg:z-10 before:opacity-65 lg:before:opacity-1
+            after:content-[''] after:absolute after:h-[500px] after:w-[500px] after:bg-[#ff5b26] after:bottom-[-250px] after:right-[-250px] after:rounded-full after:opacity-65 lg:after:opacity-1">
+            <div class="z-30">
+                <div class="container max-w-[1170px] mx-auto   items-center h-full px-2.5 pb-6 ">
+                    <div class="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-5 items-center">
+                        <div class="col-span-3  z-30">
+                            <div class="h-full">
+                                <div class=" bg-custom-radial">
+                                    <div
+                                        class="text-[25px] text-center lg:text-left lg:text-[32px] text-[#1c1c1c] uppercase">
+                                        <span>Ưu đãi</span>
+                                        <span class="text-[#ff5b26]"> giảm đến 50%</span>
+                                    </div>
+                                    <h2
+                                        class="text-[32px] text-center lg:text-left lg:ext-[70px] text-[#4b4b4b] uppercase font-bold">
+                                        Tài khoản mới</h2>
+                                </div>
+
+                                <p class="w-full mt-3 flex justify-center lg:justify-start">
+                                    <a href="" class="w-[13rem] flex  items-center relative">
+                                        <span
+                                            class="w-[3rem] h-[3rem] bg-[#ff5b26] flex justify-center items-center rounded-full ">
+                                            <ion-icon name="chevron-forward-outline"
+                                                class="text-lg text-white"></ion-icon>
+                                        </span>
+                                        <span
+                                            class="bg-[#ff5b262e] absolute inset-0 py-[0.75rem] text-center ml-[1.85rem] rounded-r-[50px] font-semibold uppercase text-[#ff5b26]">Đăng
+                                            ký ngay</span>
+                                    </a>
+                                </p>
+
+                                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 mt-6">
+                                    <div class="col-span-1">
+                                        <div class="flex items-center justify-center ">
+                                            <div class="w-2/5">
+                                                <img src="{{ asset('images/client/icons8-like-100.png') }}"
+                                                    alt="" class="w-full h-full">
+                                            </div>
+                                        </div>
+
+                                        <div class="px-3 pb-5 text-center font-bold text-[14px] text-[#1c1c1c]">
+                                            <h4>Sản phẩm chính hãng</h4>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                        <div class="flex items-center justify-center ">
+                                            <div class="w-2/5">
+                                                <img src="{{ asset('images/client/icons8-box-60.png') }}" alt=""
+                                                    class="w-full h-full">
+                                            </div>
+                                        </div>
+
+                                        <div class="px-3 pb-5 text-center font-bold text-[14px] text-[#1c1c1c]">
+                                            <h4>Dễ dàng đổi trả</h4>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                        <div class="flex items-center justify-center ">
+                                            <div class="w-2/5">
+                                                <img src="{{ asset('images/client/icons8-delivery-64.png') }}"
+                                                    alt="" class="w-full h-full">
+                                            </div>
+                                        </div>
+
+                                        <div class="px-3 pb-5 text-center font-bold text-[14px] text-[#1c1c1c]">
+                                            <h4>Giao hàng siêu tốc</h4>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-1">
+                                        <div class="flex items-center justify-center ">
+                                            <div class="w-2/5">
+                                                <img src="{{ asset('images/client/icons8-money-100.png') }}"
+                                                    alt="" class="w-full h-full">
+                                            </div>
+                                        </div>
+
+                                        <div class="px-3 pb-5 text-center font-bold text-[14px] text-[#1c1c1c]">
+                                            <h4>Thanh toán dễ dàng</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-span-2 z-30 relative">
+                            <div class="z-10">
+                                <img src="{{ asset('images/client/img-footer-6.png') }}" />
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End Banner Footer -->
+
         <!-- Footer -->
         @include('client.layout.footer')
         <!-- End Footer -->
@@ -107,6 +209,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <!-- Style -->
         <script src="{{ asset('assets/client/js/main.js') }}"></script>
+        <script src="{{ asset('assets/client/js/renderHtml.js') }}"></script>
         <script src="{{ asset('assets/client/js/ajax.js') }}"></script>
 
         <!-- Font Awesome -->
@@ -143,13 +246,15 @@
         </script>
 
         <script>
-            $(document).ready(function() {
-                $("#loading").show();
+            showLoading();
 
-                $(window).on("load", function() {
-                    $("#loading").fadeOut(); // Ẩn loading với hiệu ứng fade out
-                });
+            $(document).on("DOMContentLoaded", function() {
+                hidenLoading(); // Ẩn loading với hiệu ứng fade out
             });
+        </script>
+
+        <script>
+            var searchAjax = '{{ route('searchAjax') }}'
         </script>
 
         @stack('js')
