@@ -5,7 +5,10 @@ namespace App\Services\Client;
 use App\Models\Categories;
 use App\Models\GroupProduct;
 use App\Models\Products;
+use App\Models\ProductVariant;
+use App\Models\Properties;
 use App\Models\Setting;
+use Illuminate\Support\Facades\Log;
 
 class DetailService
 {
@@ -111,7 +114,7 @@ class DetailService
         return GroupProduct::where('slug', $slug)->where('status', 0)->first();
     }
 
-    public function getGroupProductAjax( $request)
+    public function getGroupProductAjax($request)
     {
         // Lấy số lượng sản phẩm trên mỗi trang, mặc định là 1 nếu không có cài đặt
         $paginateDefault = 1;
@@ -165,7 +168,7 @@ class DetailService
         return Categories::where('slug', $slug)->where('status', 0)->first();
     }
 
-    public function getFirstCategoriesAjax( $request)
+    public function getFirstCategoriesAjax($request)
     {
         // Lấy số lượng sản phẩm trên mỗi trang, mặc định là 1 nếu không có cài đặt
         $paginateDefault = 1;
@@ -216,6 +219,98 @@ class DetailService
 
     public function getFirstProduct($slug)
     {
-        // dd($slug);
+        // Lấy thông tin sản phẩm
+        $getFindProduct = Products::where('slug', $slug)->where('status', 0)->firstOrFail();
+
+        // Lấy ảnh sản phẩm
+        $imageString = $getFindProduct->images;
+
+        // Convert string sang array images
+        $imageArray = explode(', ', $imageString);
+
+        // Giải mã thuộc tính sản phẩm từ JSON
+        $attributeArray = json_decode($getFindProduct->attributes, true);
+
+        // Lấy các khóa thuộc tính
+        $attributeKey = array_keys($attributeArray);
+
+        // Lấy thông tin thuộc tính từ database
+        $getProperties = Properties::whereIn('id', $attributeKey)->where('status', 0)->get();
+
+        // Mảng để lưu thông tin cha và con
+        $arrayData = [];
+
+        // Tạo cấu trúc cho mảng cha và con
+        foreach ($attributeArray as $key => $subArray) {
+            $arrayData[$key] = [
+                'id' => $key,
+                'children' => $subArray,
+            ];
+        }
+
+        // Mảng để lưu thông tin trả về
+        $formattedData = [];
+
+        // Duyệt qua các thuộc tính đã tạo
+        foreach ($arrayData as $data) {
+            $parent = Properties::where('id', $data['id'])->where('status', 0)->first();
+            $childrenData = [];
+
+            if ($data['children']) {
+                foreach ($data['children'] as $childId) {
+                    $child = Properties::where('id', $childId)->where('status', 0)->first();
+                    if ($child) {
+                        $childrenData[] = $child;
+                    }
+                }
+            }
+
+            // Thêm thông tin cha và con vào mảng kết quả
+            $formattedData[] = [
+                'parent' => $parent,
+                'children' => $childrenData
+            ];
+        }
+
+
+
+
+
+        // Trả về dữ liệu sản phẩm
+        $dataProduct = [
+            'product' => $getFindProduct,
+            'imageArray' => $imageArray,
+            'attributes' => $formattedData, // Thay đổi tên thành 'attributes' cho rõ ràng
+        ];
+
+        return $dataProduct;
+    }
+
+    public function getAttributeAjax($request)
+    {
+        $ids = $request->data;
+
+        $idProduct = $request->idProduct;
+
+        $getFindProduct = Products::where('id', $idProduct)->first();
+
+        $arrayID = explode(', ', $ids);
+
+        $dataName = '';
+
+        foreach ($arrayID as $id) {
+            $attriName = Properties::where('id', $id)->first();
+            $dataName .= ' - '.$attriName->name ;
+        }
+
+        $nameProduct = $getFindProduct->name . $dataName;
+
+        $dataVariant = ProductVariant::where('code',$ids)->first();
+
+        $data = [
+            'nameProduct' => $nameProduct,
+            'dataVariant' => $dataVariant
+        ];
+        return response()->json($data);
     }
 }

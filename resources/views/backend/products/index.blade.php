@@ -109,11 +109,6 @@
 
                             <x-table-col width="10%"
                                 class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Giá khuyến mãi
-                            </x-table-col>
-
-                            <x-table-col width="10%"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                                 Trạng thái
                             </x-table-col>
 
@@ -156,9 +151,6 @@
                     data: 'price'
                 },
                 {
-                    data: 'price_sale'
-                },
-                {
                     data: 'status'
                 },
                 {
@@ -169,7 +161,7 @@
             const _CUSTOM_DATATABLES = {
                 CLASS_ROW: '',
                 PAGE: '8',
-                TARGETS: [0, 1, 2, 3,4,5,7,8]
+                TARGETS: [0, 1, 2, 3,4,5,7]
 
             };
             var dataTableIndex = initializeDataTable(url, columns, _CUSTOM_DATATABLES);

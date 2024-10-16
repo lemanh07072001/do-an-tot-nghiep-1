@@ -236,6 +236,7 @@ function createTableHeader(attributesTitle) {
     }
     html += '        <th width="15%" class="px-6 py-3 text-center">Số lượng</th>';
     html += '        <th width="15%" class="px-6 py-3 text-center">Giá bán</th>';
+    html += '        <th width="15%" class="px-6 py-3 text-center">Giảm giá</th>';
     html += '        <th width="15%" class="px-6 py-3 text-center">SKU</th>';
     html += '    </tr>';
 
@@ -248,6 +249,7 @@ function createTableHeader(attributesTitle) {
 }
 
 function createTableRow(attributeItem, variantItem) {
+
     // Convert attribute and variant values to strings
     let attributeString = Object.values(attributeItem).join(', ');
     let attributeId = Object.values(variantItem).join(', ');
@@ -267,12 +269,17 @@ function createTableRow(attributeItem, variantItem) {
     let $tdHidden = $('<td>').addClass('hidden td-variant');
 
     let priceText = $('input[name=price]').val();
+    let priceSale = $('input[name=priceSale]').val();
+
+    console.log(priceSale);
+
     let skuText = $('input[name=sku]').val();
 
     // Define hidden input fields
     let inputHiddenFields = [
         { name: 'variant[quantity][]', class: 'variant_quantity' },
         { name: 'variant[price][]', class: 'variant_price', value: priceText },
+        { name: 'variant[priceSale][]', class: 'variant_priceSale', value: priceSale },
         { name: 'variant[sku][]', class: 'variant_sku', value: skuText + '-' + classModified },
         { name: 'productVariant[name][]', class: 'product_name', value: attributeString },
         { name: 'productVariant[id][]', class: 'product_value', value: attributeId }
@@ -298,7 +305,8 @@ function createTableRow(attributeItem, variantItem) {
 
     // Append other cells with placeholders
     $row.append($('<td>').addClass('px-6 py-4 text-center td-quantity').text('-'));
-    $row.append($('<td>').addClass('px-6 py-4 text-center td-price').text(priceText));
+    $row.append($('<td>').addClass('px-6 py-4 text-center td-price').text(priceText??'-'));
+    $row.append($('<td>').addClass('px-6 py-4 text-center td-priceSale').text(priceSale??'-'));
     $row.append($('<td>').addClass('px-6 py-4 text-center td-sku').text(skuText + '-' + classModified));
 
     return $row;
@@ -310,14 +318,16 @@ function updateVariant() {
         let variantData = {};
         _this.find(".td-variant input[type=text][class^='variant_']").each(function () {
             let className = $(this).attr('class');
+
             variantData[className] = $(this).val();
         })
-
 
         if ($('.updateVariantTr').length == 0) {
             let updateVariantBox = updateVariantHTML(variantData);
             _this.after(updateVariantBox)
         }
+
+
 
     })
 }
@@ -382,6 +392,7 @@ function updateVariant() {
 
 
 function updateVariantHTML(variantData) {
+
     let html = '';
 
     html += '<tr class="updateVariantTr w-100">';
@@ -396,20 +407,18 @@ function updateVariantHTML(variantData) {
     html += '            </div>';
     html += '            <div>';
     html += '                <div class="grid grid-cols-8 gap-4 gap-y-4">';
-    html += '                    <div class="col-span-6 sm:col-span-2 flex content-center flex-initial">';
-    html += '                        <label class="inline-flex items-center me-5 cursor-pointer">';
-    html += '                            <input type="checkbox" id="checkquantity" value="" class="sr-only peer checkquantity" ' + ((variantData.variant_quantity === '') ? '' : 'checked') + '>';
-    html += '                            <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-orange-300 dark:peer-focus:ring-orange-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[\'\'] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-orange-500"></div>';
-    html += '                            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">Cho phép tồn kho</span>';
-    html += '                        </label>';
-    html += '                    </div>';
+
     html += '                    <div class="col-span-6 sm:col-span-2">';
     html += '                        <label for="quantity1" class="inline-flex items-center cursor-pointer mb-2 text-sm font-medium text-gray-900">Số lượng</label>';
-    html += '                        <input name="variant_quantity" type="number" min="0 id="quantity1" value="' + variantData.variant_quantity + '"  ' + ((variantData.variant_quantity == '') ? 'disabled' : '') + ' variant_quantity class="quantity ' + ((variantData.variant_quantity == '') ? 'cursor-not-allowed' : '') + ' bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Số lượng">';
+    html += '                        <input name="variant_quantity" type="number" min="0 id="quantity1" value="' + variantData.variant_quantity + '"   variant_quantity class="quantity  bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Số lượng">';
     html += '                    </div>';
     html += '                    <div class="col-span-6 sm:col-span-2">';
     html += '                        <label for="price" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giá bán</label>';
     html += '                        <input name="variant_price" type="text" id="price" value="' + variantData.variant_price + '" class="int variant_price bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Giá bán">';
+    html += '                    </div>';
+    html += '                    <div class="col-span-6 sm:col-span-2">';
+    html += '                        <label for="priceSale" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Giảm giá</label>';
+    html += '                        <input name="variant_priceSale" type="text" id="priceSale" value="' + variantData.variant_priceSale + '" class="int variant_priceSale bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Giảm giá">';
     html += '                    </div>';
     html += '                    <div class="col-span-6 sm:col-span-2">';
     html += '                        <label for="sku" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">SKU</label>';
@@ -436,11 +445,15 @@ function saveVariantUpdate() {
         if (e.type === 'click' || (e.type === 'keyup' && e.keyCode === 13)) {
             e.preventDefault();
 
+
             let variantObj = {
                 'quantity': $('input[name="variant_quantity"]').val(),
                 'price': $('input[name="variant_price"]').val(),
+                'priceSale': $('input[name="variant_priceSale"]').val(),
                 'sku': $('input[name="variant_sku"]').val(),
             };
+
+            console.log(variantObj);
 
             // Cập nhật các giá trị của variantObj vào hàng trước đó của .updateVariantTr
             $.each(variantObj, function (index, value) {
@@ -460,6 +473,7 @@ function updateTrPreviewBox(variantObj) {
     let optionObj = {
         'quantity': variantObj.quantity,
         'price': variantObj.price,
+        'priceSale': variantObj.priceSale,
         'sku': variantObj.sku
     };
 

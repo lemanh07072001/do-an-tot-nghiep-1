@@ -11,6 +11,8 @@ function formatToVND(amount) {
     return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " ₫";
 }
 
+
+
 function findMaxMin(prices) {
     // Kiểm tra xem mảng có tồn tại và không rỗng
     if (!Array.isArray(prices) || prices.length === 0) {

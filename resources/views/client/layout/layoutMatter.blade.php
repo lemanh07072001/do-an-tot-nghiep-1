@@ -9,8 +9,6 @@
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
-    <script src="./src/js/tailwind.js"></script>
-    <link href="./output.css" rel="stylesheet" />
 
     <!-- Flowbite -->
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
@@ -19,7 +17,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <!-- Style -->
-    <link href="/src/css/main.css" rel="stylesheet" />
+    <link href="{{ asset('assets/client/css/main.css') }}" rel="stylesheet" />
+
 
     <!-- AOS -->
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
@@ -227,9 +226,7 @@
             AOS.init();
         </script>
 
-        {{-- <script>
-            swiper('.slideBanner')
-        </script> --}}
+
 
         <script src="//cdn.jsdelivr.net/npm/jquery.marquee@1.6.0/jquery.marquee.min.js" type="text/javascript"></script>
         <script>

@@ -53,6 +53,9 @@ class TransactionService
             ->addColumn('price', function ($transaction) {
                 return FormatFunction::formatPriceProduct($transaction->price);
             })
+            ->addColumn('price_sale', function ($transaction) {
+                return FormatFunction::formatPriceProduct($transaction->price_sale);
+            })
 
             ->addColumn('action', function ($transaction) {
                 return '
@@ -63,7 +66,7 @@ class TransactionService
                     ';
             })
 
-            ->rawColumns(['sku', 'name',  'action','price'])
+            ->rawColumns(['sku', 'name',  'action','price','price_sale'])
             ->make(true);
     }
 
@@ -76,12 +79,12 @@ class TransactionService
 
     public function createTransaction($request){
         $quantity = $request->get('quantity');
-        $price = $request->get('price');
+        $price_sale = $request->get('price_sale');
         $id = $request->get('id');
 
         $data = [
             'quantity' => $quantity,
-            'price' => FormatFunction::formatPrice($request->price),
+            'price_sale' => FormatFunction::formatPrice($request->price_sale),
         ];
 
         $getFind = ProductVariant::with('products')->find($id);

@@ -25,8 +25,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('avatar');
             $table->string('sku');
-            $table->decimal('price', 10, 2);
-            $table->decimal('price_sale', 10, 2)->default(0);
+            $table->string('price');
             $table->tinyInteger('status')->default(Status::Active);
             $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();
             $table->tinyInteger('label')->nullable();

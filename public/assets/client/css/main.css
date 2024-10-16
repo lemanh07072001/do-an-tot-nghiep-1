@@ -1,0 +1,16 @@
+body{
+    font-family: 'Roboto', sans-serif;
+}
+
+.menu-list .active{
+    color: #ff5b26 !important;
+}
+
+.swiper-slide-thumb-active{
+    border-color: #ff5b26 !important;
+    opacity: .4;
+}
+
+
+
+

@@ -77,6 +77,11 @@
 
                             <x-table-col width="10%"
                                 class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                Giá khuyến mãi
+                            </x-table-col>
+
+                            <x-table-col width="10%"
+                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                                 Hoạt động
                             </x-table-col>
                         </x-table-row>
@@ -127,8 +132,8 @@
                         </div>
 
                         <div class="col-span-6 sm:col-span-6 ">
-                            <x-input-label for="price" required>Giá tiền</x-input-label>
-                            <x-text-input class="int" name="price" :value="old('price')" id="price"
+                            <x-input-label for="price_sale" required>Giá khuyến mãi</x-input-label>
+                            <x-text-input class="int" name="price_sale" :value="old('price_sale')" id="price_sale"
                                 placeholder="Nhập giá tiền" />
                             <div class="text-sm text-red-600 space-y-1 error"></div>
                         </div>
@@ -196,6 +201,9 @@
                 {
                     data: 'price'
                 },
+                {
+                    data: 'price_sale'
+                },
 
                 {
                     data: 'action'
@@ -205,7 +213,7 @@
             const _CUSTOM_DATATABLES = {
                 CLASS_ROW: '',
                 PAGE: '8',
-                TARGETS: [0, 1, 2, 3, 4, 5, 7]
+                TARGETS: [0, 1, 2, 3, 4, 5, 7, 8]
 
             };
             var dataTableIndex = initializeDataTable(url, columns, _CUSTOM_DATATABLES);

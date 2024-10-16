@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->integer('quantity')->nullable();
             $table->string('sku');
-            $table->decimal('price', 10, 2)->default(0);
+            $table->string('price_sale')->default(0);
+            $table->string('price')->default(0);
 
             $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();
             $table->foreignIdFor(Products::class)->nullable()->constrained()->cascadeOnDelete();

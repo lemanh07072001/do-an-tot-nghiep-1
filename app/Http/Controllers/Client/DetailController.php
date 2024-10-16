@@ -55,9 +55,19 @@ class DetailController extends Controller
     }
 
     public function firstProduct($slug){
-        $getFirstProduct = $this->service->getFirstProduct($slug);
-        $title = 'Nhóm sản phẩm';
-        return view('client.detail.detailProduct',compact(['getFirstProduct','title']));
+        $dataService = $this->service->getFirstProduct($slug);
+
+
+
+        $getFirstProduct = $dataService['product'];
+        $imageArray = $dataService['imageArray'];
+        $dataAttribute = $dataService['attributes'];
+
+        return view('client.detail.detailProduct',compact(['getFirstProduct', 'imageArray', 'dataAttribute']));
+    }
+
+    public function getAttributeAjax(Request $request){
+        return $this->service->getAttributeAjax($request);
     }
 
 

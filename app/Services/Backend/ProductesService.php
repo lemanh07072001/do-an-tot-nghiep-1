@@ -110,7 +110,6 @@ class ProductesService
             'avatar' => $request->avatar,
             'sku' => $request->sku,
             'price' => FormatFunction::formatPrice($request->price),
-            'price_sale' => FormatFunction::formatPrice($request->price_sale),
             'status' => $request->status,
             'user_id' => Auth::id(),
             'attributeCatalogue' => $this->formatJson($request, 'attributeCatalogue'),
@@ -195,6 +194,7 @@ class ProductesService
                     'code' => $payload['productVariant']['id'][$key] ?? '',
                     'quantity' => $payload['variant']['quantity'][$key] ?? '',
                     'sku' => $value,
+                    'price_sale' => $payload['variant']['priceSale'][$key] ? FormatFunction::formatPrice($payload['variant']['priceSale'][$key]) : '',
                     'price' => $payload['variant']['price'][$key] ? FormatFunction::formatPrice($payload['variant']['price'][$key]) : '',
                     'user_id' => Auth::id(),
                 ];
@@ -232,7 +232,6 @@ class ProductesService
             'avatar' => $request->avatar,
             'sku' => $request->sku,
             'price' => FormatFunction::formatPrice($request->price),
-            'price_sale' => FormatFunction::formatPrice($request->price_sale),
             'status' => $request->status,
             'user_id' => Auth::id(),
             'attributeCatalogue' => $this->formatJson($request, 'attributeCatalogue'),
@@ -375,11 +374,6 @@ class ProductesService
     public function getAllBrandSelect()
     {
         return Brand::select(['id', 'name'])->where('status', 0)->get();
-    }
-
-    public function getAllLabelSelect()
-    {
-        return Label::select(['id', 'name'])->where('status', 0)->get();
     }
 
     public function getChildrenProperties($request)

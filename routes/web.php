@@ -233,6 +233,7 @@ Route::get('/get-group-product-ajax', [DetailController::class, 'getGroupProduct
 Route::get('/danh-muc-san-pham/{slug}', [DetailController::class, 'getFirstCategories'])->name('getFirstCategories');
 Route::get('/danh-muc-san-pham-ajax', [DetailController::class, 'getFirstCategoriesAjax'])->name('getFirstCategoriesAjax');
 
+Route::get('get-attribute-ajax',[DetailController::class,'getAttributeAjax'])->name('getAttributeAjax');
 
 Route::get('/san-pham/{slug}', [DetailController::class, 'firstProduct'])->name('firstProduct');
 //LINK - UploadController
