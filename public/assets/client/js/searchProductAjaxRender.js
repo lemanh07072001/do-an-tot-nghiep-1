@@ -56,7 +56,7 @@ function renderHtmlProduct(data) {
             html += '  <div class="px-2 pb-3 group ">';
             html +=
                 '    <div class="border-[#e0e0e0] border-[1px] relative pt-1 rounded-[20px] overflow-hidden shadow-[0_1px_3px_-2px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] group-hover:shadow-[0_3px_6px_-4px_rgba(0,0,0,0.16),0_3px_6px_rgba(0,0,0,0.23)] duration-300">';
-            html += '      <a href="">';
+            html += '      <a class="loadingHref" href="">';
             switch (value.label) {
                 case 0:
                     html += renderHtmlLabel("images/client/label/hot.png");
@@ -102,7 +102,7 @@ let value = ""
 
 // Hàm gọi AJAX để lấy dữ liệu sản phẩm
 function fetchProducts( value = null,page = 1, sort = "") {
-    showLoading();
+    addLoading();
     $.ajax({
         url: searchAjax,
         type: "GET",
@@ -113,7 +113,7 @@ function fetchProducts( value = null,page = 1, sort = "") {
 
         },
         success: function (response) {
-            hidenLoading()
+            hideLoading()
 
             // Ẩn giao diện
             $('#box-search').addClass('hidden')
@@ -136,7 +136,7 @@ function fetchProducts( value = null,page = 1, sort = "") {
             }
         },
         error:function(error){
-            hidenLoading();
+            hideLoading();
             if(error.status == 404){
                 $("#product-list").removeClass('grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5')
                 $("#no-products").removeClass('hidden')

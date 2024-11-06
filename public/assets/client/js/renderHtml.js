@@ -1,5 +1,4 @@
-function renderHtmlLabel(url = null) {
-    if (url == null) return;
+function renderHtmlLabel(url) {
     var html = "";
 
     html +=
@@ -7,7 +6,12 @@ function renderHtmlLabel(url = null) {
     html += '          <img class="h-full" src="' + hostUrl(url) + '"/>';
     html += "        </div>";
 
-    return html;
+    if (url === undefined) {
+        return html ="";
+    } else {
+        return html;
+    }
+
 }
 
 function renderNoProduct() {
@@ -58,15 +62,18 @@ function renderHtmlProduct(data) {
         html += '  <div class="px-2 pb-3 group ">';
         html +=
             '    <div class="border-[#e0e0e0] border-[1px] relative pt-1 rounded-[20px] overflow-hidden shadow-[0_1px_3px_-2px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.24)] group-hover:shadow-[0_3px_6px_-4px_rgba(0,0,0,0.16),0_3px_6px_rgba(0,0,0,0.23)] duration-300">';
-        html += '      <a href="' + urlRoute +'">';
+        html += '      <a class="loadingHref" href="' + urlRoute +'">';
+
         switch (value.label) {
-            case 0:
+
+
+            case 1:
                 html += renderHtmlLabel("images/client/label/hot.png");
                 break;
-            case 1:
+            case 2:
                 html += renderHtmlLabel("images/client/label/new.png");
                 break;
-            case 2:
+            case 3:
                 html += renderHtmlLabel("images/client/label/sale.png");
                 break;
             default:

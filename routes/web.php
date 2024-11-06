@@ -9,8 +9,10 @@ use App\Http\Controllers\Backend\ClientController;
 use App\Http\Controllers\Backend\CommentController;
 use App\Http\Controllers\Backend\ContactController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\GiaoHangTietKiemControllor;
 use App\Http\Controllers\Backend\GroupProductController;
 use App\Http\Controllers\Backend\LabelController;
+use App\Http\Controllers\Backend\OrderController as BackendOrderController;
 use App\Http\Controllers\Backend\PolicyController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\PropertiesController;
@@ -18,6 +20,7 @@ use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\TransactionController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\VoucherController;
+use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\DetailController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UploadController;
@@ -25,7 +28,8 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\Client\HomeController;
-
+use App\Http\Controllers\Client\OrderController;
+use App\Http\Controllers\Client\ProfileController as ClientProfileController;
 
 Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     //ANCHOR - [Ecommerce Modules]
@@ -164,12 +168,20 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
             Route::get('/searchProduct', [GroupProductController::class, 'searchProduct'])->name('searchProduct');
         });
 
+        //LINK - Order
+        Route::prefix('order')->name('order.')->group(function () {
+            Route::get('/', [BackendOrderController::class, 'index'])->name('index');
+            Route::get('/getData', [BackendOrderController::class, 'getData'])->name('getData');
+            Route::post('/status-order', [BackendOrderController::class, 'statusOrder'])->name('statusOrder');
+            Route::post('/get-item-order', [BackendOrderController::class, 'getItemOrder'])->name('getItemOrder');
+            Route::get('/excel-order', [BackendOrderController::class, 'excelOrder'])->name('excelOrder');
+        });
 
 
         //LINK - Ajax
         Route::prefix('ajax')->name('ajax.')->group(function () {
             Route::post('/getChildrenProperties', [ProductController::class, 'getChildrenProperties'])->name('getChildrenProperties');
-            Route::get('/getAttributeAjax', [ProductController::class, 'getAttributeAjax'])->name('getAttributeAjax');
+            Route::post('/getAttributeAjax', [ProductController::class, 'getAttributeAjax'])->name('getAttributeAjax');
         });
     });
 
@@ -236,6 +248,20 @@ Route::get('/danh-muc-san-pham-ajax', [DetailController::class, 'getFirstCategor
 Route::get('get-attribute-ajax',[DetailController::class,'getAttributeAjax'])->name('getAttributeAjax');
 
 Route::get('/san-pham/{slug}', [DetailController::class, 'firstProduct'])->name('firstProduct');
+
+Route::get('gio-hang', [CartController::class,'index'])->middleware('auth')->name('cart.index');
+Route::post('/add-cart', [CartController::class, 'addCart'])->name('addCart');
+Route::post('/update-cart', [CartController::class, 'updateCart'])->name('updateCart');
+Route::post('/delete-cart', [CartController::class, 'deleteCart'])->name('deleteCart');
+
+Route::get('tai-khoan', [ClientProfileController::class, 'showTabs'])->middleware('auth')->name('showTabs');
+Route::post('change-password', [ClientProfileController::class,'changePassword'])->name('changePassword');
+
+Route::get('/check-voucher', [CartController::class, 'checkVoucher'])->name('checkVoucher');
+
+Route::post('/order',[OrderController::class,'order'])->name('order');
+
+
 //LINK - UploadController
 Route::post('/upload', [UploadController::class, 'upload'])->name('upload');
 require __DIR__ . '/auth.php';

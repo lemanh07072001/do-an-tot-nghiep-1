@@ -174,6 +174,24 @@ Breadcrumbs::for('groupProductUpdate', function (BreadcrumbTrail $trail, $groupP
     $trail->push(config('apps.groupProduct.titleUpdate') . ' [ ' . $groupProduct->name . ' ] ', route('ecommerce_module.groupProduct.edit', $groupProduct));
 });
 
+//NOTE - Order
+// Order
+Breadcrumbs::for('order', function (BreadcrumbTrail $trail) {
+    $trail->push('Trang chủ', route('ecommerce_module.order.index'));
+});
+
+// Order > Create
+Breadcrumbs::for('orderCreate', function (BreadcrumbTrail $trail) {
+    $trail->parent('order');
+    $trail->push(config('apps.order.titleCreate'), route('ecommerce_module.order.create'));
+});
+
+// Order > Update[order]
+Breadcrumbs::for('orderUpdate', function (BreadcrumbTrail $trail, $order) {
+    $trail->parent('order');
+    $trail->push(config('apps.order.titleUpdate') . ' [ ' . $order->name . ' ] ', route('ecommerce_module.order.edit', $order));
+});
+
 
 // <=============== SETTING MODULES ===============>
 //NOTE - Setting

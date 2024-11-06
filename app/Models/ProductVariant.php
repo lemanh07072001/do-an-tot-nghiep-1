@@ -21,6 +21,7 @@ class ProductVariant extends Model
         'quantity',
         'price',
         'price_sale',
+        'product_variants',
         'sku',
         'user_id',
     ];

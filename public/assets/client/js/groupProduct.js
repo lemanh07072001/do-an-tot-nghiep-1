@@ -6,7 +6,7 @@ let lastPage = false; // Kiểm tra nếu là trang cuối cùng
 // Hàm gọi AJAX để lấy dữ liệu sản phẩm
 function fetchProducts(page = 1, sort = "") {
     var slug = $(".box-product").attr("data-slug-product");
-    showLoading();
+    addLoading();
 
     $.ajax({
         url: getGroupProductAjax,
@@ -17,7 +17,7 @@ function fetchProducts(page = 1, sort = "") {
             slug: slug,
         },
         success: function (response) {
-            hidenLoading();
+            hideLoading();
             // Render sản phẩm mới lên giao diện
 
 
@@ -34,7 +34,7 @@ function fetchProducts(page = 1, sort = "") {
             }
         },
         error: function (error) {
-            hidenLoading();
+            hideLoading();
             if (error.status == 404) {
                 var dataRender = renderNoProduct();
                 $("#product-list").removeClass('grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5')

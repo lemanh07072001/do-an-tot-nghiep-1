@@ -231,11 +231,10 @@ class DetailService
         // Giải mã thuộc tính sản phẩm từ JSON
         $attributeArray = json_decode($getFindProduct->attributes, true);
 
+
         // Lấy các khóa thuộc tính
         $attributeKey = array_keys($attributeArray);
 
-        // Lấy thông tin thuộc tính từ database
-        $getProperties = Properties::whereIn('id', $attributeKey)->where('status', 0)->get();
 
         // Mảng để lưu thông tin cha và con
         $arrayData = [];
@@ -253,12 +252,13 @@ class DetailService
 
         // Duyệt qua các thuộc tính đã tạo
         foreach ($arrayData as $data) {
-            $parent = Properties::where('id', $data['id'])->where('status', 0)->first();
+            $parent = Properties::where('id', $data['id'])->where('status', 0)->orderBy('id', 'DESC')->first();
+
             $childrenData = [];
 
             if ($data['children']) {
                 foreach ($data['children'] as $childId) {
-                    $child = Properties::where('id', $childId)->where('status', 0)->first();
+                    $child = Properties::where('id', $childId)->where('status', 0)->orderBy('id', 'ASC')->first();
                     if ($child) {
                         $childrenData[] = $child;
                     }
@@ -288,11 +288,19 @@ class DetailService
 
     public function getAttributeAjax($request)
     {
+
         $ids = $request->data;
 
         $idProduct = $request->idProduct;
+        $avatar = $request->avatar;
 
-        $getFindProduct = Products::where('id', $idProduct)->first();
+        $getFindProduct = Products::with(['product_variants' => function($query) use($ids){
+            $query->where('code', $ids);
+        }])->where('id', $idProduct)->first();
+
+        $dataVariant = $getFindProduct ? $getFindProduct->product_variants->first() : null;
+
+
 
         $arrayID = explode(', ', $ids);
 
@@ -305,11 +313,12 @@ class DetailService
 
         $nameProduct = $getFindProduct->name . $dataName;
 
-        $dataVariant = ProductVariant::where('code',$ids)->first();
+        $dataVariant = $getFindProduct->product_variants->where('code',$ids)->first();
 
         $data = [
             'nameProduct' => $nameProduct,
-            'dataVariant' => $dataVariant
+            'dataVariant' => $dataVariant,
+            'avatar' => $avatar
         ];
         return response()->json($data);
     }

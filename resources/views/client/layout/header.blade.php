@@ -17,8 +17,6 @@
         $categoriesArray[] = $parentArray;
     }
 
-
-
 @endphp
 
 <header id="header" class="header">
@@ -29,7 +27,8 @@
                     <!-- Logo -->
                     <div class="logo order-2 w-[200px] lg:mr-[30px] lg:order-none">
                         <a href="#">
-                            <img src="{{ asset('images/client/MONA-e1702621831263.png') }}" alt="MONA" class="img w-full" />
+                            <img src="{{ asset('images/client/MONA-e1702621831263.png') }}" alt="MONA"
+                                class="img w-full" />
                         </a>
                     </div>
                     <!-- End Logo -->
@@ -83,10 +82,8 @@
                                                         <ul class="">
                                                             @if (count($itemParent['children']) > 0)
                                                                 @foreach ($itemParent['children'] as $item)
-
-
                                                                     <li class="pl-[.5em]">
-                                                                        <a href="{{ route('detail',['slug' => $item['slug'],'id'=>$item['id']]) }}"
+                                                                        <a href="{{ route('detail', ['slug' => $item['slug'], 'id' => $item['id']]) }}"
                                                                             class="pl-5 py-2 text-[.9em] text-[rgba(102,102,102,0.85)] block lg:hover:bg-[#ff5b26] lg:rounded-lg lg:py-2 lg:px-5 lg:pr-1 lg:pl-2 lg:mx-2 lg:hover:text-[#fff]">
                                                                             {{ $item['name'] }}
                                                                         </a>
@@ -126,7 +123,7 @@
                         <div class="search-header pr-2 lg:mx-[7px] border-solid relative first:ml-0 lg:py-3 group">
                             <a href="{{ route('search') }}">
                                 <ion-icon class=" cursor-pointer text-[#666666] text-[20px] lg:text-[20px]"
-                                name="search-outline"></ion-icon>
+                                    name="search-outline"></ion-icon>
                             </a>
 
 
@@ -134,26 +131,41 @@
                         <!-- End Search Bar -->
 
                         <!-- User -->
-                        <div class="search-header pr-2 hidden lg:mx-[7px] border-solid first:ml-0 lg:block lg:py-3">
-                            <ion-icon class="cursor-pointer text-[#666666] text-[20px] lg:text-[20px]"
-                                name="person"></ion-icon>
-                        </div>
+                        @if (Auth::check())
+                            <div class="search-header pr-2 hidden lg:mx-[7px] border-solid first:ml-0 lg:block lg:py-3">
+                                <a href="{{ route('showTabs') }}">
+                                    <ion-icon class="cursor-pointer text-[#666666] text-[20px] lg:text-[20px]"
+                                        name="person"></ion-icon>
+                                </a>
+                            </div>
+                        @else
+                            <div class="search-header pr-2 hidden lg:mx-[7px] border-solid first:ml-0 lg:block lg:py-3">
+                                <a href="{{ route('login') }}">
+                                    <ion-icon class="cursor-pointer text-[#666666] text-[20px] lg:text-[20px]"
+                                        name="person"></ion-icon>
+                                </a>
+                            </div>
+                        @endif
                         <!-- End User -->
 
+                        @if(Auth::check())
                         <!-- Cart -->
                         <div class="cart search-header lg:mx-[7px] border-solid  first:ml-0 relative group lg:py-3">
-                            <ion-icon class=" cursor-pointer text-[#666666] text-[20px] lg:text-[21px]"
-                                name="cart"></ion-icon>
+                            <a href="{{ route('cart.index') }}">
+                                <ion-icon class=" cursor-pointer text-[#666666] text-[20px] lg:text-[21px]"
+                                    name="cart"></ion-icon>
 
+                            </a>
 
-                            <div
+                            {{-- <div
                                 class=" group-hover:block hidden absolute z-30 shadow-lg shadow-neutral-300 px-3 py-5 border-2 rounded-2xl text-[#777] bg-[#fff] border-[#ddd] min-w-[240px]  top-11 right-0">
                                 <div class="px-[10px]">
                                     Chưa có sản phẩm trong giỏ hàng
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <!-- End Cart -->
+                        @endif
                         <!-- End Right Box -->
                     </div>
                 </div>
@@ -164,7 +176,5 @@
 
 
 @push('js')
-    <script>
-
-    </script>
+    <script></script>
 @endpush

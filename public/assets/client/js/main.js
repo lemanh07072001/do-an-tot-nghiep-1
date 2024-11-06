@@ -1,4 +1,6 @@
 
+
+
 function openMenuMobile() {
     $('#buttonOpenMenuMobile').on('click', function () {
         let _menu = $('#menu');
@@ -34,7 +36,7 @@ function openSupMenuMobile() {
     });
 }
 
-function timeDown(){
+function timeDown() {
     // Thời gian đếm ngược ban đầu (tính bằng giây)
     var countdownTime = 60 * 60 * 2; // 2 giờ
 
@@ -76,7 +78,7 @@ function timeDown(){
 }
 
 
-function swiper(elmClass='') {
+function swiper(elmClass = '') {
     var swiper = new Swiper(elmClass, {
         navigation: {
             nextEl: ".swiper-button-next",
@@ -85,21 +87,25 @@ function swiper(elmClass='') {
     });
 }
 
+
+function addLoading(){
+    $('#loading').show(); // Hiển thị spinner
+    // $('body').addClass('overflow-hidden');
+}
+
+function hideLoading(){
+    $('#loading').hide(); // Hiển thị spinner
+    // $('body').addClass('overflow-hidden');
+}
+
+
 $(document).ready(function () {
     openMenuMobile();
     closeMenuMobile();
     openSupMenuMobile();
     timeDown();
+
     // $('#menu a').on('click', function(){
     //     console.log('da');
     // })
 })
-
-
-function showLoading(){
-    $("#loading").show();
-}
-
-function hidenLoading(){
-    $("#loading").fadeOut();
-}

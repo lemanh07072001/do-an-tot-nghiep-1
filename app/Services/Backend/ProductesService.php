@@ -150,7 +150,11 @@ class ProductesService
 
         $variantId = $variants->pluck('id');
 
-        $attributesCombines = $this->comebineAttribute(array_values($payload['attribute']));
+        if (isset($payload['attribute'])) {
+            $attributesCombines = $this->comebineAttribute(array_values($payload['attribute']));
+        } else {
+            $attributesCombines = [];
+        }
 
         $variantAttitude = [];
 
@@ -195,6 +199,7 @@ class ProductesService
                     'quantity' => $payload['variant']['quantity'][$key] ?? '',
                     'sku' => $value,
                     'price_sale' => $payload['variant']['priceSale'][$key] ? FormatFunction::formatPrice($payload['variant']['priceSale'][$key]) : '',
+                    'product_variants' => $payload['variant']['quantity'][$key] ?? '',
                     'price' => $payload['variant']['price'][$key] ? FormatFunction::formatPrice($payload['variant']['price'][$key]) : '',
                     'user_id' => Auth::id(),
                 ];
@@ -402,6 +407,7 @@ class ProductesService
 
     public function getAttributeAjax($request)
     {
+
         $payload['attributes'] = $request['attributes'];
         $payload['attributeId'] = $request['attributeId'];
         $attributeArray = $payload['attributes'][$payload['attributeId']];

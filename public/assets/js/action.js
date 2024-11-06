@@ -15,8 +15,17 @@ let spingLoad = () => {
         hidenLoading();
     });
 
-    $(document).on('click','a', function(e) {
-        showLoading();
+    $(document).on('click','a .loadingHref', function(e) {
+        e.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+        showLoading(); // Gọi hàm hiển thị spinner loading
+
+        // Nếu bạn muốn sau khi hiển thị loading sẽ điều hướng đến liên kết
+        const href = $(this).attr('href');
+        if (href) {
+            setTimeout(function () {
+                window.location.href = href;
+            }, 500); // Thêm độ trễ nếu cần
+        }
     });
 
     $(document).on('click','button[type="submit"]', function(e) {
@@ -29,6 +38,8 @@ let spingLoad = () => {
 }
 
 let showLoading = () => {
+
+
     $('#spingLoad').show(); // Hiển thị spinner
     $('body').addClass('overflow-hidden');
 }
@@ -175,6 +186,10 @@ function loadFormatPrice(){
 $('#fileSelect').on('click', function() {
     $('#fileElem').click();
 });
+
+function formatPriceVND(price) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+}
 
 function ChangeToSlug(title) {
 

@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('code')->nullable();
             $table->integer('quantity')->nullable();
-            $table->string('sku');
-            $table->string('price_sale')->default(0);
-            $table->string('price')->default(0);
+            $table->string('sku')->nullable();
+            $table->string('price_sale')->nullable()->default(0);
+            $table->string('price')->nullable()->default(0);
 
             $table->foreignIdFor(User::class)->nullable()->constrained()->nullOnDelete();
             $table->foreignIdFor(Products::class)->nullable()->constrained()->cascadeOnDelete();

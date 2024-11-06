@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Mona Fashion</title>
 
     <!-- Tailwind -->
@@ -20,6 +21,7 @@
     <link href="{{ asset('assets/client/css/main.css') }}" rel="stylesheet" />
 
 
+
     <!-- AOS -->
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
@@ -33,7 +35,7 @@
             right: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 1);
             z-index: 9999;
         }
 
@@ -208,8 +210,12 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <!-- Style -->
         <script src="{{ asset('assets/client/js/main.js') }}"></script>
+        <script src="{{ asset('assets/js/action.js') }}"></script>
         <script src="{{ asset('assets/client/js/renderHtml.js') }}"></script>
         <script src="{{ asset('assets/client/js/ajax.js') }}"></script>
+
+        {{-- Alert Box --}}
+        <script src="https://cdn.jsdelivr.net/gh/noumanqamar450/alertbox@main/version/1.0.2/alertbox.min.js"></script>
 
         <!-- Font Awesome -->
         <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
@@ -243,10 +249,12 @@
         </script>
 
         <script>
-            showLoading();
+            addLoading()
 
             $(document).on("DOMContentLoaded", function() {
-                hidenLoading(); // Ẩn loading với hiệu ứng fade out
+                setTimeout(() => {
+                    hideLoading();
+                }, 500);
             });
         </script>
 

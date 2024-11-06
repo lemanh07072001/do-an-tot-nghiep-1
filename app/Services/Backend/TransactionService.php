@@ -9,7 +9,9 @@ use App\Models\Properties;
 use App\Models\ProductVariant;
 use App\Helpers\FormatFunction;
 use App\Exports\TransactionExport;
+use App\Models\Products;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -19,65 +21,122 @@ class TransactionService
     public function getData($request)
     {
         $searchInput = $request->searchInput;
-        $searchParent = $request->searchParent;
+
 
         $filer = [];
 
-        $query =  ProductVariant::query();
-        $query = $query->with('products');
+        $query =  Products::with(['product_variants'])->orderBy('id', 'desc');
+
 
         if ($request->has('searchInput') && isset($searchInput)) {
-            $query->whereHas('products', function ($query) use ($searchInput) {
-                $query->where('name', 'like', '%' . $searchInput . '%');
-            });
-        }
-
-        if (!empty($filer)) {
-            $query = $query->where($filer);
+            $query->whereHas('product_variants', function ($subQuery) use ($searchInput) {
+                $subQuery->where('name', 'like', '%' . $searchInput . '%');
+            })->orWhere('sku', 'like', '%' . $searchInput . '%'); // Tìm kiếm theo SKU
         }
 
 
-        return DataTables::of($query)
-            ->addColumn('name', function ($transaction) {
-                return FormatFunction::formatTitleCategories($transaction);
-            })
+        $getAllProduct = $query->get();
+        $data = []; // Khởi tạo mảng dữ liệu đầu ra
+
+
+        foreach ($getAllProduct as $product) {
+            $dataChildren = [];
+            $arrayCode = $product->product_variants;
+
+
+            // Tạo mã kết hợp và lấy biến thể
+            foreach ($arrayCode as $code) {
+
+                $productNameVariant = '';
+                $codeArray = explode(', ', $code->code);
+
+
+                foreach ($codeArray as $codeData) {
+
+                    $propose = Properties::where('id', $codeData)->where('status', 0)->first();
+
+                    $productNameVariant .= '-' . $propose->name;
+
+                    $productName = $product->name . $productNameVariant;
+
+
+                };
+                // $variantsProducts = ProductVariant::where('code',$codeString)->get();
+
+
+                $dataChildren[] = [
+                    'id' => $code->id,
+                    'name' => $productName,
+                    'sku' => $code->sku,
+                    'quantity' => $code->quantity,
+                    'price'=> $code->price,
+                    'price_sale' => $code->price_sale,
+                    'product_variants' => $code->quantity - $code->product_variants,
+                ];
+
+            }
+            $data[] = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'avatar' => $product->avatar ?? '',
+                'children' => $dataChildren,
+
+            ];
+        }
+
+        $dataArrayProductVariant = FormatFunction::formatDataProductVariantsForDataTable($data);
+
+
+
+        return DataTables::of($dataArrayProductVariant)
+
             ->addColumn('sku', function ($transaction) {
-                return '<span class="font-semibold">' . $transaction->sku . '</span>';
+
+                return FormatFunction::formatVariantProduct($transaction, 'sku');
             })
             ->addColumn('name', function ($transaction) {
-                return  FormatFunction::formatTitleVariantProduct($transaction);
+
+                return FormatFunction::formatTitleVariantProduct($transaction);
             })
             ->addColumn('quantity', function ($transaction) {
-                return $transaction->quantity;
+                return FormatFunction::formatVariantProduct($transaction, 'quantity');
+            })
+            ->addColumn('product_variants', function ($transaction) {
+                return FormatFunction::formatVariantProduct($transaction, 'product_variants');
             })
             ->addColumn('price', function ($transaction) {
-                return FormatFunction::formatPriceProduct($transaction->price);
+                return FormatFunction::formatVariantProduct($transaction, 'price', true, 'đ');
             })
             ->addColumn('price_sale', function ($transaction) {
-                return FormatFunction::formatPriceProduct($transaction->price_sale);
+                return FormatFunction::formatVariantProduct($transaction, 'price_sale', true, 'đ');
             })
 
             ->addColumn('action', function ($transaction) {
+
                 return '
-                        <a href="#" data-id="'.$transaction->id.'" class="btnEdit inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-400 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
+                        <a href="#" data-id="' . $transaction['id'] . '" class="btnEdit inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-400 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
                             <svg class="w-4 h-4 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
                         </a>
 
                     ';
             })
 
-            ->rawColumns(['sku', 'name',  'action','price','price_sale'])
+            ->rawColumns(['sku', 'name', 'quantity', 'product_variants', 'action', 'price', 'price_sale'])
             ->make(true);
     }
 
-    public function getTransactionById($request){
+    public function getTransactionById($request)
+    {
         $id = $request->get('id');
 
-        $getFind = ProductVariant::with('products')->find($id);
+        $getFind = ProductVariant::with(['products', 'product_variants'])->find($id);
+
+
         return response()->json($getFind);
     }
 
-    public function createTransaction($request){
+    public function createTransaction($request)
+    {
         $quantity = $request->get('quantity');
         $price_sale = $request->get('price_sale');
         $id = $request->get('id');
@@ -91,18 +150,19 @@ class TransactionService
 
         $dataUpdate = $getFind->update($data);
 
-        if($dataUpdate){
+        if ($dataUpdate) {
             return response()->json([
                 'message' => 'Cập nhật thành công!'
             ], 200);
-        }else{
+        } else {
             return response()->json([
                 'message' => 'Lỗi hệ thống vui lòng thử lại sau!'
             ], 500);
         }
     }
 
-    public function exportTransaction($request){
+    public function exportTransaction($request)
+    {
         $id = $request->get('id');
 
         // Get the current year, date, and month
@@ -121,7 +181,4 @@ class TransactionService
             'file' => Storage::url($fileName)
         ]);
     }
-
-
-
 }

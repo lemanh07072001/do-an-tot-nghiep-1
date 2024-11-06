@@ -70,6 +70,11 @@
                                 Số lượng
                             </x-table-col>
 
+                            <x-table-col width="15%"
+                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
+                                Số lượng đã bán
+                            </x-table-col>
+
                             <x-table-col width="10%"
                                 class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
                                 Giá bán
@@ -106,15 +111,7 @@
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white lg:text-2xl">
                             Chi tiết số lượng sản phẩm
                         </h3>
-                        <button type="button"
-                            class="cloneModal ms-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-transparent text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white">
-                            <svg class="h-3 w-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                            <span class="sr-only">Close modal</span>
-                        </button>
+
                     </div>
                     <!-- Modal body -->
                     <div class="space-y-6 p-6">
@@ -148,10 +145,7 @@
                             class="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             Xác nhận
                         </button>
-                        <button type="button"
-                            class="cloneModal rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:z-10 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">
-                            Thoát
-                        </button>
+
                     </div>
 
                     <div class="absolute inset-x-0 inset-y-0 bg-gray-400 opacity-80" id="loadingIndicator">
@@ -199,6 +193,9 @@
                     data: 'quantity'
                 },
                 {
+                    data: 'product_variants'
+                },
+                {
                     data: 'price'
                 },
                 {
@@ -213,7 +210,7 @@
             const _CUSTOM_DATATABLES = {
                 CLASS_ROW: '',
                 PAGE: '8',
-                TARGETS: [0, 1, 2, 3, 4, 5, 7, 8]
+                TARGETS: [0, 1, 2, 3, 4, 5, 7, 8,9]
 
             };
             var dataTableIndex = initializeDataTable(url, columns, _CUSTOM_DATATABLES);

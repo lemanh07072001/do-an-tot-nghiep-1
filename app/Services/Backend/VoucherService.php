@@ -104,7 +104,7 @@ class VoucherService
             $data = [
                 'name' => $request->name,
                 'discount_type' => $request->discount_type,
-                'value_reduction' => FormatFunction::formatPrice($request->value_reduction),
+                'value_reduction' => (int) str_replace('.', '', $request->value_reduction),
                 'status' => $request->status,
                 'date_start' => $dateStart,
                 'date_end' => $dateEnd,
@@ -113,10 +113,9 @@ class VoucherService
                 'created_at' => FormatFunction::getDatetime(),
             ];
 
-
-
             //NOTE - Lưu vào cơ sở dữ liệu
             $dataInsert = Voucher::create($data);
+
 
 
             //NOTE - Thông báo
@@ -273,6 +272,8 @@ class VoucherService
             ], 500);
         }
     }
+
+
 
     public function getAllUsersSelect()
     {

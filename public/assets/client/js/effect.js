@@ -8,10 +8,20 @@ function jsonDecode(json) {
 }
 
 function formatToVND(amount) {
-    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " ₫";
+    return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") ;
 }
 
+function formatPriceVND(price) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price);
+}
 
+function tinhPhanTramGiam(originalPrice, salePrice) {
+    // Nếu giá gốc hoặc giá giảm bằng 0 hoặc giá giảm lớn hơn giá gốc, trả về 0%
+    if (originalPrice <= 0 || salePrice <= 0 || salePrice >= originalPrice) return 0;
+
+    const discount = ((originalPrice - salePrice) / originalPrice) * 100;
+    return discount.toFixed(0); // Giữ 2 chữ số thập phân
+}
 
 function findMaxMin(prices) {
     // Kiểm tra xem mảng có tồn tại và không rỗng

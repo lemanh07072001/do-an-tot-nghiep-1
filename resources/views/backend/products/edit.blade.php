@@ -116,7 +116,7 @@
                     <h3 class="mb-3 text-xl font-medium text-gray-900 dark:text-white">Thêm mới thộc tính</h3>
                     <label class="inline-flex items-center me-5 cursor-pointer mb-3">
                         <input type="checkbox" name="turnOnVariant" class="sr-only peer turnOnVariant"
-                            @checked(old('turnOnVariant') == 'on' || (isset($products) && count(json_decode($products->attributeCatalogue, true)) > 0))>
+       @checked(old('turnOnVariant') == 'on' || (isset($products) && is_array($decoded = json_decode($products->attributeCatalogue, true)) && count($decoded) > 0))>
                         <div
                             class="relative w-11 h-6 bg-gray-200 rounded-full peer  peer-focus:ring-4 peer-focus:ring-orange-300  peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500">
                         </div>
@@ -141,13 +141,13 @@
 
                 @endphp
 
-                <div class="col-span-6 sm:col-span-6 attributeList {{ count($variantCatalogue) ? '' : 'hidden' }}">
+                <div class="col-span-6 sm:col-span-6 attributeList {{ count($variantCatalogue ?? []) ? '' : 'hidden' }}">
                     <div
                         class="mb-2 text-sm font-semibold tracking-wide text-gray-900 uppercase lg:text-xs dark:text-white">
                         Thuộc tính</div>
                     <div class="data-render">
 
-                        @if ($variantCatalogue && count($variantCatalogue))
+                        @if ($variantCatalogue && count($variantCatalogue ?? []))
                             @foreach ($variantCatalogue as $key => $value)
                                 <div data-repeater-list="attribute">
                                     <div data-repeater-item>
@@ -190,7 +190,7 @@
                 </div>
 
 
-                <div class="attributeList col-span-6 sm:col-span-6 {{ count($variantCatalogue) ? '' : 'hidden' }}">
+                <div class="attributeList col-span-6 sm:col-span-6 {{ count($variantCatalogue ?? []) ? '' : 'hidden' }}">
                     <div class="w-100">
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                             <table class="w-full text-sm text-left  text-gray-500 tableFull">
@@ -230,7 +230,7 @@
                             Loading...
                         </span>
                     </button>
-                    <a href="{{ route('ecommerce_module.banner.index') }}"
+                    <a href="{{ route('ecommerce_module.products.index') }}"
                         class="text-white bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                         Quay lại
                     </a>

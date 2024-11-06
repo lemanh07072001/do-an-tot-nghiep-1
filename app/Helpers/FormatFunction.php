@@ -9,6 +9,7 @@ use App\Enums\Status;
 use App\Models\Products;
 use App\Models\Categories;
 use App\Models\Properties;
+use Illuminate\Support\Facades\Log;
 
 class FormatFunction
 {
@@ -179,42 +180,84 @@ class FormatFunction
         }
     }
 
-    public static function formatPrice($data)
+    public static function formatPrice($data, $to = 'đ')
     {
-        return str_replace('.', '', $data);
+        return number_format($data, 0, ',', '.') . ' ' . $to;
     }
 
-    public static function formatTitleVariantProduct($data, $image = true)
+
+
+    public static function paymentFormOrder($data)
     {
-        $name = $data->products->name;
-        $getCodeArray = explode(',', $data->code);
-
-        // Retrieve properties based on IDs
-        $properties = Properties::where('status', 0)->whereIn('id', $getCodeArray)->get();
-
-        // Concatenate property names
-        $getName = '';
-        foreach ($properties as $property) {
-            $getName .= ' - ' . $property->name;
+        if ($data->payment_method == 'cash_on_delivery') {
+            return '<span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded  border border-blue-400">Thanh toán khi nhận hàng</span>';
+        } else if ($data->payment_method == 'payment_transfer') {
+            return '<span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded  border border-green-400">Thanh toán chuyển khoản</span>';
+        } else {
+            return '<span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded  border border-red-400">Lỗi thanh toán</span>';
         }
+    }
 
-        // Start building the output HTML
+    public static function statusFormOrder($data)
+    {
+        $html = '';
+
+        $html .= '
+        <select id="status-order-' . $data->id . '" data-id="' . $data->id . '" class="block w-2/3 p-1.5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500">
+            <option value="pending" ' . ($data->status == 'pending' ? 'selected' : '') . '>Đang chờ xử lý</option>
+            <option value="completed" ' . ($data->status == 'completed' ? 'selected' : '') . '>Đã hoàn thành</option>
+            <option value="cancelled" ' . ($data->status == 'cancelled' ? 'selected' : '') . '>Đã huỷ</option>
+        </select>
+    ';
+
+        return $html;
+    }
+
+
+    public static function formatTitleVariantProduct($data)
+    {
+        // Bắt đầu xây dựng HTML đầu ra
         $output = '<div class="flex items-center gap-4">';
 
-        // Conditionally add the image if required
-        if ($image) {
-            $output .= '<img class="w-10 h-10 rounded-full" src="' . env('APP_URL') . $data->products->avatar . '" alt="">';
+        // Thêm ảnh nếu tồn tại
+        if (!empty($data['avatar'])) {
+            $output .= '<img class="w-10 h-10 rounded-full" src="' . env('APP_URL') . $data['avatar'] . '" alt="">';
         }
 
-        // Continue building the output HTML
-        $output .= '
-        <div class="font-medium text-sky-400">
-            <div>' . htmlspecialchars($name . $getName) . '</div>
-        </div>
-    </div>';
+        // Tiếp tục xây dựng HTML
+        $output .= '<div class="font-medium text-sky-400">';
+
+        // Thêm tiêu đề nếu không có ảnh
+        if (empty($data['avatar'])) {
+            $output .= '<div class="title ml-[40px]">' . htmlspecialchars($data['name']) . '</div>';
+        } else {
+            $output .= htmlspecialchars($data['name']);
+        }
+
+        // Đóng thẻ div
+        $output .= '</div></div>';
 
         return $output;
     }
+
+    public static function formatVariantProduct($data, $name = '', $number = false, $format = 'VND')
+    {
+        $html = '';
+        if (!empty($data[$name])) {
+            if ($number == false) {
+                $html .= '<div>' . $data[$name] . '</div>';
+            } else {
+                $html .= number_format($data[$name], 0, ',', '.') . ' ' . $format;
+            }
+        } else {
+            $html .= '---';
+        }
+
+        return $html;
+    }
+
+
+
 
     public static function formatCountProductCategories($data)
     {
@@ -295,8 +338,65 @@ class FormatFunction
             return '<span class="bg-red-100 text-red-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Chưa trả lời</span>';
         } else if ($data->status === 1) {
             return '<span class="bg-red-100 text-red-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">Đã trả lời</span>';
-        }else{
+        } else {
             return '<span class="bg-green-100 text-green-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">Đã xem</span>';
         }
+    }
+
+    public static function formatDataProductVariantsForDataTable($data)
+    {
+
+
+        $dataProducts = [];
+
+        foreach ($data as $item) {
+            $dataProducts[] = [
+                'id' => $item['id'],
+                'name' => $item['name'],
+                'avatar' => $item['avatar'],
+            ];
+
+            if (!empty($item['children'])) {
+                foreach ($item['children'] as $variant) {
+
+
+                    $dataProducts[] = [
+                        'id' => $variant['id'],  // Giữ ID cha
+                        'name' => '--|' . $variant['name'],
+                        'quantity' => $variant['quantity'],
+                        'sku' => $variant['sku'],
+                        'product_variants' => $variant['product_variants'],
+                        'price' => $variant['price'],
+                        'price_sale' => $variant['price_sale'],
+                    ];
+                }
+            }
+        }
+
+
+        return $dataProducts;
+    }
+
+    public static function combineArrays($array)
+    {
+
+        $values = array_values($array);
+
+
+        // Khởi tạo kết quả
+        $result = [[]];
+
+        // Duyệt qua từng mảng con
+        foreach ($values as $subArray) {
+            $newResult = [];
+            foreach ($result as $combination) {
+                foreach ($subArray as $value) {
+                    // Tạo các kết hợp mới
+                    $newResult[] = array_merge($combination, [$value]);
+                }
+            }
+            $result = $newResult; // Cập nhật kết quả với các kết hợp mới
+        }
+        return $result;
     }
 }

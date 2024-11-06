@@ -29,7 +29,7 @@ class TransactionExport implements FromCollection,WithHeadings,WithMapping,WithC
             ->with('products',function($query){
                 $query->select(['id', 'name']);
             })
-            ->select([ 'sku', 'price','code','quantity','products_id', 'created_at'])->get();
+            ->select([ 'sku', 'price','code','quantity','products_id', 'product_variants', 'created_at'])->get();
 
         return $data;
     }
@@ -41,6 +41,7 @@ class TransactionExport implements FromCollection,WithHeadings,WithMapping,WithC
             'Tên sản phẩm',
             'Gía tiền',
             'Số lượng',
+            'Đã bán',
             'Ngày tạo'
             // Add other column headings as needed
         ];
@@ -65,11 +66,13 @@ class TransactionExport implements FromCollection,WithHeadings,WithMapping,WithC
 
         $price = number_format($product->price, 0, ',', '.') . ' đ';
 
+
         return [
             $product->sku,
             $dataName,
             $price,
             $product->quantity,
+            $product->product_variants,
 
             Carbon::parse($product->created_at)->format('d-m-y H:i:s'),
             // Adjust the date format as per your requirement
@@ -83,7 +86,8 @@ class TransactionExport implements FromCollection,WithHeadings,WithMapping,WithC
             'B' => 40,
             'C' => 20,
             'D' => 25,
-            'E' => 60,
+            'E' => 25,
+            'F' => 60,
         ];
     }
 }

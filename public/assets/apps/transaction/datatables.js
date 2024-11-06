@@ -16,6 +16,8 @@ function initializeDataTable(
 ) {
     /* Get input search */
     let searchInput = $('input[data-search="search-input"]');
+
+
     /* Get select status */
     let searchStatus = $('select[data-search="search-status"]');
     /* Get select user */

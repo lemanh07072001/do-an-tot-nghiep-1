@@ -94,37 +94,36 @@ function setupProductVariant() {
             let price = $('input[name=price]').val();
             let sku = $('input[name=sku]').val();
 
-            // validatePriceAndSKU(price, sku);
+            if (price == '' || sku == '') {
+                Swal.fire({
+                    position: "center",
+                    icon: "warning",
+                    title: "Vui lòng nhập ( Giá tiền ) và ( SKU )",
+                    showConfirmButton: false,
+                    timer: 1500,
+                    width: '600px'
+                });
+                _this.prop('checked', false)
+                return;
+            }else{
+                if (_this.prop('checked')) {
+                    $('.add-row').prop('disabled', false);
+                    $('.add-row').removeClass('cursor-not-allowed');
+                    $('.attributeList').removeClass('hidden');
 
-            if (_this.prop('checked')) {
-                $('.add-row').prop('disabled', false);
-                $('.add-row').removeClass('cursor-not-allowed');
-                $('.attributeList').removeClass('hidden');
-
-            } else {
-                $('.add-row').prop('disabled', true);
-                $('.add-row').addClass('cursor-not-allowed');
-                $('.attributeList').addClass('hidden');
+                } else {
+                    $('.add-row').prop('disabled', true);
+                    $('.add-row').addClass('cursor-not-allowed');
+                    $('.attributeList').addClass('hidden');
+                }
             }
+
+
         })
     }
 }
 
-function validatePriceAndSKU(price, sku) {
-    if (price == '' || sku == '') {
-        Swal.fire({
-            position: "center",
-            icon: "warning",
-            title: "Vui lòng nhập ( Giá tiền ) và ( SKU )",
-            showConfirmButton: false,
-            timer: 1500,
-            width: '600px'
-        });
-        _this.prop('checked', false)
-        return;
-    }
 
-}
 
 function createVariant() {
     let attributes = [];
@@ -170,6 +169,7 @@ function createVariant() {
     } else {
         variants = [];
     }
+
 
 
     //Render Table
@@ -256,6 +256,8 @@ function createTableRow(attributeItem, variantItem) {
     let classModified = attributeId.replace(/, /g, '-');
 
 
+
+
     // Create a new table row with dynamic classes
     let $row = $('<tr>').addClass('variantRow tr-variant-' + classModified + ' bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600');
 
@@ -271,7 +273,7 @@ function createTableRow(attributeItem, variantItem) {
     let priceText = $('input[name=price]').val();
     let priceSale = $('input[name=priceSale]').val();
 
-    console.log(priceSale);
+
 
     let skuText = $('input[name=sku]').val();
 
@@ -445,6 +447,19 @@ function saveVariantUpdate() {
         if (e.type === 'click' || (e.type === 'keyup' && e.keyCode === 13)) {
             e.preventDefault();
 
+            var inputQuantity = $('.quantity').val();
+            var inputPriceSale = $('#priceSale').val();
+            var inputPrice = $('#price').val();
+
+            if(inputPriceSale == ''){
+                alert('Vui lòng nhập giá khuyến mãi hoặc giá trị bằng 0')
+                return
+            }else if(inputQuantity == ''){
+                alert('vui lòng nhập số lượng')
+                return
+            } else if (inputPriceSale > inputPrice){
+                alert('Giá khuyến mãi không đuọc lớn hơn giá bán')
+            }
 
             let variantObj = {
                 'quantity': $('input[name="variant_quantity"]').val(),
@@ -452,8 +467,6 @@ function saveVariantUpdate() {
                 'priceSale': $('input[name="variant_priceSale"]').val(),
                 'sku': $('input[name="variant_sku"]').val(),
             };
-
-            console.log(variantObj);
 
             // Cập nhật các giá trị của variantObj vào hàng trước đó của .updateVariantTr
             $.each(variantObj, function (index, value) {
@@ -674,13 +687,14 @@ function setupSelectMultiple(callback) {
 
 function productVariant() {
 
-    $('.variantRow').each(function (index, value) {
 
+    $('.variantRow').each(function (index, value) {
         let _this = $(this);
 
         let inputHiddenFields = [
             { name: 'variant[quantity][]', id: 'quantity', class: 'variant_quantity', value: variants.quantity[index] },
             { name: 'variant[price][]', id: 'price', class: 'variant_price', value: variants.price[index] },
+            { name: 'variant[priceSale][]', id: 'priceSale', class: 'variant_priceSale', value: variants.priceSale[index] },
             { name: 'variant[sku][]', id: 'sku', class: 'variant_sku', value: variants.sku[index] },
         ];
 
@@ -690,6 +704,7 @@ function productVariant() {
 
         _this.find('.td-quantity').html(variants.quantity[index]);
         _this.find('.td-price').html(addCommas(variants.price[index]));
+        _this.find('.td-priceSale').html(addCommas(variants.priceSale[index]));
         _this.find('.td-sku').html(variants.sku[index]);
     })
 }

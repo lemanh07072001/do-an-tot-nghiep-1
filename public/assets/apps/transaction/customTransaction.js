@@ -12,12 +12,13 @@ function setupModal(ID) {
     // options with default values
     const options = {
         placement: 'center',
-        backdrop: 'static',
+        backdrop: 'dynamic',
         backdropClasses:
             'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
         closable: true,
         onHide: () => {
             $('.error').text("")
+            $('#spingLoad').hide();
         },
         onShow: (elm) => {
 
@@ -27,11 +28,13 @@ function setupModal(ID) {
                 type: 'POST',
                 //   Trả dữ liệu thành công
                 success: function (response) {
+                    console.log(response);
+
                     var mainBody = elm._targetEl;
 
-                    $(mainBody).find('input[name="name"]').val(response.products.name)
+                    $(mainBody).find('input[name="name"]').val($('.title').text()).attr('disabled', true)
                     $(mainBody).find('input[name="quantity"]').val(response.quantity)
-                    $(mainBody).find('input[name="price"]').val(parseInt(response.price))
+                    $(mainBody).find('input[name="price_sale"]').val(parseInt(response.price_sale)).addClass('int')
                     $(mainBody).find('input[name="id"]').val(ID)
 
                     $('#loadingIndicator').hide();
@@ -75,10 +78,10 @@ function saveModal() {
 
 
         var quantity = $('input[name="quantity"]').val();
-        var price = $('input[name="price"]').val();
+        var price_sale = $('input[name="price_sale"]').val();
         var id = $('input[name="id"]').val();
 
-        if (quantity == '' || price == '') {
+        if (quantity == '' || price_sale == '') {
             Toastify({
                 text: "Không được để trống số lượng hoặc giá tiền",
                 duration: 3000,
@@ -97,7 +100,7 @@ function saveModal() {
                 url: createTransaction,
                 data: {
                     quantity: quantity,
-                    price: price,
+                    price_sale: price_sale,
                     id : id
                  },
                 type: 'POST',

@@ -15,7 +15,6 @@ class Voucher extends Model
         'value_reduction',
         'limit',
         'status',
-        'time',
         'date_start',
         'date_end',
         'user_id'
@@ -26,4 +25,17 @@ class Voucher extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'voucher_user');
+    }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class, 'order_voucher')
+            ->withTimestamps();
+    }
+
+
 }
