@@ -1,4 +1,7 @@
 @php
+    $logo =
+        asset(App\Models\Setting::where('setting_key', 'setting_logo')->value('setting_value')) ?? '/images/logo.png';
+
     $parentCategories = App\Models\Categories::whereNull('parent_id')->where('status', 0)->get();
 
     $categoriesArray = [];
@@ -25,10 +28,10 @@
             <div class="container max-w-[1170px] mx-auto  flex items-center h-full px-2.5">
                 <div class="flex  items-center w-full">
                     <!-- Logo -->
-                    <div class="logo order-2 w-[200px] lg:mr-[30px] lg:order-none">
-                        <a href="#">
-                            <img src="{{ asset('images/client/MONA-e1702621831263.png') }}" alt="MONA"
-                                class="img w-full" />
+                    <div class="logo order-2 lg:mr-[30px] lg:order-none">
+                        <a href="{{ route('index') }}" class="block w-full max-w-[200px] min-w-[100px] h-auto">
+                            <img src="{{ asset($logo) ?? asset('images/client/MONA-e1702621831263.png') }}"
+                                alt="MONA" class="w-full h-auto max-h-[100px] object-contain" />
                         </a>
                     </div>
                     <!-- End Logo -->
@@ -50,13 +53,13 @@
                         <div class="h-full bg-white w-1/2 z-30 lg:w-full overflow-x-auto lg:overflow-x-visible">
                             <ul class="flex flex-col py-[30px]  lg:justify-center lg:flex-row lg:py-0 lg:flex-1">
                                 <li class="border-solid lg:px-2.5 lg:mx-[7px] first:ml-0  menu-list">
-                                    <a href="#"
+                                    <a href="{{ route('index') }}"
                                         class="leading-4 px-5 py-[15px] inline-flex w-full text-[#666666] text-[.8em]  font-bold tracking-wider uppercase lg:hover:text-[#ff5b26] lg:text-[.9em] lg:hover:ease-in lg:p-0 lg:py-2.5">Trang
                                         chủ</a>
                                 </li>
 
                                 <li class="border-solid lg:px-2.5 lg:mx-[7px]   menu-list">
-                                    <a href="#"
+                                    <a href="{{ route('aboutPage') }}"
                                         class="leading-4 px-5 py-[15px] inline-flex w-full text-[#666666] text-[.8em]  font-bold tracking-wider uppercase lg:hover:text-[#ff5b26] lg:text-[.9em] lg:hover:ease-in lg:p-0 lg:py-2.5">Giới
                                         thiệu</a>
                                 </li>
@@ -103,7 +106,7 @@
                                     </div>
                                 </li>
                                 <li class="border-solid lg:px-2.5 lg:mx-[7px]  last:ml-0 menu-list">
-                                    <a href="#"
+                                    <a href="{{ route('index') }}"
                                         class="leading-4 px-5 py-[15px] inline-flex w-full text-[#666666] text-[.8em]  font-bold tracking-wider uppercase lg:hover:text-[#ff5b26] lg:text-[.9em] lg:hover:ease-in lg:p-0 lg:py-2.5">Liên
                                         hệ</a>
                                 </li>
@@ -148,23 +151,23 @@
                         @endif
                         <!-- End User -->
 
-                        @if(Auth::check())
-                        <!-- Cart -->
-                        <div class="cart search-header lg:mx-[7px] border-solid  first:ml-0 relative group lg:py-3">
-                            <a href="{{ route('cart.index') }}">
-                                <ion-icon class=" cursor-pointer text-[#666666] text-[20px] lg:text-[21px]"
-                                    name="cart"></ion-icon>
+                        @if (Auth::check())
+                            <!-- Cart -->
+                            <div class="cart search-header lg:mx-[7px] border-solid  first:ml-0 relative group lg:py-3">
+                                <a href="{{ route('cart.index') }}">
+                                    <ion-icon class=" cursor-pointer text-[#666666] text-[20px] lg:text-[21px]"
+                                        name="cart"></ion-icon>
 
-                            </a>
+                                </a>
 
-                            {{-- <div
+                                {{-- <div
                                 class=" group-hover:block hidden absolute z-30 shadow-lg shadow-neutral-300 px-3 py-5 border-2 rounded-2xl text-[#777] bg-[#fff] border-[#ddd] min-w-[240px]  top-11 right-0">
                                 <div class="px-[10px]">
                                     Chưa có sản phẩm trong giỏ hàng
                                 </div>
                             </div> --}}
-                        </div>
-                        <!-- End Cart -->
+                            </div>
+                            <!-- End Cart -->
                         @endif
                         <!-- End Right Box -->
                     </div>

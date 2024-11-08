@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Models\Setting;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\Client\HomeService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
@@ -16,7 +17,9 @@ class HomeController extends Controller
     }
     public function index()
     {
-        return view('client.home.index');
+
+        $title = Setting::where('setting_key', 'setting_name')->value('setting_value') ?? 'Laravel';
+        return view('client.home.index',compact('title'));
     }
 
     public function hotlineAjax(Request $request)
@@ -44,7 +47,8 @@ class HomeController extends Controller
     }
 
     public function search(){
-        return view('client.uitil.search');
+        $title = "Tìm kiếm sản phẩm";
+        return view('client.uitil.search',compact('title'));
     }
 
     public function searchAjax(Request $request){

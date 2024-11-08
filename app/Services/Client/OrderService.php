@@ -10,12 +10,15 @@ use App\Models\OrderItem;
 use App\Rules\PhoneNumber;
 use Illuminate\Support\Str;
 use App\Helpers\FormatFunction;
+use App\Services\Backend\VNPayService;
+use App\Services\Backend\ZaloPayService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 
 class OrderService
 {
+
     function generateUniqueOrderCode()
     {
         do {
@@ -60,6 +63,7 @@ class OrderService
 
     public function order($request)
     {
+
 
         // Các quy tắc xác thực
         $rules = [
@@ -118,6 +122,7 @@ class OrderService
 
         $dataOrderAjax = $request->data;
 
+
         $cart = session()->get("cart", []);
 
         $codeOrder = $this->generateUniqueOrderCode();
@@ -160,13 +165,6 @@ class OrderService
 
 
 
-
-
-        if($dataOrderAjax['voucher_code']){
-            $getVocher = Voucher::where('status', 0)->where('name', $dataOrderAjax['voucher_code'])->first();
-        }
-
-
         $dataOrder = [
             'code_order' => $codeOrder,
             'order_date' => FormatFunction::getDatetime(),
@@ -182,6 +180,19 @@ class OrderService
             'user_id' => Auth::id(),
         ];
 
+        if ($dataOrderAjax['payment_method'] == 'payment_transfer') {
+            $dataOrderVNPay = [
+                'code_order' => $codeOrder,
+                'total' => $totalValue,
+            ];
+            $VNPay = new VNPayService($dataOrderVNPay);
+            $orderVNPay = $VNPay->payment();
+            return response()->json([
+                'type' => 'payment_transfer',
+                'data' => $orderVNPay
+            ]);
+        }
+
 
         $dataInsertOrder = Order::create($dataOrder);
 
@@ -191,6 +202,7 @@ class OrderService
                 $getProducts = Products::with(['product_variants' => function ($query) use ($key) {
                     $query->where('code', str_replace("-", ", ", $key));
                 }])->where('status', 0)->get();
+
 
 
                 foreach ($getProducts as $product) {
@@ -240,6 +252,7 @@ class OrderService
             session()->forget('cart');
 
             return response()->json([
+                 'type' => 'cash_on_delivery',
                 'status' =>'success',
                 'message'=> 'Bạn đã đặt hàng thành công!',
             ]);

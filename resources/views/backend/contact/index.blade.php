@@ -4,7 +4,7 @@
 
         <div class="w-full mb-1">
             <div class="mb-4">
-                {{ Breadcrumbs::render('contact') }}
+
                 <div class="flex items-center content-center">
                     <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mr-2 ">@yield('title')
                     </h1>

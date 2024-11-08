@@ -29,9 +29,7 @@ class TransactionController extends Controller
         return $this->service->getTransactionById($request);
     }
 
-    public function createTransaction(Request $request){
-        return $this->service->createTransaction($request);
-    }
+
 
     public function exportTransaction(Request $request){
         return $this->service->exportTransaction($request);

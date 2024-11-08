@@ -25,7 +25,7 @@
                     </svg>
                 </button>
                 <a href="" class="flex ml-2 md:mr-24">
-                    <img src="{{$logo}}" class="h-8 mr-3" alt="{{$title}}" />
+                    <img src="{{$logo}}" class="h-8 mr-3 bg-transparent" alt="{{$title}}" />
                     <span
                         class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">{{$title}}</span>
                 </a>

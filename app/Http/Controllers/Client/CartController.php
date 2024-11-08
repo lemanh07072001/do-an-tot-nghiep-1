@@ -14,13 +14,14 @@ class CartController extends Controller
     }
 
     public function index(){
+        $title = "Giỏ hàng";
         $data = $this->service->getCart();
         $carts = $data['data'];
         $total = $data['total'];
 
         $getVouchers = $this->service->getVouchers();
 
-        return view("client.cart.index",compact(["carts","getVouchers", "total"]));
+        return view("client.cart.index",compact(["carts","getVouchers", "total",'title']));
     }
 
 

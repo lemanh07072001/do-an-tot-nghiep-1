@@ -21,7 +21,7 @@ class ProfileService
 
     public function getOders($request){
         $getOrder = Order::where('user_id', Auth::id())
-                            ->simplePaginate(1)
+                            ->simplePaginate(5)
                             ->withQueryString();
         return $getOrder;
     }

@@ -6,7 +6,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Mona Fashion</title>
+    <title>{{ $title ?? 'No title' }}</title>
+
+    @php
+        $logo = asset(App\Models\Setting::where('setting_key', 'setting_logo')->value('setting_value')) ?? '/images/logo.png';
+
+    @endphp
+
+    <link rel="icon" type="image/x-icon" href="{{asset($logo)}}">
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>

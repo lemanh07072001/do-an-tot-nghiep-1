@@ -238,3 +238,21 @@ Breadcrumbs::for('contactUpdate', function (BreadcrumbTrail $trail, $contact) {
     $trail->parent('contact');
     $trail->push(config('apps.contact.titleUpdate') . ' [ ' . $contact->name . ' ] ', route('setting_module.contact.edit', $contact));
 });
+
+//NOTE - Introduce
+// Introduce
+Breadcrumbs::for('introduce', function (BreadcrumbTrail $trail) {
+    $trail->push('Trang chủ', route('setting_module.introduce.index'));
+});
+
+// Introduce > Create
+// Breadcrumbs::for('introduceCreate', function (BreadcrumbTrail $trail) {
+//     $trail->parent('introduce');
+//     $trail->push(config('apps.introduce.titleCreate'), route('setting_module.introduce.create'));
+// });
+
+// // Introduce > Update[introduce]
+// Breadcrumbs::for('introduceUpdate', function (BreadcrumbTrail $trail, $introduce) {
+//     $trail->parent('introduce');
+//     $trail->push(config('apps.introduce.titleUpdate') . ' [ ' . $introduce->name . ' ] ', route('setting_module.introduce.edit', $introduce));
+// });

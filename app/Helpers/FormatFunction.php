@@ -180,9 +180,9 @@ class FormatFunction
         }
     }
 
-    public static function formatPrice($data, $to = 'đ')
+    public static function formatPrice($data)
     {
-        return number_format($data, 0, ',', '.') . ' ' . $to;
+        return str_replace('.', '', $data);
     }
 
 

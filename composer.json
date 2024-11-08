@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.2",
         "andreiio/blade-iconoir": "^4.3",
+        "arielmejiadev/larapex-charts": "^2.1",
         "arrilot/laravel-widgets": "^3.14",
         "bensampo/laravel-enum": "^6.11",
         "blade-ui-kit/blade-heroicons": "^2.3",

@@ -37,5 +37,15 @@ class Voucher extends Model
             ->withTimestamps();
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1); // Assuming 'status' field indicates if a voucher is active
+    }
 
+    public function scopeValid($query)
+    {
+        $now = now();
+        return $query->where('date_start', '<=', $now)
+            ->where('date_end', '>=', $now); // Adjust these fields if you have different validity fields
+    }
 }

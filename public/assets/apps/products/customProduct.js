@@ -652,7 +652,7 @@ function setupSelectMultiple(callback) {
 
             if (attributes != '') {
                 $.ajax({
-                    type: 'GET',
+                    type: 'POST',
                     url: getAttributeAjax,
                     dataType: 'json',
                     deley: 250,

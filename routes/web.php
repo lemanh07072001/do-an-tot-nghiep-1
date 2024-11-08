@@ -11,15 +11,20 @@ use App\Http\Controllers\Backend\ContactController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\GiaoHangTietKiemControllor;
 use App\Http\Controllers\Backend\GroupProductController;
+use App\Http\Controllers\Backend\IntroduceController;
 use App\Http\Controllers\Backend\LabelController;
 use App\Http\Controllers\Backend\OrderController as BackendOrderController;
 use App\Http\Controllers\Backend\PolicyController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\PropertiesController;
+use App\Http\Controllers\Backend\SePayController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\TransactionController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Backend\VNPayController;
 use App\Http\Controllers\Backend\VoucherController;
+use App\Http\Controllers\Backend\ZaloPayController;
+use App\Http\Controllers\Client\AboutPageController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\DetailController;
 use App\Http\Controllers\ProfileController;
@@ -38,6 +43,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
         //LINK - BannerController
         Route::prefix('dashboard')->name('dashboard.')->group(function () {
             Route::get('/', [DashboardController::class, 'index'])->name('index');
+            Route::get('/product-sales', [DashboardController::class, 'getSalesData'])->name('getSalesData');
         });
     });
 
@@ -136,7 +142,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
             Route::get('/', [TransactionController::class, 'index'])->name('index');
             Route::get('/getData', [TransactionController::class, 'getData'])->name('getData');
             Route::post('/getTransactionById', [TransactionController::class, 'getTransactionById'])->name('getTransactionById');
-            Route::post('/createTransaction', [TransactionController::class, 'createTransaction'])->name('createTransaction');
+
             Route::get('/exportTransaction', [TransactionController::class, 'exportTransaction'])->name('exportTransaction');
         });
 
@@ -167,6 +173,7 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
             Route::post('/getAllProducts', [GroupProductController::class, 'getAllProducts'])->name('getAllProducts');
             Route::get('/searchProduct', [GroupProductController::class, 'searchProduct'])->name('searchProduct');
         });
+
 
         //LINK - Order
         Route::prefix('order')->name('order.')->group(function () {
@@ -219,6 +226,13 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
             Route::delete('/deleteAll', [ContactController::class, 'deleteAll'])->name('deleteAll');
             Route::delete('/deleteRow', [ContactController::class, 'deleteRow'])->name('deleteRow');
         });
+
+        //LINK - Introduce
+        Route::prefix('introduce')->name('introduce.')->group(function () {
+            Route::get('/', [IntroduceController::class, 'index'])->name('index');
+            Route::post('/upload-image', action: [IntroduceController::class, 'uploadImage'])->name('uploadImage');
+            Route::post('/store', action: [IntroduceController::class, 'store'])->name('store');
+        });
     });
 
     //LINK - Voucher
@@ -260,6 +274,12 @@ Route::post('change-password', [ClientProfileController::class,'changePassword']
 Route::get('/check-voucher', [CartController::class, 'checkVoucher'])->name('checkVoucher');
 
 Route::post('/order',[OrderController::class,'order'])->name('order');
+
+Route::get('/gioi-thieu', [AboutPageController::class, 'index'])->name('aboutPage');
+
+Route::get('/thank', function () {
+    return view('client.page.thank');
+});
 
 
 //LINK - UploadController

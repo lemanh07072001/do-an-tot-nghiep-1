@@ -36,17 +36,25 @@ $(document).ready(function () {
                 data
             },
             success: function (response) {
-                alertbox.render({
-                    alertIcon: 'success',
-                    title: 'Thank You!',
-                    message: response.message,
-                    btnTitle: 'Xác nhận',
-                    border: true
-                });
+                console.log(response.type = "cash_on_delivery");
+                if (response.type = "cash_on_delivery"){
+                    alertbox.render({
+                        alertIcon: 'success',
+                        title: 'Thank You!',
+                        message: response.message,
+                        btnTitle: 'Xác nhận',
+                        border: true
+                    });
 
-                setTimeout(function(){
-                    location.reload();
-                },1000)
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000)
+                } else if (response.type = 'payment_transfer'){
+                    window.open(response.data.data, '_blank');
+
+                }
+
+
             },
             error: function (xhr) {
                 // Xử lý lỗi xác thực

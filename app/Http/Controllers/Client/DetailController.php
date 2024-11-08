@@ -16,7 +16,9 @@ class DetailController extends Controller
 
     public function detail($slug){
         $firstCategories = $this->service->getFirstCategories($slug);
-        return view('client.detail.firstProductCategories',compact('firstCategories'));
+        $title = $firstCategories->name;
+
+        return view('client.detail.firstProductCategories',compact(['firstCategories','title']));
     }
 
     public function getProducts(Request $request){
@@ -25,7 +27,7 @@ class DetailController extends Controller
 
     public function allProductCategories(){
 
-        $title = "Tất cả sản phẩm";
+        $title = "Cửa hàng";
         return view('client.detail.getAllProducts', compact(['title']));
     }
 
@@ -35,7 +37,9 @@ class DetailController extends Controller
 
     public function allGroupProduct($slug) {
         $nameGroupProduct = $this->service->getNameGroupProduct($slug);
-        return view('client.detail.detailGroupProducts',compact(['nameGroupProduct']));
+        $title = $nameGroupProduct->name;
+
+        return view('client.detail.detailGroupProducts',compact(['nameGroupProduct','title']));
     }
 
     public function getGroupProductAjax(Request $request){
@@ -46,7 +50,10 @@ class DetailController extends Controller
     public function getFirstCategories($slug)
     {
         $getFirstCategories = $this->service->getFirstCategorie($slug);
-        return view('client.detail.detailCategories', compact(['getFirstCategories']));
+
+        $title = $getFirstCategories->name;
+
+        return view('client.detail.detailCategories', compact(['getFirstCategories','title']));
     }
 
     public function getFirstCategoriesAjax(Request $request)
@@ -57,13 +64,13 @@ class DetailController extends Controller
     public function firstProduct($slug){
         $dataService = $this->service->getFirstProduct($slug);
 
-
-
         $getFirstProduct = $dataService['product'];
         $imageArray = $dataService['imageArray'];
         $dataAttribute = $dataService['attributes'];
 
-        return view('client.detail.detailProduct',compact(['getFirstProduct', 'imageArray', 'dataAttribute']));
+        $title = $getFirstProduct->name;
+
+        return view('client.detail.detailProduct',compact(['getFirstProduct', 'imageArray', 'dataAttribute','title']));
     }
 
     public function getAttributeAjax(Request $request){

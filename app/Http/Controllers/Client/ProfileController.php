@@ -13,11 +13,13 @@ class ProfileController extends Controller
         $this->service = new ProfileService();
     }
     public function showTabs(Request $request){
+        $title = 'Thông tin tài khoản';
+
         $activeTab = $this->service->showTabs($request);
         $getOders = $this->service->getOders($request);
         $getProfile = $this->service->getProfile();
 
-        return view('client.profile.index',compact(['activeTab', 'getOders', 'getProfile']));
+        return view('client.profile.index',compact(['activeTab', 'getOders', 'getProfile','title']));
     }
 
     public function changePassword(Request $request){
