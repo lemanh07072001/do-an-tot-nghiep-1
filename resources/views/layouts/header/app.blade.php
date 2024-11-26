@@ -17,7 +17,8 @@
                     </div>
                     <div class="grid grid-cols-3 gap-4 p-4">
 
-                        <a href="{{ route('account_module.user.index') }}"
+                        @can('Quản lý tài khoản')
+                            <a href="{{ route('account_module.user.index') }}"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
                             <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -27,9 +28,11 @@
                             </svg>
                             <div class="text-sm font-medium text-gray-900 dark:text-white">Tài khoản</div>
                         </a>
+                        @endcan
 
 
-                        <a href="{{ route('setting_module.setting.index') }}"
+                        @can('Cài đặt chung')
+                            <a href="{{ route('setting_module.setting.index') }}"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
                             <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -39,7 +42,11 @@
                             </svg>
                             <div class="text-sm font-medium text-gray-900 dark:text-white">Settings</div>
                         </a>
-                        <a href="{{ route('ecommerce_module.products.index') }}"
+                        @endcan
+
+
+                        @can('Quản lý sản phẩm')
+                            <a href="{{ route('ecommerce_module.products.index') }}"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
                             <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -50,7 +57,10 @@
                             </svg>
                             <div class="text-sm font-medium text-gray-900 dark:text-white">Sản phẩm</div>
                         </a>
-                        <a href="{{ route('ecommerce_module.order.index') }}"
+                        @endcan
+
+                        @can('Quản lý giỏ hàng')
+                            <a href="{{ route('ecommerce_module.order.index') }}"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
                             <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -63,7 +73,10 @@
                             </svg>
                             <div class="text-sm font-medium text-gray-900 dark:text-white">Giỏ hàng</div>
                         </a>
-                        <a href="{{ route('ecommerce_module.voucher.index') }}"
+                        @endcan
+
+                       @can('Quản lý khuyến mãi')
+                            <a href="{{ route('ecommerce_module.voucher.index') }}"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
                             <svg class="mx-auto mb-1 text-gray-500 w-7 h-7 dark:text-gray-400" fill="currentColor"
                                 viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -73,6 +86,8 @@
                             </svg>
                             <div class="text-sm font-medium text-gray-900 dark:text-white">Voucher</div>
                         </a>
+                       @endcan
+
                         <form method="POST" action="{{ route('logout') }}">
                             <button type="submit"
                             class="block p-4 text-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600">
@@ -82,7 +97,7 @@
                                     d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1">
                                 </path>
                             </svg>
-                            <div class="text-sm font-medium text-gray-900 dark:text-white">Logout</div>
+                            <div class="text-sm font-medium text-gray-900 dark:text-white">Đăng xuất</div>
                         </button>
                         </form>
                     </div>

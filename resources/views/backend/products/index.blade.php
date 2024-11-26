@@ -1,4 +1,3 @@
-
 <x-app-layout>
     @section('title', config('apps.products.titleIndex'))
     <div class="p-4 max-h-full bg-white block sm:flex items-center justify-between   dark:bg-gray-800 ">
@@ -52,20 +51,24 @@
                         </x-dropdown-form>
                     </div>
                     <div>
-                        <a href={{ route('ecommerce_module.products.create') }}
-                            class="text-white bg-gradient-to-r focus:ring-blue-300 dark:focus:ring-blue-800 from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br  focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
-                            @svg('heroicon-o-plus', 'w-4 h-4 me-2')
-                            Thêm mới dữ liệu
-                        </a>
+                        @can('Thêm mới sản phẩm')
+                            <a href={{ route('ecommerce_module.products.create') }}
+                                class="text-white bg-gradient-to-r focus:ring-blue-300 dark:focus:ring-blue-800 from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br  focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
+                                @svg('heroicon-o-plus', 'w-4 h-4 me-2')
+                                Thêm mới dữ liệu
+                            </a>
+                        @endcan
                     </div>
                 </div>
 
                 <div class="flex items-center hidden" id="handleDelete">
                     <span class="me-2">Tổng: <span id="countUpdate">0</span></span>
-                    <button type="button" id="data-delete"
-                        class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                        Xóa tất cả
-                    </button>
+                    @can('Xoá sản phẩm')
+                        <button type="button" id="data-delete"
+                            class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                            Xóa tất cả
+                        </button>
+                    @endcan
                 </div>
             </div>
         </div>
@@ -130,10 +133,9 @@
     </div>
 
     @push('js')
-        <script src="{{asset('assets/apps/products/datatables.js')}}"></script>
+        <script src="{{ asset('assets/apps/products/datatables.js') }}"></script>
 
         <script>
-
             var url = '{!! route('ecommerce_module.products.getData') !!}'
             const columns = [{
                     data: 'id'
@@ -161,7 +163,7 @@
             const _CUSTOM_DATATABLES = {
                 CLASS_ROW: '',
                 PAGE: '8',
-                TARGETS: [0, 1, 2, 3,4,5,7]
+                TARGETS: [0, 1, 2, 3, 4, 5, 7]
 
             };
             var dataTableIndex = initializeDataTable(url, columns, _CUSTOM_DATATABLES);

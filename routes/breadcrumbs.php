@@ -25,6 +25,17 @@ Breadcrumbs::for('userUpdate', function (BreadcrumbTrail $trail, $user) {
     $trail->push(config('apps.user.titleUpdate') . ' [ ' . $user->email . ' ] ', route('account_module.user.edit', $user));
 });
 
+// Role
+Breadcrumbs::for('role', function (BreadcrumbTrail $trail) {
+    $trail->push('Trang chủ', route('account_module.role.index'));
+});
+// Role > Create
+Breadcrumbs::for('roleCreate', function (BreadcrumbTrail $trail) {
+    $trail->parent('role');
+    $trail->push(config('apps.role.titleCreate'), route('account_module.role.create'));
+});
+
+
 //NOTE - Categories
 // Categories
 Breadcrumbs::for('categories', function (BreadcrumbTrail $trail) {

@@ -55,7 +55,7 @@ class OrderService
 
         return DataTables::of($query)
             ->addColumn('code_order', function ($order) {
-                return '<div class="font-bold">'.$order->code_order.'</div>';
+                return '<div class="font-bold">' . $order->code_order . '</div>';
             })
             ->addColumn('order_date', function ($order) {
                 return FormatFunction::formatDate($order->order_date);
@@ -70,12 +70,18 @@ class OrderService
                 return FormatFunction::statusFormOrder($order);
             })
             ->addColumn('action', function ($order) {
-                return '
-                        <button type="button" class="modal-order inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-400 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
-                            <svg class="w-4 h-4 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
-                        </button>
+                $actions = '';
 
-                    ';
+
+                // Kiểm tra quyền xóa khuyến mãi
+                if (auth()->user()->can('Xem đơn hàng')) {
+                    $actions .= ' <button type="button" class="modal-order inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-400 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
+                            <svg class="w-4 h-4 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                        </button>';
+                }
+
+                // Nếu không có quyền nào thì trả về một thông báo hoặc HTML trống
+                return $actions ?: '<span class="text-gray-500">Không có quyền</span>';
             })
 
             ->rawColumns(['code_order', 'order_date', 'total_amount', 'payment_method', 'status', 'action'])
@@ -166,29 +172,30 @@ class OrderService
         }
     }
 
-    public function getItemOrder( $request){
+    public function getItemOrder($request)
+    {
         $id = $request->idOrderItem;
 
         $getOrder = Order::find($id);
 
-        if($getOrder){
-            $dataOrder= [];
+        if ($getOrder) {
+            $dataOrder = [];
             $getOrderItems = $getOrder->orderItems;
 
             // Duyệt lấy từng orderItem
-            foreach ($getOrderItems as $orderItem){
+            foreach ($getOrderItems as $orderItem) {
                 $nameProduct = '';
                 // Lấy sản phẩm
                 $getProduct = $orderItem->product_variant->products;
 
                 $codeArray = explode(', ', $orderItem->product_variant->code);
 
-                foreach ($codeArray as $code){
-                    $getProperties = Properties::where('status',0)->where('id',$code)->first();
+                foreach ($codeArray as $code) {
+                    $getProperties = Properties::where('status', 0)->where('id', $code)->first();
 
-                        if($getProperties){
-                            $nameProduct .= ' - '.$getProperties->name;
-                        }
+                    if ($getProperties) {
+                        $nameProduct .= ' - ' . $getProperties->name;
+                    }
                 }
 
 
@@ -197,21 +204,20 @@ class OrderService
                     'name' => $getProduct->name . $nameProduct,
                     'product_variants' => $orderItem->product_variant->product_variants,
                 ];
-
             }
 
             return response()->json([
                 'success' => true,
                 'orderCode' => $getOrder->code_order,
-                'data'=> $dataOrder
+                'data' => $dataOrder
             ]);
-
         }
 
         return null;
     }
 
-    public function excelOrder($request){
+    public function excelOrder($request)
+    {
 
         // Get the current year, date, and month
         $year = Carbon::now()->year;

@@ -18,7 +18,7 @@ function selectProperties() {
 
             initializeSelectMultiple();
         } else {
-            let inputHtml = '<input type="text" name="attribute[' + attributeID + '][]" class="select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled></input>';
+            let inputHtml = '<input type="text" name="attribute[' + attributeID + '][]" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled></input>';
             _this.parent('.col-span-2').siblings('.col-span-5').html(inputHtml)
         }
 
@@ -61,7 +61,7 @@ function initializeSelectMultiple() {
 }
 
 function select2Variables(attibbuteID) {
-    let className = 'select selectMultiple variant-' + attibbuteID + ' bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ';
+    let className = ' selectMultiple variant-' + attibbuteID + ' bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ';
     let html = '<select class="' + className + '" name="attribute[' + attibbuteID + '][]" multiple data-catID="' + attibbuteID + '"></select>'
     return html;
 }
@@ -458,7 +458,7 @@ function saveVariantUpdate() {
                 alert('vui lòng nhập số lượng')
                 return
             } else if (inputPriceSale > inputPrice){
-                alert('Giá khuyến mãi không đuọc lớn hơn giá bán')
+                alert('Giá khuyến mãi đanh nhỏ hơn giá bán')
             }
 
             let variantObj = {
@@ -546,7 +546,7 @@ function handleDeleteRow() {
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Đòng ý!"
+            confirmButtonText: "Đồng ý!"
         }).then((result) => {
             if (result.isConfirmed) {
                 $row.remove(); // In ra thông tin về hàng để kiểm tra
@@ -567,7 +567,7 @@ function renderVariantItem(getAllProperties) {
     html += '    <div data-repeater-item>';
     html += '        <div class="grid grid-cols-8 gap-4 gap-y-4">';
     html += '            <div class="col-span-2 sm:col-span-2 mb-2">';
-    html += '                <select name="attributeCatalogue[]" class="select selectProperties bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">';
+    html += '                <select name="attributeCatalogue[]" class=" selectProperties bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">';
     html += '                    <option value="">--Chọn thuộc tính--</option>';
     $.each(getAllProperties, function (index, value) {
         html += '<option value="' + value.id + '">' + value.name + '</option>';
@@ -575,7 +575,7 @@ function renderVariantItem(getAllProperties) {
     html += '                </select>';
     html += '            </div>';
     html += '            <div class="col-span-5 sm:col-span-5 mb-2">';
-    html += '                <input type="text" name="input_attribute" class="select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled>';
+    html += '                <input type="text" name="input_attribute" class=" bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" disabled>';
     html += '            </div>';
     html += '            <div class="col-span-1 sm:col-span-1">';
     html += '                <button type="button" data-delete class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">';

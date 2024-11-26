@@ -59,7 +59,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('backend.user.create');
+        $getRole = $this->service->GetRole();
+        return view('backend.user.create',compact('getRole'));
     }
 
 
@@ -115,8 +116,8 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-
-        return view('backend.user.edit', compact('user'));
+        $getRole = $this->service->GetRole();
+        return view('backend.user.edit', compact(['user','getRole']));
     }
 
 

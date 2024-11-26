@@ -59,10 +59,12 @@
 
                 <div class="flex items-center hidden" id="handleDelete">
                     <span class="me-2">Tổng: <span id="countUpdate">0</span></span>
-                    <button type="button" id="data-export"
-                        class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                        Export
-                    </button>
+                    @can('Xuất đơn hàng')
+                        <button type="button" id="data-export"
+                            class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                            Export
+                        </button>
+                    @endcan
                 </div>
             </div>
         </div>
@@ -132,11 +134,11 @@
         <script src="{{ asset('assets/apps/order/datatables.js') }}"></script>
         <script src="{{ asset('assets/apps/order/customOrder.js') }}"></script>
 
-         <script>
+        <script>
             const urlUpdateStatusOrder = '{{ route('ecommerce_module.order.statusOrder') }}';
             const urlGetOrderItem = '{{ route('ecommerce_module.order.getItemOrder') }}';
             const urlExportOrder = '{{ route('ecommerce_module.order.excelOrder') }}'
-         </script>
+        </script>
 
         <script>
             var url = '{!! route('ecommerce_module.order.getData') !!}'

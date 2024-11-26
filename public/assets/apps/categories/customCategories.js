@@ -97,6 +97,8 @@ function handleOpenModelDetai(){
 }
 
 
+
+
 $(document).ready(function () {
 handleOpenModelDetai();
 

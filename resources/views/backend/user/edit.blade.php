@@ -50,14 +50,25 @@
                     <x-input-error error="password_confirmation" class="mt-2" />
                 </div>
 
-                <div class="col-span-6 sm:col-span-3">
-                    <div class="flex items-center mb-4 w-full">
-                        <input id="is_admin" name="is_admin" type="checkbox"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" @checked(old('is_admin')|| $user->is_admin == '0')>
-                        <label for="is_admin" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Cho phép
-                            truy cập trang Admin</label>
-                    </div>
+                @php
+                    $userRoles=$user->roles->pluck('id')->toArray()
+                @endphp
 
+                 <div class="col-span-6 sm:col-span-3">
+                    <x-input-label for="password_confirmation" required>Quyền hạn</x-input-label>
+                    <x-select name="role">
+                        <option value="">--Chọn quyền--</option>
+                        @foreach ($getRole as $role)
+            <option value="{{ $role->id }}"
+                @if(in_array($role->id, $userRoles)) selected @endif>
+                {{ $role->name }}
+            </option>
+        @endforeach
+                    </x-select>
+                </div>
+
+
+                <div class="col-span-6 sm:col-span-3">
                     <div class="flex items-center mb-4 w-full">
                         <input id="status" name="status" type="checkbox"
                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" @checked(old('status')|| $user->status == '0')>

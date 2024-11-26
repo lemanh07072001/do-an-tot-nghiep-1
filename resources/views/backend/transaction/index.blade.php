@@ -27,13 +27,13 @@
 
                 <div class="flex items-center hidden" id="handleDelete">
                     <span class="me-2">Tổng: <span id="countUpdate">0</span></span>
-
-                    <button type="button" id="exportData"
-                        class="px-4 py-2 me-2 mb-2 bg-lime-500 text-white font-semibold rounded-md hover:bg-lime-700 flex items-center">
-                        @svg('fwb-o-file-export', 'w-4 h-4 me-2')
-                        Export
-                    </button>
-
+                    @can('Xuất kho')
+                        <button type="button" id="exportData"
+                            class="px-4 py-2 me-2 mb-2 bg-lime-500 text-white font-semibold rounded-md hover:bg-lime-700 flex items-center">
+                            @svg('fwb-o-file-export', 'w-4 h-4 me-2')
+                            Export
+                        </button>
+                    @endcan
                 </div>
             </div>
         </div>
@@ -211,8 +211,6 @@
             //NOTE - Export Table
             var urlExport = '{!! route('ecommerce_module.transaction.exportTransaction') !!}'
             exportData(urlExport, dataTableIndex)
-
-
         </script>
     @endpush
 </x-app-layout>

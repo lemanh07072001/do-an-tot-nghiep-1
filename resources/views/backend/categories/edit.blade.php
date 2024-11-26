@@ -61,7 +61,7 @@
                     </x-select>
                 </div>
 
-                <div class="col-span-6 sm:col-span-3">
+                <div class="col-span-6 sm:col-span-3" id="categorie_hot">
                     <div class="flex items-center mb-4">
                         <input id="default-checkbox" type="checkbox" name="hot"
                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
@@ -72,7 +72,7 @@
                     </div>
                 </div>
 
-                <div class="col-span-6 sm:col-span-3">
+                <div class="col-span-6 sm:col-span-3" id="categorie_image">
                     <x-input-label for="myDropzone" >Hình ảnh</x-input-label>
                     <input type="hidden" id="image_id" name="image" value="">
                     <div id="myDropzone"
@@ -188,6 +188,28 @@
 
                 })
             });
+        </script>
+
+        <script>
+           if($('select[name="parent_id"]').val() == ''){
+             $('#categorie_hot').addClass('hidden')
+             $('#categorie_image').addClass('hidden')
+           }else{
+                $('#categorie_hot').addClass('block')
+                 $('#categorie_image').addClass('block')
+           }
+
+           $('select[name="parent_id"]').change(function(){
+                if($(this).val() == ''){
+                     $('#categorie_hot').addClass('hidden')
+                       $('#categorie_image').addClass('hidden')
+                }else{
+                    $('#categorie_hot').removeClass('hidden')
+                      $('#categorie_image').removeClass('hidden')
+                }
+
+           })
+
         </script>
     @endpush
 </x-app-layout>

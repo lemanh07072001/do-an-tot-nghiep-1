@@ -15,7 +15,7 @@
                     </div>
 
                 </div>
-                <div id="main-chart">
+                <div >
                     {!! $getChartData->container() !!}
                 </div>
                 <!-- Card Footer -->

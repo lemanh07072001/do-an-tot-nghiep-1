@@ -27,13 +27,5 @@ class AppServiceProvider extends ServiceProvider
             SendMessage::class
         );
 
-        $email = Setting::where('setting_key', 'setting_email_address')->value('setting_value')??'';
-        $password = Setting::where('setting_key', 'setting_passEmail')->value('setting_value')??'';
-
-        if ($email ) {
-            // Đặt các giá trị từ database vào cấu hình của ứng dụng
-            Config::set('mail.username', $email);
-            Config::set('mail.password', $password);
-        }
     }
 }

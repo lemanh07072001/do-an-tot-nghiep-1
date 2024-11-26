@@ -49,6 +49,7 @@ function renderHtmlMe(time,input){
 }
 
 function renderHtmlAi(response,time){
+    console.log(response);
 
     let html = '';
 
@@ -59,59 +60,76 @@ function renderHtmlAi(response,time){
     html += '<span class="text-sm font-semibold text-gray-900 dark:text-white">Genmini</span>';
     html += '<span class="text-sm font-normal text-gray-500 dark:text-gray-400">'+time+'</span>';
     html += '</div>';
-    html += '<p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">'+response.result+'</p>';
+    html += '<p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">' +formatTextWithNewlines(response.result)+'</p>';
     html += '</div>';
     html += '</div>';
 
     $('.client-chat').append(html);
 }
 
+function formatTextWithNewlines(text) {
+    // Thay thế ** bằng dấu ngắt dòng và giữ lại nội dung bên trong **
+    return text.replace(/\*\*(.*?)\*\*/g, '\n$1\n');
+}
+
 function sendMessageAi(){
     $('#searchBtn').on('click', function(e) {
 
         e.preventDefault();
-        let searchInput = $('#search').val();
+        ajaxSearch();
 
-        let time = getTime();
+    })
 
-        renderHtmlMe(time,searchInput)
+    $('#searchBtn').on('keypress', function (event) {
+        if (event.key === 'Enter') {
+            console.log('ds');
 
-        scrollToBottom();
+            ajaxSearch();
+        }
+    });
+}
 
-        $('#search').val('');
+function ajaxSearch(){
+    let searchInput = $('#search').val();
 
-        $('#loadingAi').show();
+    let time = getTime();
 
-        $(this).find('#btnLoadingSearch').removeClass('hidden');
-        $(this).find('#textSearch').hide();
-        $(this).attr('disabled', true);
-        $(this).addClass('cursor-not-allowed');
+    renderHtmlMe(time, searchInput)
 
-        $.ajax({
-            url: sendMessage,
-            data: {
-                valueData: searchInput,
-            },
-            type: "POST",
-            dataType: "json",
+    scrollToBottom();
 
-            success: function(response) {
+    $('#search').val('');
 
-                renderHtmlAi(response,time)
-                scrollToBottom();
-                $('#loadingAi').hide();
+    $('#loadingAi').show();
 
-                $('#btnLoadingSearch').addClass('hidden');
-                $('#textSearch').show();
-                $('#searchBtn').attr('disabled', false);
-                $('#searchBtn').removeClass('cursor-not-allowed');
-            },
-            error: function(xhr, status, error) {
-                $(this).find('#btnLoadingSearch').addClass('hidden');
-                $(this).find('#textSearch').show();
-            }
+    $(this).find('#btnLoadingSearch').removeClass('hidden');
+    $(this).find('#textSearch').hide();
+    $(this).attr('disabled', true);
+    $(this).addClass('cursor-not-allowed');
 
-        })
+    $.ajax({
+        url: sendMessage,
+        data: {
+            valueData: searchInput,
+        },
+        type: "POST",
+        dataType: "json",
+
+        success: function (response) {
+
+            renderHtmlAi(response, time)
+            scrollToBottom();
+            $('#loadingAi').hide();
+
+            $('#btnLoadingSearch').addClass('hidden');
+            $('#textSearch').show();
+            $('#searchBtn').attr('disabled', false);
+            $('#searchBtn').removeClass('cursor-not-allowed');
+        },
+        error: function (xhr, status, error) {
+            $(this).find('#btnLoadingSearch').addClass('hidden');
+            $(this).find('#textSearch').show();
+        }
 
     })
 }

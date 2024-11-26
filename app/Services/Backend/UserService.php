@@ -11,6 +11,7 @@ use Laravolt\Avatar\Avatar;
 use App\Exports\UsersExport;
 use App\Imports\UsersImport;
 use App\Helpers\FormatFunction;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -68,15 +69,31 @@ class UserService
                 return FormatFunction::formatBadge($user->status);
             })
             ->addColumn('action', function ($user) {
-                return '
-                        <a href="' . route('account_module.user.edit', ['user' => $user]) . '" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-400 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
-                            <svg class="w-4 h-4 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
-                        </a>
+                $actions = '';
 
-                        <button type="button" data-delete="deleteRow" class="deleteRow inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
-                            <svg class="w-4 h-4 " fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
-                        </button>
-                    ';
+                // Kiểm tra quyền cập nhật tài khoản
+                if (auth()->user()->can('Cập nhật tài khoản')) {
+                    $actions .= '<a href="' . route('account_module.user.edit', ['user' => $user]) . '"
+                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-yellow-400 hover:bg-yellow-800 focus:ring-4 focus:ring-yellow-300 dark:bg-yellow-400 dark:hover:bg-yellow-700 dark:focus:ring-yellow-800">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path>
+                        <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path>
+                    </svg>
+                </a>';
+                }
+
+                // Kiểm tra quyền xóa tài khoản
+                if (auth()->user()->can('Xoá tài khoản')) {
+                    $actions .= '<button type="button" data-delete="deleteRow"
+                    class="deleteRow ml-2 inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>';
+                }
+
+                // Nếu không có quyền nào thì trả về một thông báo hoặc HTML trống
+                return $actions ?: '<span class="text-gray-500">Không có quyền</span>';
             })
 
             ->rawColumns(['avatar', 'name', 'status', 'email_verified_at', 'action'])
@@ -85,17 +102,13 @@ class UserService
 
     public function store($request)
     {
+
         // Xử lý ngoại lệ
         try {
-            if($request->is_admin == 'on'){
-                $is_admin = 0;
-            }else{
-                $is_admin = 1;
-            };
 
-            if($request->status == 'on'){
+            if ($request->status == 'on') {
                 $status = 0;
-            }else{
+            } else {
                 $status = 1;
             }
 
@@ -103,7 +116,7 @@ class UserService
             $data = [
                 'name' => $request->name,
                 'email' => $request->email,
-                'is_admin' => $is_admin,
+
                 'password' => Hash::make($request->password),
                 'status' => $status,
             ];
@@ -113,7 +126,11 @@ class UserService
 
             //NOTE - Thông báo
             if ($dataInsert) {
+                $managerRole = Role::where('id', $request->role)->first();
 
+                if ($managerRole) {
+                    $dataInsert->assignRole($managerRole);
+                }
                 // Thông báo thành công
                 flash()->success('Tạo tài khoản thành công!');
                 // Chuyển hướng trang
@@ -134,13 +151,9 @@ class UserService
 
     public function update($request, $user)
     {
+
         // Xử lý ngoại lệ
         try {
-            if ($request->is_admin == 'on') {
-                $is_admin = 0;
-            } else {
-                $is_admin = 1;
-            };
 
             if ($request->status == 'on') {
                 $status = 0;
@@ -151,16 +164,24 @@ class UserService
             $data = [
                 'name' => $request->name,
                 'email' => $request->email,
-                'is_admin' => $is_admin,
                 'status' => $status,
-                'password' => Hash::make($request->password),
             ];
+
+            if($request->password !== null){
+                $data['password']  =  Hash::make($request->password);
+            }
 
             //NOTE - Lưu vào cơ sở dữ liệu
             $dataUpdate = $user->update($data);
 
             //NOTE - Thông báo
             if ($dataUpdate) {
+                $managerRole = Role::where('id', $request->role)->first();
+
+                if ($managerRole) {
+                    $user->syncRoles($managerRole);
+                }
+
                 // Thông báo thành công
                 flash()->success('Cập nhật khoản thành công!');
 
@@ -340,5 +361,10 @@ class UserService
         } catch (\Exception $e) {
             return response()->json(['message' => 'Error importing users: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function GetRole()
+    {
+        return Role::all();
     }
 }

@@ -1,10 +1,10 @@
 <x-app-layout>
-    @section('title', config('apps.voucher.titleIndex'))
+    @section('title', config('apps.role.titleIndex'))
     <div class="p-4 max-h-full bg-white block sm:flex items-center justify-between   dark:bg-gray-800 ">
 
         <div class="w-full mb-1">
             <div class="mb-4">
-                {{ Breadcrumbs::render('voucher') }}
+                {{ Breadcrumbs::render('role') }}
                 <div class="flex items-center content-center">
                     <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white mr-2 ">@yield('title')
                     </h1>
@@ -27,59 +27,29 @@
                 <div class="flex items-center" id="handleAdd">
 
                     <div class="flex pl-2 space-x-1 mr-2">
-                        <x-dropdown-form>
-                            <x-slot:button id="dropdownFind" icon="iconoir-filter-solid">
-                                Tìm kiếm
-                            </x-slot:button>
 
-                            <x-slot:subDropdown class="w-60">
-                                <div class="p-1">
-                                    <x-input-label required>Trạng thái</x-input-label>
-                                    <x-select data-search="search-status">
-                                        @if (\App\Enums\Status::getValues())
-                                            <option value="">--Chọn trạng thái--</option>
-                                            @foreach (\App\Enums\Status::getValues() as $status)
-                                                <option value="{{ $status }}">
-                                                    {{ \App\Enums\Status::getKey($status) }}</option>
-                                            @endforeach
-                                        @endif
-                                    </x-select>
-                                </div>
-
-                                <div class="p-1 mt-2">
-                                    <x-input-label required>Người tạo</x-input-label>
-                                    <x-select data-search="search-user">
-                                        @if (\App\Enums\Status::getValues())
-                                            <option value="">--Chọn người tạo--</option>
-                                            @foreach ($getAllUsersSelect as $user)
-                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                            @endforeach
-                                        @endif
-                                    </x-select>
-                                </div>
-                            </x-slot:subDropdown>
-                        </x-dropdown-form>
                     </div>
-                    <div>
-                        @can('Thêm mới khuyến mãi')
-                            <a href={{ route('ecommerce_module.voucher.create') }}
+                    @can('Thêm mới phân quyền')
+                        <div>
+                            <a href={{ route('account_module.role.create') }}
                                 class="text-white bg-gradient-to-r focus:ring-blue-300 dark:focus:ring-blue-800 from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br  focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
                                 @svg('heroicon-o-plus', 'w-4 h-4 me-2')
                                 Thêm mới dữ liệu
                             </a>
-                        @endcan
+                        </div>
+                    @endcan
 
-                    </div>
                 </div>
 
                 <div class="flex items-center hidden" id="handleDelete">
                     <span class="me-2">Tổng: <span id="countUpdate">0</span></span>
-                    @can('Xoá khuyến mãi')
+                    @can('Xoá phân quyền')
                         <button type="button" id="data-delete"
                             class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                             Xóa tất cả
                         </button>
                     @endcan
+
                 </div>
             </div>
         </div>
@@ -103,32 +73,12 @@
 
                             <x-table-col width="15%"
                                 class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Mã vorcher
-                            </x-table-col>
-
-                            <x-table-col width="15%"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Giảm giá
-                            </x-table-col>
-
-                            <x-table-col width="15%"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Số lượng
-                            </x-table-col>
-
-                            <x-table-col width="10%"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Người tạo
-                            </x-table-col>
-
-                            <x-table-col width="10%"
-                                class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Trạng thái
+                                Role
                             </x-table-col>
 
                             <x-table-col
                                 class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400">
-                                Thời gian
+                                Permission
                             </x-table-col>
 
                             <x-table-col width="10%"
@@ -149,30 +99,18 @@
     </div>
 
     @push('js')
-        <script src="{{ asset('assets/apps/voucher/datatables.js') }}"></script>
+        <script src="{{ asset('assets/apps/role/datatables.js') }}"></script>
 
         <script>
-            var url = '{!! route('ecommerce_module.voucher.getData') !!}'
+            var url = '{!! route('account_module.role.getData') !!}'
             const columns = [{
                     data: 'id'
                 },
                 {
-                    data: 'name'
+                    data: 'role'
                 },
                 {
-                    data: 'sale'
-                },
-                {
-                    data: 'quantity'
-                },
-                {
-                    data: 'user_id'
-                },
-                {
-                    data: 'status'
-                },
-                {
-                    data: 'time'
+                    data: 'permission'
                 },
                 {
                     data: 'action'
@@ -182,21 +120,18 @@
             const _CUSTOM_DATATABLES = {
                 CLASS_ROW: '',
                 PAGE: '8',
-                TARGETS: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+                TARGETS: [0, 1, 2, 3]
 
             };
             var dataTableIndex = initializeDataTable(url, columns, _CUSTOM_DATATABLES);
 
-            //NOTE - Toggle Status
-            var urlToggleStatus = '{!! route('ecommerce_module.voucher.toggleStatus') !!}'
-            toggleStatus(urlToggleStatus, dataTableIndex)
 
             //NOTE - Delete All
-            var urlToggleStatus = '{!! route('ecommerce_module.voucher.deleteAll') !!}'
+            var urlToggleStatus = '{!! route('ecommerce_module.brand.deleteAll') !!}'
             deleteAll(urlToggleStatus, dataTableIndex)
 
             //NOTE - Delete Row
-            var urlToggleStatus = '{!! route('ecommerce_module.voucher.deleteRow') !!}'
+            var urlToggleStatus = '{!! route('ecommerce_module.brand.deleteRow') !!}'
             deleteRow(urlToggleStatus, dataTableIndex)
         </script>
     @endpush

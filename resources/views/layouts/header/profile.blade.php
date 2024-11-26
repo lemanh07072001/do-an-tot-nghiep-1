@@ -20,27 +20,36 @@
             </p>
         </div>
         <ul class="py-1" role="none">
-            <li>
+            @can('Quản lý trang chủ' )
+                <li>
                 <a href="{{ route('dashboard_module.dashboard.index') }}"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                     role="menuitem">Dashboard</a>
             </li>
-            <li>
+            @endcan
+
+            @can('Cài đặt chung')
+                <li>
                 <a href="{{ route('setting_module.setting.index') }}"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                     role="menuitem">Settings</a>
             </li>
-            <li>
+            @endcan
+
+            @can('Quản lý đơn hàng')
+                <li>
                 <a href="{{ route('ecommerce_module.order.index') }}"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                     role="menuitem">Đơn hàng</a>
             </li>
+            @endcan
+
             <li>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
                     <button type="submit"
                     class="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem">Sign out</button>
+                    role="menuitem">Đăng xuất</button>
                 </form>
             </li>
         </ul>

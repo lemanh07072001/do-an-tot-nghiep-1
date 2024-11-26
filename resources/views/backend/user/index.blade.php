@@ -26,7 +26,8 @@
 
                 <div class="flex items-center" id="handleAdd">
                     <div>
-                        <div>
+                        @can('Xuất tài khoản')
+                            <div>
                             <input placeholder="Excel Only" type="file" id="fileElem"
                                 accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                                 style="display:none" />
@@ -36,6 +37,7 @@
                                 Import
                             </button>
                         </div>
+                        @endcan
                     </div>
                     <div class="flex pl-2 space-x-1 mr-2">
                         <x-dropdown-form>
@@ -60,36 +62,43 @@
                         </x-dropdown-form>
                     </div>
                     <div>
-                        <a href={{ route('account_module.user.create') }}
-                            class="text-white bg-gradient-to-r focus:ring-blue-300 dark:focus:ring-blue-800 from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br  focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
-                            @svg('heroicon-o-plus', 'w-4 h-4 me-2')
-                            Thêm mới dữ liệu
-                        </a>
+                        @can('Thêm mới tài khoản')
+                            <a href={{ route('account_module.user.create') }}
+                                class="text-white bg-gradient-to-r focus:ring-blue-300 dark:focus:ring-blue-800 from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br  focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
+                                @svg('heroicon-o-plus', 'w-4 h-4 me-2')
+                                Thêm mới dữ liệu
+                            </a>
+                        @endcan
+
                     </div>
                 </div>
 
                 <div class="flex items-center hidden" id="handleDelete">
                     <span class="me-2">Tổng: <span id="countUpdate">0</span></span>
-                    <button type="button" id="data-delete"
-                        class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                        Xóa tất cả
-                    </button>
+                    @can('Xoá tài khoản')
+                        <button type="button" id="data-delete"
+                            class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                            Xóa tất cả
+                        </button>
+                    @endcan
 
-                    <x-dropdown-form class="me-2 mb-2">
-                        <x-slot:button id="dropdownExcel" icon="fwb-o-file-export">
-                            Export
-                        </x-slot:button>
+                    @can('Xuất tài khoản')
+                        <x-dropdown-form class="me-2 mb-2">
+                            <x-slot:button id="dropdownExcel" icon="fwb-o-file-export">
+                                Export
+                            </x-slot:button>
 
-                        <x-slot:subDropdown class="w-60">
-                            <div class="p-1">
-                                <x-input-label>Export</x-input-label>
-                                <x-select data-export="export">
-                                    <option disabled>Select a format</option>
-                                    <option value="excel">Excel</option>
-                                </x-select>
-                            </div>
-                        </x-slot:subDropdown>
-                    </x-dropdown-form>
+                            <x-slot:subDropdown class="w-60">
+                                <div class="p-1">
+                                    <x-input-label>Export</x-input-label>
+                                    <x-select data-export="export">
+                                        <option disabled>Select a format</option>
+                                        <option value="excel">Excel</option>
+                                    </x-select>
+                                </div>
+                            </x-slot:subDropdown>
+                        </x-dropdown-form>
+                    @endcan
 
 
                 </div>
@@ -161,7 +170,7 @@
     </div>
 
     @push('js')
-        <script src="{{asset('assets/apps/users/datatables.js')}}"></script>
+        <script src="{{ asset('assets/apps/users/datatables.js') }}"></script>
 
         <script>
             var url = '{!! route('account_module.user.getData') !!}'

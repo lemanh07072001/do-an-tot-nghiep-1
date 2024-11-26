@@ -63,7 +63,7 @@
                             </svg>
                         </div>
                         <input id="date_start" type="text" name="date_start" autocomplete="off"
-                            value="{{ old('date_start') ?? (($voucher->date_end)==null?'':\Carbon\Carbon::parse($voucher->date_start)->format('d/m/Y')) }}"
+                            value="{{ old('date_start') ?? (($banner->date_end)==null?'':\Carbon\Carbon::parse($banner->date_start)->format('d/m/Y')) }}"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Chọn ngày">
                     </div>
@@ -82,7 +82,7 @@
                             </svg>
                         </div>
                         <input id="date_end" type="text" name="date_end" autocomplete="off"
-                            value="{{ old('date_end') ?? (($voucher->date_end)==null?'':\Carbon\Carbon::parse($voucher->date_end)->format('d/m/Y')) }}"
+                            value="{{ old('date_end') ?? (($banner->date_end)==null?'':\Carbon\Carbon::parse($banner->date_end)->format('d/m/Y')) }}"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             placeholder="Chọn ngày">
                     </div>
