@@ -1,34 +1,36 @@
 <?php
 
-use App\Http\Controllers\Backend\AI\AIController;
-use App\Http\Controllers\Backend\BannerController;
-use App\Http\Controllers\Backend\BrandController;
-use App\Http\Controllers\Backend\CategoriesController;
-use App\Http\Controllers\Backend\ContactController;
-use App\Http\Controllers\Backend\DashboardController;
-use App\Http\Controllers\Backend\GroupProductController;
-use App\Http\Controllers\Backend\IntroduceController;
-use App\Http\Controllers\Backend\OrderController as BackendOrderController;
-use App\Http\Controllers\Backend\PolicyController;
-use App\Http\Controllers\Backend\ProductController;
-use App\Http\Controllers\Backend\PropertiesController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UploadController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Backend\RoleController;
-use App\Http\Controllers\Backend\SettingController;
-use App\Http\Controllers\Backend\TransactionController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Client\OrderController;
+use App\Http\Controllers\Backend\AI\AIController;
+use App\Http\Controllers\Backend\BrandController;
+use App\Http\Controllers\Client\DetailController;
+use App\Http\Controllers\Backend\BannerController;
+use App\Http\Controllers\Backend\PolicyController;
+use App\Http\Controllers\Backend\ContactController;
+use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\VoucherController;
 use App\Http\Controllers\Client\AboutPageController;
-use App\Http\Controllers\Client\CartController;
-use App\Http\Controllers\Client\DetailController;
-use App\Http\Controllers\UploadController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\IntroduceController;
+use App\Http\Controllers\Backend\CategoriesController;
+use App\Http\Controllers\Backend\PropertiesController;
 
 
-use App\Http\Controllers\Client\HomeController;
-use App\Http\Controllers\Client\OrderController;
+use App\Http\Controllers\Backend\TransactionController;
+use App\Http\Controllers\Backend\GroupProductController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Backend\OrderController as BackendOrderController;
 use App\Http\Controllers\Client\ProfileController as ClientProfileController;
 
-Route::prefix('admin')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'verified', 'is_admin'])->group(function () {
     //ANCHOR - [Ecommerce Modules]
     Route::name('dashboard_module.')->group(function () {
 
@@ -64,6 +66,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::get('/create', [RoleController::class, 'create'])->name('create');
             Route::post('/store', [RoleController::class, 'store'])->name('store');
             Route::get('/edit/{role}', [RoleController::class, 'edit'])->name('edit');
+            Route::delete('/deleteRow', [RoleController::class, 'deleteRow'])->name('deleteRow');
+            Route::delete('/deleteAll', [RoleController::class, 'deleteAll'])->name('deleteAll');
         });
     });
 
@@ -219,13 +223,13 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
         //LINK - Contact
         Route::prefix('contact')->name('contact.')->group(function () {
-            Route::get('/', [ContactController::class, 'index'])->middleware(['permission:Hỗ trợ và liên kết'])->name('index');
-            Route::get('/getData', [ContactController::class, 'getData'])->middleware(['permission:Hỗ trợ và liên kết'])->name('getData');
-            Route::get('/getMessage', [ContactController::class, 'getMessage'])->middleware(['permission:Hỗ trợ và liên kết'])->name('getMessage');
-            Route::post('/sendMessage', [ContactController::class, 'sendMessage'])->middleware(['permission:Hỗ trợ và liên kết'])->name('sendMessage');
-            Route::post('/toggleStatus', [ContactController::class, 'toggleStatus'])->middleware(['permission:Hỗ trợ và liên kết'])->name('toggleStatus');
-            Route::delete('/deleteAll', [ContactController::class, 'deleteAll'])->middleware(['permission:Hỗ trợ và liên kết'])->name('deleteAll');
-            Route::delete('/deleteRow', [ContactController::class, 'deleteRow'])->middleware(['permission:Hỗ trợ và liên kết'])->name('deleteRow');
+            Route::get('/', [ContactController::class, 'index'])->middleware(['permission:Hỗ trợ và liên hệ'])->name('index');
+            Route::get('/getData', [ContactController::class, 'getData'])->middleware(['permission:Hỗ trợ và liên hệ'])->name('getData');
+            Route::get('/getMessage', [ContactController::class, 'getMessage'])->middleware(['permission:Hỗ trợ và liên hệ'])->name('getMessage');
+            Route::post('/sendMessage', [ContactController::class, 'sendMessage'])->middleware(['permission:Hỗ trợ và liên hệ'])->name('sendMessage');
+            Route::post('/toggleStatus', [ContactController::class, 'toggleStatus'])->middleware(['permission:Hỗ trợ và liên hệ'])->name('toggleStatus');
+            Route::delete('/deleteAll', [ContactController::class, 'deleteAll'])->middleware(['permission:Hỗ trợ và liên hệ'])->name('deleteAll');
+            Route::delete('/deleteRow', [ContactController::class, 'deleteRow'])->middleware(['permission:Hỗ trợ và liên hệ'])->name('deleteRow');
         });
 
         //LINK - Introduce
@@ -282,6 +286,22 @@ Route::get('/thank', function () {
     return view('client.page.thank');
 });
 
+
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 //LINK - UploadController
 Route::post('/upload', [UploadController::class, 'upload'])->name('upload');

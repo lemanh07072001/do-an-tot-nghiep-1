@@ -113,4 +113,77 @@ class RoleService
             return redirect()->back();
         }
     }
+
+    //NOTE - Xóa tất cả dữ liệu được chọn
+    public function deleteAll($request)
+    {
+        // Xử lý ngoại lệ
+        try {
+            $roles = Role::whereIn('id', $request->id)->get();
+            $rolesInUse = [];
+
+            foreach ($roles as $role) {
+                if ($role->users()->exists()) {
+                    $rolesInUse[] = $role->name; // Thêm tên role vào mảng
+                }
+            }
+            if (!empty($rolesInUse)) {
+                return response()->json([
+                    'message' => 'Các role sau đang được sử dụng: '. implode(' , ', $rolesInUse),
+                    'roles_in_use' => $rolesInUse // Trả về danh sách tên role
+                ], 500);
+            }else{
+                Role::destroy($request->id);
+                return response()->json([
+                    'message' => 'Bạn đã xoá thành công ' . implode(' , ', $rolesInUse),
+                ], 200);
+            }
+
+
+        } catch (\Exception $e) {
+            // Thông báo lỗi xử lý
+            return response()->json([
+                'message' => 'Lỗi hệ thống vui lòng thử lại sau!'
+            ], 500);
+        }
+    }
+
+
+    //NOTE - Xóa tài khoản đang chọn
+    public function deleteRow($request)
+    {
+        // Xử lý ngoại lệ
+        try {
+            // Tìm role theo tên
+            $role = Role::where('id', $request->id)->first();
+
+            if (!$role) {
+                return response()->json([
+                    'message' => 'Role không tồn tại.'
+                ], 500);
+
+            }
+
+            // Kiểm tra xem role này có được gán cho bất kỳ user nào không
+            if ($role->users()->exists()) {
+                return response()->json([
+                    'message' => 'Role này đang được sử dụng bởi một hoặc nhiều người dùng.'
+                ], 500);
+
+            } else {
+                $role->delete();
+
+                return response()->json([
+                    'message' => 'Bạn đã xoá thành công'
+                ], 200);
+            }
+
+
+        } catch (\Exception $e) {
+            // Thông báo lỗi xử lý
+            return response()->json([
+                'message' => 'Lỗi hệ thống vui lòng thử lại sau!'
+            ], 500);
+        }
+    }
 }

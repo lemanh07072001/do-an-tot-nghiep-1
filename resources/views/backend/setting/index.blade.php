@@ -179,7 +179,7 @@
                     <div class="my-0 m-4">
                         <h5 class="mb-1 text-lg font-bold tracking-tight text-green-900 dark:text-white">Email
                         </h5>
-                        <p class="mb-3 text-xs text-green-700">Dưới đây là thông tin email
+                        <p class="mb-3 text-xs text-green-700">Dưới đây là thông tin phân trang
                     </div>
 
 
@@ -189,23 +189,11 @@
                 <div class="col-span-8 ">
                     <x-card class="my-0">
                         <div class="col-span-6 sm:col-span-3 ">
-                            <x-input-label for="setting_email_address">Email hệ thống</x-input-label>
-                            <x-text-input name="setting_email_address" :value="old('setting_email_address') ?? $settings['setting_email_address']" id="setting_email_address"
-                                placeholder="Nhập email hệ thống" />
-                            <x-input-error error="setting_email_address" class="mt-2" />
+                            <x-input-label for="setting_paginate">Số lượng sản phẩm trên 1 trang</x-input-label>
+                            <x-text-input name="setting_paginate" :value="old('setting_paginate') ?? $settings['setting_paginate']" id="setting_email_address"
+                                placeholder="Nhập số lượng" />
+                            <x-input-error error="setting_paginate" class="mt-2" />
                         </div>
-
-                        <div class="col-span-6 sm:col-span-3 ">
-                            <x-input-label for="settingsetting_passEmail_zalo">Mật khẩu Email</x-input-label>
-                            <x-text-input name="setting_passEmail" :value="old('setting_passEmail') ?? $settings['setting_passEmail']" id="setting_passEmail"
-                                placeholder="Nhập mật khẩu email" />
-                            <x-input-error error="setting_passEmail" class="mt-2" />
-                        </div>
-
-
-
-
-
                     </x-card>
                 </div>
 

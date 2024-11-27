@@ -127,11 +127,11 @@
 
 
             //NOTE - Delete All
-            var urlToggleStatus = '{!! route('ecommerce_module.brand.deleteAll') !!}'
+            var urlToggleStatus = '{!! route('account_module.role.deleteAll') !!}'
             deleteAll(urlToggleStatus, dataTableIndex)
 
             //NOTE - Delete Row
-            var urlToggleStatus = '{!! route('ecommerce_module.brand.deleteRow') !!}'
+            var urlToggleStatus = '{!! route('account_module.role.deleteRow') !!}'
             deleteRow(urlToggleStatus, dataTableIndex)
         </script>
     @endpush

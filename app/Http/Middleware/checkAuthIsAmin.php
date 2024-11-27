@@ -16,27 +16,16 @@ class checkAuthIsAmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // if (Auth::check()) {
-        //     if (Auth::user()->is_admin) {
-        //         // Nếu người dùng đã là admin và đang không truy cập trang admin
-        //         if (!$request->is('admin/*')) {
-        //             return redirect()->route('dashboard_module.dashboard.index'); // Chuyển hướng đến trang admin dashboard
-        //         }
-        //     } else {
-        //         // Nếu người dùng không phải là admin và đang cố truy cập trang admin
-        //         if ($request->is('admin/*')) {
-        //             return redirect('/'); // Chuyển hướng đến trang người dùng
-        //         }
-        //     }
-        // } else {
-        //     return redirect('/login')->with('error', 'Please login first'); // Chuyển hướng đến trang đăng nhập nếu chưa đăng nhập
-        // }
 
         $user = Auth::user();
 
-        if(!$user->is_admin){
-            return redirect("/");
+        // Kiểm tra nếu user đã đăng nhập và có ít nhất 1 role
+        if ($user && $user->roles->isNotEmpty()) {
+            return $next($request); // Cho phép truy cập nếu có role
         }
-        return $next($request); // Cho phép tiếp tục thực hiện request nếu không có vấn đề
+
+        // Chuyển hướng về trang khác với thông báo lỗi
+        return redirect()->route('index')->with('error', 'Bạn chưa được phân quyền truy cập.');
+
     }
 }

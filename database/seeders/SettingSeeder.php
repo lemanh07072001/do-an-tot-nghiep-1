@@ -62,14 +62,6 @@ class SettingSeeder extends Seeder
                 'setting_value' => 'true',
             ],
             [
-                'setting_key' => 'setting_email_address',
-                'setting_value' => 'lemanh.laravel@gmail.com',
-            ],
-            [
-                'setting_key' => 'setting_passEmail',
-                'setting_value' => 'xnmprgtkilckxnmj',
-            ],
-            [
                 'setting_key' => 'setting_paginate',
                 'setting_value' => '1',
             ],

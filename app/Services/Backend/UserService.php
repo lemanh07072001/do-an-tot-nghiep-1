@@ -102,7 +102,6 @@ class UserService
 
     public function store($request)
     {
-
         // Xử lý ngoại lệ
         try {
 
@@ -126,10 +125,12 @@ class UserService
 
             //NOTE - Thông báo
             if ($dataInsert) {
-                $managerRole = Role::where('id', $request->role)->first();
+                if($request->role != null){
+                    $managerRole = Role::where('id', $request->role)->first();
 
-                if ($managerRole) {
-                    $dataInsert->assignRole($managerRole);
+                    if ($managerRole) {
+                        $dataInsert->assignRole($managerRole);
+                    }
                 }
                 // Thông báo thành công
                 flash()->success('Tạo tài khoản thành công!');
@@ -176,10 +177,12 @@ class UserService
 
             //NOTE - Thông báo
             if ($dataUpdate) {
-                $managerRole = Role::where('id', $request->role)->first();
+                if ($request->role != null) {
+                    $managerRole = Role::where('id', $request->role)->first();
 
-                if ($managerRole) {
-                    $user->syncRoles($managerRole);
+                    if ($managerRole) {
+                        $user->syncRoles($managerRole);
+                    }
                 }
 
                 // Thông báo thành công
